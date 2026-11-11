@@ -529,7 +529,7 @@ class _HomeDashboardState extends ConsumerState<HomeDashboard> {
                       label: _locationStatus,
                     ),
                   ),
-                  if (busHasLocation && !bus.locationFresh)
+                  if (bus != null && busHasLocation && !bus.locationFresh)
                     const Positioned(
                       top: 114,
                       left: 14,
