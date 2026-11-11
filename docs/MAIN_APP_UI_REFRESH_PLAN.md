@@ -74,6 +74,8 @@ This workstream refreshes the Flutter parent-facing mobile app in `app/`. The pu
 - Reworked splash screen into a branded blue startup experience while preserving the existing health-check and permission flow.
 - Updated shared authentication layout to use the new design system.
 - Rebuilt the parent home hierarchy around a clear header, contained map, map controls, and a separate journey-status card.
+- Replaced the old static live-tracking mock screen with a map and status card driven by the existing bus API provider; empty and error states are explicit.
+- Added Live bus tracking to the parent navigation drawer and aligned the parent profile with the shared theme.
 - Kept existing data providers and API calls; no new sample trip records or fake boarding events were introduced.
 
 ## Known follow-up items
