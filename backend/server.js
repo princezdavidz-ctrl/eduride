@@ -413,19 +413,30 @@ async function handleRequest(request, response) {
       const schoolName = String(body.school ?? "").trim();
       if (!schoolName) return reply(400, { error: "School is required" });
       await client.query("BEGIN");
-      const result = await client.query(
-        `UPDATE children c SET school_id=s.id, verification_status='pending', updated_at=now()
-         FROM schools s WHERE c.id=$1 AND c.parent_id=$2 AND lower(s.name)=lower($3) AND s.active=true
-         RETURNING c.id,c.name,s.name AS school,c.verification_status AS "verificationStatus"`,
-        [childId, user.id, schoolName],
+      const ownedChild = await client.query(
+        "SELECT id FROM children WHERE id=$1 AND parent_id=$2 FOR UPDATE",
+        [childId, user.id],
       );
-      if (!result.rows[0]) {
+      if (!ownedChild.rows[0]) {
+        await client.query("ROLLBACK");
+        return reply(404, { error: "Child or registered school not found" });
+      }
+      const school = await client.query(
+        "SELECT id,name FROM schools WHERE lower(name)=lower($1) AND active=true ORDER BY created_at LIMIT 1",
+        [schoolName],
+      );
+      if (!school.rows[0]) {
         await client.query("ROLLBACK");
         return reply(404, { error: "Child or registered school not found" });
       }
       await client.query("DELETE FROM child_bus_assignments WHERE child_id=$1", [childId]);
+      const result = await client.query(
+        `UPDATE children SET school_id=$1, verification_status='pending', updated_at=now()
+         WHERE id=$2 RETURNING id,name,verification_status AS "verificationStatus"`,
+        [school.rows[0].id, childId],
+      );
       await client.query("COMMIT");
-      return reply(200, { child: result.rows[0] });
+      return reply(200, { child: { ...result.rows[0], school: school.rows[0].name } });
     } catch {
       await client.query("ROLLBACK").catch(() => {});
       return reply(400, { error: "Invalid school change request" });
