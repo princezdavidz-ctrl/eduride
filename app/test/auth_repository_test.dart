@@ -61,7 +61,7 @@ class _FakeAuthRemoteDataSource implements AuthRemoteDataSource {
 }
 
 void main() {
-  test('demo credentials authenticate against the backend first', () async {
+  test('successful sign-in stores the server-issued session', () async {
     final remote = _FakeAuthRemoteDataSource();
     final store = _FakeSessionStore();
     final repository = AuthRepositoryImpl(
@@ -70,8 +70,8 @@ void main() {
     );
 
     final session = await repository.signIn(
-      email: 'test@gmail.com',
-      password: 'Password123',
+      email: 'parent@example.com',
+      password: 'Valid-Parent-Password-2026!',
     );
 
     expect(remote.signInCalls, 1);
@@ -81,48 +81,56 @@ void main() {
     expect(store.token, 'server-token');
   });
 
-  test(
-    'demo credentials fall back only when the backend is unreachable',
-    () async {
-      final remote = _FakeAuthRemoteDataSource(
-        signInFailure: const NetworkFailure(),
-      );
-      final store = _FakeSessionStore();
-      final repository = AuthRepositoryImpl(
-        remoteDataSource: remote,
-        sessionStore: store,
-      );
+  test('network failure never creates a local demo account', () async {
+    final remote = _FakeAuthRemoteDataSource(
+      signInFailure: const NetworkFailure(),
+    );
+    final store = _FakeSessionStore();
+    final repository = AuthRepositoryImpl(
+      remoteDataSource: remote,
+      sessionStore: store,
+    );
 
-      final session = await repository.signIn(
+    await expectLater(
+      repository.signIn(
         email: 'test@gmail.com',
         password: 'Password123',
-      );
+      ),
+      throwsA(isA<NetworkFailure>()),
+    );
 
-      expect(remote.signInCalls, 1);
-      expect(session.isDemoSession, isTrue);
-      expect(store.token, 'edu-ride-demo-session');
-    },
-  );
+    expect(remote.signInCalls, 1);
+    expect(store.token, isNull);
+  });
 
-  test(
-    'invalid backend demo credentials do not silently become offline login',
-    () async {
-      final remote = _FakeAuthRemoteDataSource(
-        signInFailure: const UnauthorizedFailure(),
-      );
-      final store = _FakeSessionStore();
-      final repository = AuthRepositoryImpl(
-        remoteDataSource: remote,
-        sessionStore: store,
-      );
+  test('invalid credentials never fall back to offline login', () async {
+    final remote = _FakeAuthRemoteDataSource(
+      signInFailure: const UnauthorizedFailure(),
+    );
+    final store = _FakeSessionStore();
+    final repository = AuthRepositoryImpl(
+      remoteDataSource: remote,
+      sessionStore: store,
+    );
 
-      await expectLater(
-        repository.signIn(email: 'test@gmail.com', password: 'Password123'),
-        throwsA(isA<UnauthorizedFailure>()),
-      );
+    await expectLater(
+      repository.signIn(email: 'test@gmail.com', password: 'Password123'),
+      throwsA(isA<UnauthorizedFailure>()),
+    );
 
-      expect(remote.signInCalls, 1);
-      expect(store.token, isNull);
-    },
-  );
+    expect(remote.signInCalls, 1);
+    expect(store.token, isNull);
+  });
+
+  test('legacy demo session is cleared on restore', () async {
+    final remote = _FakeAuthRemoteDataSource();
+    final store = _FakeSessionStore()..token = 'edu-ride-demo-session';
+    final repository = AuthRepositoryImpl(
+      remoteDataSource: remote,
+      sessionStore: store,
+    );
+
+    expect(await repository.restoreSession(), isNull);
+    expect(store.token, isNull);
+  });
 }
