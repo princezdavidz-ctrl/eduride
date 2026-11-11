@@ -310,7 +310,7 @@ void main() {
     },
   );
 
-  testWidgets('OTP screen explains the demo verification code', (
+  testWidgets('OTP screen clearly reports verification is unavailable', (
     WidgetTester tester,
   ) async {
     await tester.pumpWidget(
@@ -323,7 +323,12 @@ void main() {
     );
 
     expect(find.text('Verify your sign in'), findsOneWidget);
-    expect(find.textContaining('use code 123456'), findsOneWidget);
+    expect(find.textContaining('OTP verification is not configured'), findsOneWidget);
+    final verifyButton = tester.widget<FilledButton>(
+      find.widgetWithText(FilledButton, 'Verify code'),
+    );
+    expect(verifyButton.onPressed, isNull);
+    expect(tester.takeException(), isNull);
   });
 
   testWidgets('forgot password layout fits a narrow screen', (
