@@ -239,6 +239,10 @@ async function handleRequest(request, response) {
     if (!device) return reply(401, { error: "Invalid device credentials" });
     try {
       const body = await readBody(request);
+      const acceptedFields = ["latitude", "longitude", "speedKph", "heading", "recordedAt"];
+      if (Object.keys(body).some((field) => !acceptedFields.includes(field))) {
+        return reply(400, { error: "Only GPS telemetry is accepted by this endpoint; image payloads are not supported" });
+      }
       const latitude = Number(body.latitude);
       const longitude = Number(body.longitude);
       const speedKph = body.speedKph == null ? null : Number(body.speedKph);
@@ -489,7 +493,13 @@ async function handleRequest(request, response) {
       return reply(200, { data: result.rows });
     }
     if (!requireRole(user, ["transport_admin", "school_admin", "driver"], reply) || !organizationRequired(user, reply)) return;
-    const result = await pool.query("SELECT id,name,bus_id AS \"busId\",stops FROM routes WHERE organization_id=$1 ORDER BY name", [user.organization_id]);
+    const result = user.role === "driver"
+      ? await pool.query(
+          `SELECT r.id,r.name,r.bus_id AS "busId",r.stops FROM routes r
+           JOIN buses b ON b.id=r.bus_id WHERE b.driver_id=$1 ORDER BY r.name`,
+          [user.id],
+        )
+      : await pool.query("SELECT id,name,bus_id AS \"busId\",stops FROM routes WHERE organization_id=$1 ORDER BY name", [user.organization_id]);
     return reply(200, { data: result.rows });
   }
 
@@ -506,13 +516,21 @@ async function handleRequest(request, response) {
       return reply(200, { data: result.rows });
     }
     if (!requireRole(user, ["transport_admin", "school_admin", "driver"], reply) || !organizationRequired(user, reply)) return;
-    const result = await pool.query(
-      `SELECT j.id,j.bus_id AS "busId",r.name AS route,j.departure_at AS "departureAt",
-        j.arrival_at AS "arrivalAt",j.status
-       FROM journeys j LEFT JOIN routes r ON r.id=j.route_id
-       WHERE j.organization_id=$1 ORDER BY j.departure_at DESC LIMIT 1000`,
-      [user.organization_id],
-    );
+    const result = user.role === "driver"
+      ? await pool.query(
+          `SELECT j.id,j.bus_id AS "busId",r.name AS route,j.departure_at AS "departureAt",
+            j.arrival_at AS "arrivalAt",j.status
+           FROM journeys j JOIN buses b ON b.id=j.bus_id LEFT JOIN routes r ON r.id=j.route_id
+           WHERE b.driver_id=$1 ORDER BY j.departure_at DESC LIMIT 500`,
+          [user.id],
+        )
+      : await pool.query(
+          `SELECT j.id,j.bus_id AS "busId",r.name AS route,j.departure_at AS "departureAt",
+            j.arrival_at AS "arrivalAt",j.status
+           FROM journeys j LEFT JOIN routes r ON r.id=j.route_id
+           WHERE j.organization_id=$1 ORDER BY j.departure_at DESC LIMIT 1000`,
+          [user.organization_id],
+        );
     return reply(200, { data: result.rows });
   }
 
@@ -555,6 +573,8 @@ export const server = createServer((request, response) => {
 export async function startServer() {
   if (!process.env.DATABASE_URL) throw new Error("DATABASE_URL is required. In-memory mode is intentionally disabled.");
   await pool.query("SELECT 1");
+  const migration = await pool.query("SELECT version FROM schema_migrations WHERE version = 1");
+  if (!migration.rows[0]) throw new Error("Database schema is not migrated. Run npm run migrate before starting the API.");
   await new Promise((resolve, reject) => {
     server.once("error", reject);
     server.listen(PORT, resolve);
