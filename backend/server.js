@@ -269,7 +269,7 @@ async function handleRequest(request, response) {
   }
 
   if (request.method === "POST" && pathname === "/api/auth/forgot-password") {
-    return reply(503, { available: false, message: "Password reset delivery is not configured. Please contact school support." });
+    return reply(200, { available: false, message: "Password reset delivery is not configured. Please contact school support." });
   }
 
   if (request.method === "POST" && pathname === "/api/auth/login") {
