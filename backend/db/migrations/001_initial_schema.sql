@@ -78,8 +78,10 @@ CREATE TABLE IF NOT EXISTS routes (
   stops jsonb NOT NULL DEFAULT '[]'::jsonb,
   created_at timestamptz NOT NULL DEFAULT now(),
   UNIQUE (id, organization_id),
+  UNIQUE (id, bus_id),
   FOREIGN KEY (school_id, organization_id) REFERENCES schools(id, organization_id) ON DELETE RESTRICT,
-  FOREIGN KEY (bus_id, organization_id) REFERENCES buses(id, organization_id) ON DELETE RESTRICT
+  FOREIGN KEY (bus_id, organization_id) REFERENCES buses(id, organization_id) ON DELETE RESTRICT,
+  FOREIGN KEY (bus_id, school_id) REFERENCES buses(id, school_id) ON DELETE RESTRICT
 );
 
 CREATE TABLE IF NOT EXISTS child_bus_assignments (
@@ -104,7 +106,8 @@ CREATE TABLE IF NOT EXISTS journeys (
   arrival_at timestamptz,
   created_at timestamptz NOT NULL DEFAULT now(),
   FOREIGN KEY (bus_id, organization_id) REFERENCES buses(id, organization_id) ON DELETE RESTRICT,
-  FOREIGN KEY (route_id, organization_id) REFERENCES routes(id, organization_id) ON DELETE RESTRICT
+  FOREIGN KEY (route_id, organization_id) REFERENCES routes(id, organization_id) ON DELETE RESTRICT,
+  FOREIGN KEY (route_id, bus_id) REFERENCES routes(id, bus_id) ON DELETE RESTRICT
 );
 
 CREATE TABLE IF NOT EXISTS alerts (
