@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../core/navigation/drawer_page_app_bar.dart';
+import '../../../core/theme/app_theme.dart';
 import '../../auth/presentation/providers/auth_provider.dart';
 import '../../navigation/presentation/drawer_page_shell.dart';
 
@@ -99,10 +100,10 @@ class _ParentProfileScreenState extends ConsumerState<ParentProfileScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFFF7F9FC),
+      backgroundColor: AppTheme.background,
       appBar: const DrawerPageAppBar(
         title: 'My profile',
-        backgroundColor: Color(0xFFF7F9FC),
+        backgroundColor: AppTheme.background,
       ),
       body: _isLoading
           ? const Center(child: CircularProgressIndicator())
@@ -116,11 +117,11 @@ class _ParentProfileScreenState extends ConsumerState<ParentProfileScreen> {
                   const Center(
                     child: CircleAvatar(
                       radius: 48,
-                      backgroundColor: Color(0xFFEAF2FF),
+                      backgroundColor: AppTheme.blueTint,
                       child: Icon(
                         Icons.person_rounded,
                         size: 48,
-                        color: Color(0xFF1769E0),
+                        color: AppTheme.blue,
                       ),
                     ),
                   ),
