@@ -250,6 +250,7 @@ class _HomeDashboardState extends ConsumerState<HomeDashboard> {
   Position? _userPosition;
   String _locationStatus = 'Finding your location...';
   bool _hasCenteredOnUser = false;
+  String? _centeredBusId;
 
   @override
   void initState() {
@@ -324,7 +325,8 @@ class _HomeDashboardState extends ConsumerState<HomeDashboard> {
       _locationStatus = 'Your location ±${position.accuracy.round()} m';
     });
 
-    if (!_hasCenteredOnUser) {
+    final assignedBus = ref.read(busesProvider).valueOrNull?.firstOrNull;
+    if (!_hasCenteredOnUser && assignedBus == null) {
       _hasCenteredOnUser = true;
       _mapController.move(LatLng(position.latitude, position.longitude), 15);
     }
@@ -346,6 +348,14 @@ class _HomeDashboardState extends ConsumerState<HomeDashboard> {
     final bus = busesAsync.valueOrNull?.firstOrNull;
     final eta = bus?.etaMinutes ?? 0;
     final busAvailable = bus != null;
+    if (bus != null && _centeredBusId != bus.id) {
+      _centeredBusId = bus.id;
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (mounted) {
+          _mapController.move(LatLng(bus.latitude, bus.longitude), 13);
+        }
+      });
+    }
 
     return Column(
       children: [
@@ -615,7 +625,11 @@ class _HomeDashboardState extends ConsumerState<HomeDashboard> {
                         const SizedBox(height: 5),
                         Text(
                           busAvailable
-                              ? (bus.status.isEmpty ? 'Route in progress' : bus.status)
+                              ? (bus.status.isEmpty
+                                  ? 'Route in progress'
+                                  : bus.status == 'on_route'
+                                  ? 'On the way'
+                                  : bus.status.replaceAll('_', ' '))
                               : (busesAsync.hasError
                                   ? 'Unable to load bus status'
                                   : 'Waiting for bus assignment'),
