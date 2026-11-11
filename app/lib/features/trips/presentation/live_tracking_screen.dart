@@ -65,6 +65,28 @@ class LiveTrackingScreen extends ConsumerWidget {
                   'Location and status reflect the latest update returned by the server. Pull down to refresh.',
                   style: Theme.of(context).textTheme.bodyMedium,
                 ),
+                if (bus.latitude != null && bus.longitude != null && !bus.locationFresh) ...[
+                  const SizedBox(height: 10),
+                  Container(
+                    padding: const EdgeInsets.all(12),
+                    decoration: BoxDecoration(
+                      color: AppTheme.warningTint,
+                      borderRadius: BorderRadius.circular(14),
+                    ),
+                    child: const Row(
+                      children: [
+                        Icon(Icons.warning_amber_rounded, color: AppTheme.warning),
+                        SizedBox(width: 9),
+                        Expanded(
+                          child: Text(
+                            'The latest GPS report is more than two minutes old. This position may be out of date.',
+                            style: TextStyle(color: AppTheme.ink, fontSize: 12, height: 1.4),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
                 const SizedBox(height: 18),
                 ClipRRect(
                   borderRadius: BorderRadius.circular(22),
