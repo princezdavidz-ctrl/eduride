@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
-import '../../../core/config/app_config.dart';
 import '../../family/presentation/child_setup_screen.dart';
 import '../../trips/presentation/home_screen.dart';
 import 'auth_widgets.dart';
@@ -23,7 +22,6 @@ class OtpVerificationScreen extends StatefulWidget {
 }
 
 class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
-  static const _demoCode = '123456';
   final _formKey = GlobalKey<FormState>();
   final _codeController = TextEditingController();
 
@@ -47,38 +45,11 @@ class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
   };
 
   void _verify() {
-    if (!_formKey.currentState!.validate()) return;
-    if (!AppConfig.isDemoMode || _codeController.text != _demoCode) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('That verification code is not correct.')),
-      );
-      return;
-    }
-
-    switch (widget.purpose) {
-      case OtpPurpose.signIn:
-        Navigator.of(context).pushAndRemoveUntil(
-          MaterialPageRoute(builder: (_) => const HomeScreen()),
-          (_) => false,
-        );
-        return;
-      case OtpPurpose.signUp:
-        Navigator.of(context).pushReplacement(
-          MaterialPageRoute(builder: (_) => const ChildSetupScreen()),
-        );
-        return;
-      case OtpPurpose.passwordReset:
-        final messenger = ScaffoldMessenger.of(context);
-        Navigator.of(context).popUntil((route) => route.isFirst);
-        messenger.showSnackBar(
-          const SnackBar(
-            content: Text(
-              'Email verified. Password reset is not connected to a server yet.',
-            ),
-          ),
-        );
-        return;
-    }
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(
+        content: Text('OTP verification is not configured yet. Please contact school support.'),
+      ),
+    );
   }
 
   @override
@@ -104,7 +75,7 @@ class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
                   ? 'Enter the 6-digit code'
                   : null,
               decoration: const InputDecoration(
-                hintText: AppConfig.isDemoMode ? '123456' : 'Enter your code',
+                hintText: 'Verification code unavailable',
                 prefixIcon: Icon(Icons.lock_outline_rounded),
               ),
             ),
@@ -117,9 +88,7 @@ class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
                 borderRadius: BorderRadius.circular(14),
               ),
               child: Text(
-                AppConfig.isDemoMode
-                    ? 'Demo mode: use code 123456. Connect an OTP service before production use.'
-                    : 'OTP verification service is not configured for this build.',
+                'OTP verification is not configured for this build. Please contact school support.',
                 style: const TextStyle(color: Color(0xFF174A9C)),
               ),
             ),
@@ -128,18 +97,14 @@ class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
               width: double.infinity,
               height: 54,
               child: FilledButton(
-                onPressed: AppConfig.isDemoMode ? _verify : null,
+                onPressed: null,
                 child: const Text('Verify code'),
               ),
             ),
             const SizedBox(height: 12),
             Center(
               child: TextButton(
-                onPressed: AppConfig.isDemoMode
-                    ? () => ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(content: Text('Demo code: 123456')),
-                      )
-                    : null,
+                onPressed: null,
                 child: const Text('Resend code'),
               ),
             ),
