@@ -15,7 +15,8 @@ CREATE TABLE IF NOT EXISTS users (
   role text NOT NULL CHECK (role IN ('parent', 'driver', 'school_admin', 'transport_admin')),
   verification_status text NOT NULL DEFAULT 'pending',
   created_at timestamptz NOT NULL DEFAULT now(),
-  updated_at timestamptz NOT NULL DEFAULT now()
+  updated_at timestamptz NOT NULL DEFAULT now(),
+  UNIQUE (id, organization_id)
 );
 
 CREATE TABLE IF NOT EXISTS sessions (
@@ -55,7 +56,7 @@ CREATE TABLE IF NOT EXISTS buses (
   id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
   organization_id uuid NOT NULL REFERENCES organizations(id) ON DELETE RESTRICT,
   school_id uuid,
-  driver_id uuid REFERENCES users(id) ON DELETE SET NULL,
+  driver_id uuid,
   fleet_number text NOT NULL,
   registration_number text NOT NULL DEFAULT '',
   status text NOT NULL DEFAULT 'parked',
@@ -64,7 +65,8 @@ CREATE TABLE IF NOT EXISTS buses (
   UNIQUE (organization_id, fleet_number),
   UNIQUE (id, organization_id),
   UNIQUE (id, school_id),
-  FOREIGN KEY (school_id, organization_id) REFERENCES schools(id, organization_id) ON DELETE RESTRICT
+  FOREIGN KEY (school_id, organization_id) REFERENCES schools(id, organization_id) ON DELETE RESTRICT,
+  FOREIGN KEY (driver_id, organization_id) REFERENCES users(id, organization_id) ON DELETE RESTRICT
 );
 
 CREATE TABLE IF NOT EXISTS routes (
