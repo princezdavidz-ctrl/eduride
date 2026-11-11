@@ -107,7 +107,7 @@ npm test
 npm run migrate
 ```
 
-The backend GitHub Actions workflow runs unit and PostgreSQL-backed integration tests against PostgreSQL 16.
+The backend GitHub Actions workflow runs unit and PostgreSQL-backed integration tests against PostgreSQL 16. The integration suite runs only when `TEST_DATABASE_URL` is explicitly set; point it at a disposable test database, never production.
 
 ## Deployment gates still required
 
