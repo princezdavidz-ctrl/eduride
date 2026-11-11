@@ -1,0 +1,36 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="TREAD school transport operations CRM" />
+    <title>TREAD CRM | Operations</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <section class="splash-screen" id="splash-screen" aria-label="Loading TREAD CRM">
+      <div class="splash-logo"><span class="brand-mark">+</span><strong>TREAD</strong></div>
+      <p>Connected transport operations</p><div class="loading-line"><span></span></div>
+    </section>
+    <section class="login-screen hidden" id="login-screen" aria-labelledby="login-title">
+      <div class="login-visual"><div class="login-visual-copy"><span class="eyebrow">TREAD operations</span><h1>Every journey,<br /><em>in view.</em></h1><p>One calm workspace for the people keeping school transport moving.</p><div class="login-proof"><span>24</span><small>active buses<br />being monitored</small></div></div></div>
+      <form class="login-card" id="login-form"><div class="login-brand"><span class="brand-mark">+</span><span>TREAD <small>CRM</small></span></div><p class="eyebrow">Secure workspace</p><h2 id="login-title">Welcome back</h2><p class="login-subtitle">Sign in to manage your transport operations.</p><label for="login-email">Email address<input id="login-email" name="email" type="email" autocomplete="email" required /></label><label for="login-password">Password<input id="login-password" name="password" type="password" autocomplete="current-password" required /></label><p class="login-error" id="login-error" role="alert"></p><button class="primary-button login-button" type="submit"><span>Sign in to CRM</span><span>-></span></button><div class="login-footer"><span><i></i> Secure connection</span><span>v1.0.0</span></div></form>
+    </section>
+    <div class="app-shell hidden" id="crm-app">
+      <aside class="sidebar" aria-label="CRM navigation">
+        <a class="brand" href="#overview" aria-label="TREAD CRM home"><span class="brand-mark">+</span><span>TREAD <small>CRM</small></span></a>
+        <p class="nav-label">Command center</p><nav class="nav-list"><a class="nav-item active" href="#overview" data-view="overview"><span class="nav-icon">[]</span> Overview</a><a class="nav-item" href="#operations" data-view="operations"><span class="nav-icon">=</span> Live operations</a></nav>
+        <p class="nav-label">Transport planning</p><nav class="nav-list"><a class="nav-item" href="#routes" data-view="routes"><span class="nav-icon">~</span> Routes & stops</a><a class="nav-item" href="#journeys" data-view="journeys"><span class="nav-icon">+</span> Journeys & dispatch</a><a class="nav-item" href="#fleet" data-view="fleet"><span class="nav-icon">bus</span> Fleet & devices</a><a class="nav-item" href="#drivers" data-view="drivers"><span class="nav-icon">@</span> Drivers</a></nav>
+        <p class="nav-label">Network & people</p><nav class="nav-list"><a class="nav-item" href="#schools" data-view="schools"><span class="nav-icon">#</span> Schools</a><a class="nav-item" href="#families" data-view="families"><span class="nav-icon">&</span> Families & students</a></nav>
+        <p class="nav-label">Response & governance</p><nav class="nav-list"><a class="nav-item" href="#alerts" data-view="alerts"><span class="nav-icon">!</span> Alerts & incidents <span class="nav-count" id="alert-count">0</span></a><a class="nav-item" href="#reports" data-view="reports"><span class="nav-icon">%</span> Reports & exports</a><a class="nav-item" href="#settings" data-view="settings"><span class="nav-icon">*</span> Settings</a></nav>
+        <div class="sidebar-bottom"><div class="support-card"><strong>Need a hand?</strong><span>Contact TREAD support</span><button type="button" id="support-button">Open support</button></div><div class="profile"><span class="avatar">AM</span><span><strong id="profile-name">Transport admin</strong><small>Operations workspace</small></span><button class="more" type="button" aria-label="Profile options">...</button></div></div>
+      </aside>
+      <main class="main-content">
+        <header class="topbar"><div><p class="crumb" id="page-crumb">Command center / Overview</p><h1 id="page-title">Good morning</h1></div><div class="top-actions"><span class="sync-status"><i></i> <span id="sync-label">Connecting</span></span><button class="icon-button" id="top-alerts" type="button" aria-label="Open alerts">bell</button><button class="profile-button" id="top-profile" type="button"><span class="avatar small">AM</span><span id="top-profile-name">Admin</span><span class="chevron">v</span></button></div></header>
+        <section class="content-grid" id="view-root" aria-live="polite"></section>
+      </main>
+    </div>
+    <div class="toast" id="toast" role="status" aria-live="polite"></div>
+    <script src="app.js"></script>
+  </body>
+</html>

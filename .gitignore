@@ -1,0 +1,19 @@
+# Git metadata
+**/.git/
+
+# Generated dependencies, build output, and caches
+**/node_modules/
+**/.dart_tool/
+**/.gradle/
+*.kicad_prl
+**/build/
+**/.history/
+main-web/.output/
+main-web/.wrangler/
+app/.flutter-plugins-dependencies
+app/android/local.properties
+
+# Local editor and operating-system files
+**/.idea/
+**/.DS_Store
+.vscode/
