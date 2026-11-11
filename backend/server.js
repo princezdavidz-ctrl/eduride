@@ -403,21 +403,30 @@ async function handleRequest(request, response) {
     if (!requireRole(user, ["parent"], reply)) return;
     const childId = decodeURIComponent(childMatch[1]);
     if (!isUuid(childId)) return reply(404, { error: "Child not found" });
+    const client = await pool.connect();
     try {
       const body = await readBody(request);
       const schoolName = String(body.school ?? "").trim();
       if (!schoolName) return reply(400, { error: "School is required" });
-      const result = await pool.query(
+      await client.query("BEGIN");
+      const result = await client.query(
         `UPDATE children c SET school_id=s.id, verification_status='pending', updated_at=now()
          FROM schools s WHERE c.id=$1 AND c.parent_id=$2 AND lower(s.name)=lower($3) AND s.active=true
          RETURNING c.id,c.name,s.name AS school,c.verification_status AS "verificationStatus"`,
         [childId, user.id, schoolName],
       );
-      if (!result.rows[0]) return reply(404, { error: "Child or registered school not found" });
-      await pool.query("DELETE FROM child_bus_assignments WHERE child_id=$1", [childId]);
+      if (!result.rows[0]) {
+        await client.query("ROLLBACK");
+        return reply(404, { error: "Child or registered school not found" });
+      }
+      await client.query("DELETE FROM child_bus_assignments WHERE child_id=$1", [childId]);
+      await client.query("COMMIT");
       return reply(200, { child: result.rows[0] });
     } catch {
+      await client.query("ROLLBACK").catch(() => {});
       return reply(400, { error: "Invalid school change request" });
+    } finally {
+      client.release();
     }
   }
 
