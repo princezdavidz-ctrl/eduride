@@ -69,6 +69,14 @@ test("persistent API enforces identity, organization and device boundaries", { s
     assert.equal(child.status, 201);
     await pool.query("INSERT INTO child_bus_assignments(child_id,bus_id,school_id) VALUES($1,$2,$3)",[child.data.child.id,busA,schoolA]);
 
+    await pool.query("INSERT INTO schools(organization_id,name) VALUES($1,'Integration Academy A')",[orgB]);
+    const ambiguousSchool = await request("/api/children", {
+      method: "POST",
+      headers: { authorization: `Bearer ${parentToken}` },
+      body: JSON.stringify({ name: "Student Two", school: "Integration Academy A" }),
+    });
+    assert.equal(ambiguousSchool.status, 409);
+
     const parentBTriesChild = await request(`/api/children/${child.data.child.id}`, {
       method: "PATCH",
       headers: { authorization: `Bearer ${secondParent.data.token}` },
