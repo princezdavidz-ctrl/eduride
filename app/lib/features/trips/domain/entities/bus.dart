@@ -13,9 +13,9 @@ class Bus {
   final String route;
   final String status;
   final String school;
-  final double latitude;
-  final double longitude;
-  final int etaMinutes;
+  final double? latitude;
+  final double? longitude;
+  final int? etaMinutes;
 
   bool get isMoving => status == 'on_route';
 }
