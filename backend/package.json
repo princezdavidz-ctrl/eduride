@@ -10,7 +10,8 @@
     "start": "node server.js",
     "migrate": "node migrate.js",
     "bootstrap-admin": "node scripts/bootstrap-admin.js",
-    "test": "node --test"
+    "test": "node --test",
+    "provision-device": "node scripts/provision-device.js"
   },
   "dependencies": {
     "bcryptjs": "^2.4.3",
