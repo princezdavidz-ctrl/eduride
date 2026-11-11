@@ -25,6 +25,7 @@ import '../../navigation/presentation/terms_screen.dart';
 import '../../navigation/presentation/trip_history_screen.dart';
 import '../../notifications/presentation/notifications_screen.dart';
 import '../../settings/presentation/settings_screen.dart';
+import 'live_tracking_screen.dart';
 import 'providers/bus_provider.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -132,6 +133,11 @@ class _AppDrawer extends ConsumerWidget {
               leading: _DrawerAssetIcon('assets/icons/overview.png'),
               title: const Text('Overview'),
               onTap: () => Navigator.of(context).pop(),
+            ),
+            ListTile(
+              leading: const Icon(Icons.location_searching_rounded, color: AppTheme.blue),
+              title: const Text('Live bus tracking'),
+              onTap: () => open(const LiveTrackingScreen()),
             ),
             ListTile(
               leading: _DrawerAssetIcon('assets/icons/managechildren.png'),
