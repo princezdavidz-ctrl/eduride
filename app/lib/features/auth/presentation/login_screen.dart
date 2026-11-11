@@ -2,12 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import '../../../core/config/app_config.dart';
 import '../../family/presentation/child_setup_screen.dart';
 import '../../trips/presentation/home_screen.dart';
 import 'auth_widgets.dart';
 import 'forgot_password_screen.dart';
-import 'otp_verification_screen.dart';
 import 'providers/auth_provider.dart';
 
 class LoginScreen extends ConsumerStatefulWidget {
@@ -32,10 +30,6 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
   @override
   void initState() {
     super.initState();
-    if (AppConfig.isDemoMode) {
-      _emailController.text = 'test@gmail.com';
-      _passwordController.text = 'Password123';
-    }
     _restoreRememberedEmail();
   }
 
@@ -91,9 +85,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
       }
       if (!mounted) return;
 
-      final destination = session.isDemoSession
-          ? OtpVerificationScreen(email: email, purpose: OtpPurpose.signIn)
-          : _isSignUp
+      final destination = _isSignUp
           ? const ChildSetupScreen()
           : const HomeScreen();
       Navigator.of(
@@ -164,7 +156,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
               validator: (value) => value == null || !value.contains('@')
                   ? 'Enter a valid email address'
                   : null,
-              decoration: const InputDecoration(hintText: 'test@gmail.com'),
+              decoration: const InputDecoration(hintText: 'parent@example.com'),
             ),
             const SizedBox(height: 18),
             const FieldLabel(label: 'Password'),
@@ -172,11 +164,14 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
               controller: _passwordController,
               obscureText: _obscurePassword,
               textInputAction: TextInputAction.done,
-              validator: (value) => value == null || value.length < 6
-                  ? 'Use at least 6 characters'
+              validator: (value) => value == null ||
+                      (_isSignUp ? value.length < 12 : value.isEmpty)
+                  ? (_isSignUp
+                      ? 'Use at least 12 characters'
+                      : 'Enter your password')
                   : null,
               decoration: InputDecoration(
-                hintText: _isSignUp ? 'At least 6 characters' : 'Password123',
+                hintText: _isSignUp ? 'At least 12 characters' : 'Enter your password',
                 suffixIcon: IconButton(
                   tooltip: _obscurePassword ? 'Show password' : 'Hide password',
                   onPressed: () =>
