@@ -48,6 +48,14 @@ npm start
 
 Remove the bootstrap password from the deployment environment after the one-time account has been created. The script creates a new organization and administrator; it is not an idempotent reset command.
 
+To register a vehicle device, set `DEVICE_BUS_ID`, `DEVICE_CODE`, and `DEVICE_VARIANT` (`gps_only` or `vision_gps`) and run:
+
+```bash
+npm run provision-device
+```
+
+The command prints a high-entropy device token once. Provision it securely on that single device and do not commit or reuse it. The telemetry endpoint accepts GPS fields only; image and biometric payloads are rejected.
+
 ## Security and data boundaries
 
 - Passwords are stored as bcrypt hashes (cost 12), never as plaintext.
@@ -90,7 +98,7 @@ Device-authenticated:
 
 The initial PostgreSQL schema covers organizations, users, hashed sessions, schools, children, buses, routes, child/bus assignments, journeys, alerts, per-user alert acknowledgements, preferences, registered devices and GPS telemetry.
 
-Bus `updatedAt` is sourced from the latest recorded telemetry timestamp. It is never generated at read time. ETA remains null until a validated routing/ETA service is connected; clients should show “ETA unavailable” rather than inventing a value.
+Bus `updatedAt` is sourced from the latest recorded telemetry timestamp. It is never generated at read time. The API separately reports whether the latest GPS report is fresh (within two minutes). ETA remains null until a validated routing/ETA service is connected; clients should show “ETA unavailable” rather than inventing a value.
 
 ## Quality checks
 
