@@ -13,18 +13,20 @@ const pool = new Pool({
   max: 2,
 });
 
+const client = await pool.connect();
 try {
   const schemaPath = join(dirname(fileURLToPath(import.meta.url)), "db", "schema.sql");
   const schema = await readFile(schemaPath, "utf8");
-  await pool.query("BEGIN");
-  await pool.query(schema);
-  await pool.query("INSERT INTO schema_migrations(version) VALUES (1) ON CONFLICT (version) DO NOTHING");
-  await pool.query("COMMIT");
+  await client.query("BEGIN");
+  await client.query(schema);
+  await client.query("INSERT INTO schema_migrations(version) VALUES (1) ON CONFLICT (version) DO NOTHING");
+  await client.query("COMMIT");
   process.stdout.write("Edu Ride database schema is ready (version 1).\n");
 } catch (error) {
-  await pool.query("ROLLBACK").catch(() => {});
+  await client.query("ROLLBACK").catch(() => {});
   process.stderr.write(`Database migration failed: ${error.message}\n`);
   process.exitCode = 1;
 } finally {
+  client.release();
   await pool.end();
 }
