@@ -22,6 +22,8 @@ test("persistent API enforces identity, organization and device boundaries", { s
     const busA = (await pool.query("INSERT INTO buses(organization_id,school_id,fleet_number,status) VALUES($1,$2,'TEST-A','on_route') RETURNING id",[orgA,schoolA])).rows[0].id;
     const busAUnassigned = (await pool.query("INSERT INTO buses(organization_id,school_id,fleet_number) VALUES($1,$2,'TEST-A2') RETURNING id",[orgA,schoolA])).rows[0].id;
     const busB = (await pool.query("INSERT INTO buses(organization_id,school_id,fleet_number) VALUES($1,$2,'TEST-B') RETURNING id",[orgB,schoolB])).rows[0].id;
+    const alertA = (await pool.query("INSERT INTO alerts(organization_id,bus_id,severity,title,message) VALUES($1,$2,'warning','Bus delay A','Traffic delay') RETURNING id",[orgA,busA])).rows[0].id;
+    const alertB = (await pool.query("INSERT INTO alerts(organization_id,bus_id,severity,title,message) VALUES($1,$2,'info','Bus update B','Route update') RETURNING id",[orgB,busB])).rows[0].id;
     const adminHash = await hashPassword("Integration-Admin-Password-2026!");
     await pool.query(
       "INSERT INTO users(organization_id,email,password_hash,name,role,verification_status) VALUES($1,$2,$3,'Admin A','transport_admin','verified'),($4,$5,$3,'Admin B','transport_admin','verified')",
@@ -94,6 +96,10 @@ test("persistent API enforces identity, organization and device boundaries", { s
     assert.deepEqual(parentBuses.data.buses.map((bus) => bus.id), [busA]);
     assert.equal(parentBuses.data.buses[0].latitude, -1.2864);
     assert.equal(new Date(parentBuses.data.buses[0].updatedAt).toISOString(), telemetryTime);
+    assert.equal(parentBuses.data.buses[0].locationFresh, true);
+
+    const parentNotifications = await request("/api/notifications", { headers: { authorization: `Bearer ${parentToken}` } });
+    assert.deepEqual(parentNotifications.data.notifications.map((alert) => alert.id), [alertA]);
 
     const parentAlerts = await request("/api/alerts", { headers: { authorization: `Bearer ${parentToken}` } });
     assert.equal(parentAlerts.status, 403);
@@ -106,6 +112,18 @@ test("persistent API enforces identity, organization and device boundaries", { s
     const adminABuses = await request("/api/buses", { headers: { authorization: `Bearer ${adminA.data.token}` } });
     assert.equal(adminABuses.status, 200);
     assert.deepEqual(new Set(adminABuses.data.buses.map((bus) => bus.id)), new Set([busA,busAUnassigned]));
+    const noGpsBus = adminABuses.data.buses.find((bus) => bus.id === busAUnassigned);
+    assert.equal(noGpsBus.latitude, null);
+    assert.equal(noGpsBus.longitude, null);
+    assert.equal(noGpsBus.locationAvailable, false);
+    assert.equal(noGpsBus.locationFresh, false);
+    const adminAAlerts = await request("/api/alerts", { headers: { authorization: `Bearer ${adminA.data.token}` } });
+    assert.deepEqual(adminAAlerts.data.data.map((alert) => alert.id), [alertA]);
+    const acknowledged = await request(`/api/alerts/${alertA}`, {
+      method: "PATCH",
+      headers: { authorization: `Bearer ${adminA.data.token}` },
+    });
+    assert.equal(acknowledged.status, 200);
 
     const adminB = await request("/api/auth/login", {
       method: "POST",
@@ -113,6 +131,15 @@ test("persistent API enforces identity, organization and device boundaries", { s
     });
     const adminBBuses = await request("/api/buses", { headers: { authorization: `Bearer ${adminB.data.token}` } });
     assert.deepEqual(adminBBuses.data.buses.map((bus) => bus.id), [busB]);
+    const adminBAlerts = await request("/api/alerts", { headers: { authorization: `Bearer ${adminB.data.token}` } });
+    assert.deepEqual(adminBAlerts.data.data.map((alert) => alert.id), [alertB]);
+
+    const resetUnavailable = await request("/api/auth/forgot-password", {
+      method: "POST",
+      body: JSON.stringify({ email: "parent-one@integration.test" }),
+    });
+    assert.equal(resetUnavailable.status, 200);
+    assert.equal(resetUnavailable.data.available, false);
 
     const wrongPassword = await request("/api/auth/login", {
       method: "POST",
