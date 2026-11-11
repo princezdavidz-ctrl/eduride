@@ -529,6 +529,15 @@ class _HomeDashboardState extends ConsumerState<HomeDashboard> {
                       label: _locationStatus,
                     ),
                   ),
+                  if (busHasLocation && !bus.locationFresh)
+                    const Positioned(
+                      top: 114,
+                      left: 14,
+                      child: _MapLabel(
+                        icon: Icons.warning_amber_rounded,
+                        label: 'Last GPS update may be outdated',
+                      ),
+                    ),
                   Positioned(
                     top: 14,
                     right: 14,
