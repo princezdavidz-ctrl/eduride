@@ -409,6 +409,16 @@ class _HomeDashboardState extends ConsumerState<HomeDashboard> {
                 color: AppTheme.surface,
                 shape: const CircleBorder(),
                 child: IconButton(
+                  tooltip: 'Refresh journey information',
+                  onPressed: () => ref.invalidate(busesProvider),
+                  icon: const Icon(Icons.refresh_rounded, color: AppTheme.blue),
+                ),
+              ),
+              const SizedBox(width: 4),
+              Material(
+                color: AppTheme.surface,
+                shape: const CircleBorder(),
+                child: IconButton(
                   tooltip: 'My profile',
                   onPressed: _showMyProfile,
                   icon: const Icon(Icons.account_circle_outlined, color: AppTheme.navy),
@@ -656,13 +666,13 @@ class _HomeDashboardState extends ConsumerState<HomeDashboard> {
                       mainAxisSize: MainAxisSize.min,
                       children: [
                         Icon(
-                          busAvailable ? Icons.wifi_tethering_rounded : Icons.schedule_rounded,
+                          busAvailable ? Icons.directions_bus_outlined : Icons.schedule_rounded,
                           size: 15,
                           color: busAvailable ? AppTheme.success : AppTheme.warning,
                         ),
                         const SizedBox(width: 6),
                         Text(
-                          busAvailable ? 'LIVE' : 'PENDING',
+                          busAvailable ? 'ASSIGNED' : 'PENDING',
                           style: TextStyle(
                             color: busAvailable ? AppTheme.success : AppTheme.warning,
                             fontSize: 11,
