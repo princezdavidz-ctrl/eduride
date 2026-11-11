@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
-import '../../family/presentation/child_setup_screen.dart';
-import '../../trips/presentation/home_screen.dart';
 import 'auth_widgets.dart';
 
 enum OtpPurpose { signIn, signUp, passwordReset }
@@ -43,14 +41,6 @@ class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
     OtpPurpose.passwordReset =>
       'Confirm your email to continue password recovery.',
   };
-
-  void _verify() {
-    ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(
-        content: Text('OTP verification is not configured yet. Please contact school support.'),
-      ),
-    );
-  }
 
   @override
   Widget build(BuildContext context) {
