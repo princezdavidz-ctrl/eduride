@@ -1,9 +1,20 @@
 {
-  "name": "tread-backend",
+  "name": "edu-ride-backend",
   "private": true,
   "type": "module",
+  "engines": {
+    "node": ">=20"
+  },
   "scripts": {
     "dev": "node --watch server.js",
-    "start": "node server.js"
+    "start": "node server.js",
+    "migrate": "node migrate.js",
+    "bootstrap-admin": "node scripts/bootstrap-admin.js",
+    "test": "node --test",
+    "provision-device": "node scripts/provision-device.js"
+  },
+  "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "pg": "^8.13.1"
   }
 }

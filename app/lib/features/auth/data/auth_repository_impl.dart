@@ -1,4 +1,3 @@
-import '../../../core/config/app_config.dart';
 import '../../../core/errors/app_failure.dart';
 import '../../../core/security/secure_session_store.dart';
 import 'auth_remote_data_source.dart';
@@ -6,10 +5,6 @@ import '../domain/entities/auth_session.dart';
 import '../domain/repositories/auth_repository.dart';
 
 class AuthRepositoryImpl implements AuthRepository {
-  static const _demoEmail = 'test@gmail.com';
-  static const _demoPassword = 'Password123';
-  static const _demoToken = 'edu-ride-demo-session';
-
   AuthRepositoryImpl({
     required this._remoteDataSource,
     required this._sessionStore,
@@ -23,28 +18,10 @@ class AuthRepositoryImpl implements AuthRepository {
     required String email,
     required String password,
   }) async {
-    late final Map<String, dynamic> response;
-    try {
-      response = await _remoteDataSource.signIn(
-        email: email,
-        password: password,
-      );
-    } on NetworkFailure {
-      if (!AppConfig.isDemoMode ||
-          email.trim().toLowerCase() != _demoEmail ||
-          password != _demoPassword) {
-        rethrow;
-      }
-
-      final session = AuthSession(
-        accessToken: _demoToken,
-        userId: 'demo-user',
-        expiresAt: DateTime.now().add(const Duration(hours: 8)),
-        isDemoSession: true,
-      );
-      await _sessionStore.saveAccessToken(session.accessToken);
-      return session;
-    }
+    final response = await _remoteDataSource.signIn(
+      email: email,
+      password: password,
+    );
 
     final token =
         response['token'] as String? ??
@@ -108,14 +85,9 @@ class AuthRepositoryImpl implements AuthRepository {
   Future<AuthSession?> restoreSession() async {
     final token = await _sessionStore.readAccessToken();
     if (token == null || token.isEmpty) return null;
-    if (token == _demoToken) {
-      if (!AppConfig.isDemoMode) return null;
-      return AuthSession(
-        accessToken: token,
-        userId: 'demo-user',
-        expiresAt: DateTime.now().add(const Duration(hours: 8)),
-        isDemoSession: true,
-      );
+    if (token == 'edu-ride-demo-session') {
+      await _sessionStore.clear();
+      return null;
     }
 
     try {
@@ -149,7 +121,7 @@ class AuthRepositoryImpl implements AuthRepository {
     if (token == null || token.isEmpty) return _sessionStore.clear();
 
     try {
-      if (token != _demoToken) await _remoteDataSource.signOut();
+      await _remoteDataSource.signOut();
     } on NetworkFailure {
       // Local sign-out must remain available when the device is offline.
     } on UnauthorizedFailure {

@@ -22,10 +22,12 @@ class BusRepositoryImpl implements BusRepository {
       latitude: _asDouble(data['latitude']),
       longitude: _asDouble(data['longitude']),
       etaMinutes: _asInt(data['etaMinutes']),
+      updatedAt: DateTime.tryParse((data['updatedAt'] ?? '').toString()),
+      locationFresh: data['locationFresh'] == true,
     );
   }
 
-  double _asDouble(Object? value) => value is num ? value.toDouble() : 0;
+  double? _asDouble(Object? value) => value is num ? value.toDouble() : null;
 
-  int _asInt(Object? value) => value is num ? value.toInt() : 0;
+  int? _asInt(Object? value) => value is num ? value.toInt() : null;
 }

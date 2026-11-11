@@ -332,7 +332,8 @@ class _HomeDashboardState extends ConsumerState<HomeDashboard> {
     });
 
     final assignedBus = ref.read(busesProvider).valueOrNull?.firstOrNull;
-    if (!_hasCenteredOnUser && assignedBus == null) {
+    final assignedBusHasLocation = assignedBus?.latitude != null && assignedBus?.longitude != null;
+    if (!_hasCenteredOnUser && !assignedBusHasLocation) {
       _hasCenteredOnUser = true;
       _mapController.move(LatLng(position.latitude, position.longitude), 15);
     }
@@ -352,13 +353,14 @@ class _HomeDashboardState extends ConsumerState<HomeDashboard> {
   Widget build(BuildContext context) {
     final busesAsync = ref.watch(busesProvider);
     final bus = busesAsync.valueOrNull?.firstOrNull;
-    final eta = bus?.etaMinutes ?? 0;
+    final eta = bus?.etaMinutes;
     final busAvailable = bus != null;
-    if (bus != null && _centeredBusId != bus.id) {
+    final busHasLocation = bus?.latitude != null && bus?.longitude != null;
+    if (bus != null && busHasLocation && _centeredBusId != bus.id) {
       _centeredBusId = bus.id;
       WidgetsBinding.instance.addPostFrameCallback((_) {
         if (mounted) {
-          _mapController.move(LatLng(bus.latitude, bus.longitude), 13);
+          _mapController.move(LatLng(bus.latitude!, bus.longitude!), 13);
         }
       });
     }
@@ -449,11 +451,11 @@ class _HomeDashboardState extends ConsumerState<HomeDashboard> {
                         urlTemplate: AppConfig.mapTileUrl,
                         userAgentPackageName: AppConfig.mapUserAgentPackageName,
                       ),
-                      if (busAvailable)
+                      if (busHasLocation)
                         fm.MarkerLayer(
                           markers: [
                             fm.Marker(
-                              point: LatLng(bus.latitude, bus.longitude),
+                              point: LatLng(bus!.latitude!, bus.longitude!),
                               width: 56,
                               height: 56,
                               child: Container(
@@ -527,6 +529,15 @@ class _HomeDashboardState extends ConsumerState<HomeDashboard> {
                       label: _locationStatus,
                     ),
                   ),
+                  if (bus != null && busHasLocation && !bus.locationFresh)
+                    const Positioned(
+                      top: 114,
+                      left: 14,
+                      child: _MapLabel(
+                        icon: Icons.warning_amber_rounded,
+                        label: 'Last GPS update may be outdated',
+                      ),
+                    ),
                   Positioned(
                     top: 14,
                     right: 14,
@@ -554,7 +565,7 @@ class _HomeDashboardState extends ConsumerState<HomeDashboard> {
                       ),
                     ),
                   ),
-                  if (!busAvailable)
+                  if (!busAvailable || !busHasLocation)
                     Positioned.fill(
                       child: IgnorePointer(
                         child: Center(
@@ -577,6 +588,8 @@ class _HomeDashboardState extends ConsumerState<HomeDashboard> {
                                 Text(
                                   busesAsync.hasError
                                       ? 'Bus details unavailable'
+                                      : busAvailable
+                                      ? 'Waiting for GPS update'
                                       : 'Waiting for your bus',
                                   style: const TextStyle(
                                     color: AppTheme.ink,
@@ -587,6 +600,8 @@ class _HomeDashboardState extends ConsumerState<HomeDashboard> {
                                 Text(
                                   busesAsync.hasError
                                       ? 'Pull down to refresh your journey information.'
+                                      : busAvailable
+                                      ? 'Your bus is assigned. Its position will appear after the vehicle device reports GPS data.'
                                       : 'Your school’s latest route information will appear here.',
                                   textAlign: TextAlign.center,
                                   style: const TextStyle(
@@ -697,7 +712,7 @@ class _HomeDashboardState extends ConsumerState<HomeDashboard> {
                     ),
                   ),
                   Text(
-                    busAvailable ? '$eta min' : '—',
+                    busAvailable ? (eta == null ? 'Unavailable' : '$eta min') : '—',
                     style: Theme.of(context).textTheme.titleLarge?.copyWith(
                       color: AppTheme.blue,
                       fontSize: 20,

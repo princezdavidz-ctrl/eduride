@@ -65,6 +65,28 @@ class LiveTrackingScreen extends ConsumerWidget {
                   'Location and status reflect the latest update returned by the server. Pull down to refresh.',
                   style: Theme.of(context).textTheme.bodyMedium,
                 ),
+                if (bus.latitude != null && bus.longitude != null && !bus.locationFresh) ...[
+                  const SizedBox(height: 10),
+                  Container(
+                    padding: const EdgeInsets.all(12),
+                    decoration: BoxDecoration(
+                      color: AppTheme.warningTint,
+                      borderRadius: BorderRadius.circular(14),
+                    ),
+                    child: const Row(
+                      children: [
+                        Icon(Icons.warning_amber_rounded, color: AppTheme.warning),
+                        SizedBox(width: 9),
+                        Expanded(
+                          child: Text(
+                            'The latest GPS report is more than two minutes old. This position may be out of date.',
+                            style: TextStyle(color: AppTheme.ink, fontSize: 12, height: 1.4),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
                 const SizedBox(height: 18),
                 ClipRRect(
                   borderRadius: BorderRadius.circular(22),
@@ -73,9 +95,10 @@ class LiveTrackingScreen extends ConsumerWidget {
                     child: Stack(
                       children: [
                         Positioned.fill(
-                          child: fm.FlutterMap(
+                          child: bus.latitude != null && bus.longitude != null
+                              ? fm.FlutterMap(
                             options: fm.MapOptions(
-                              initialCenter: LatLng(bus.latitude, bus.longitude),
+                              initialCenter: LatLng(bus.latitude!, bus.longitude!),
                               initialZoom: 14,
                               interactionOptions: const fm.InteractionOptions(
                                 flags: fm.InteractiveFlag.all & ~fm.InteractiveFlag.rotate,
@@ -89,7 +112,7 @@ class LiveTrackingScreen extends ConsumerWidget {
                               fm.MarkerLayer(
                                 markers: [
                                   fm.Marker(
-                                    point: LatLng(bus.latitude, bus.longitude),
+                                    point: LatLng(bus.latitude!, bus.longitude!),
                                     width: 58,
                                     height: 58,
                                     child: Container(
@@ -115,7 +138,29 @@ class LiveTrackingScreen extends ConsumerWidget {
                                 ],
                               ),
                             ],
-                          ),
+                          )
+                              : Container(
+                                  color: AppTheme.blueTint,
+                                  child: Center(
+                                    child: Padding(
+                                      padding: const EdgeInsets.all(24),
+                                      child: Column(
+                                        mainAxisSize: MainAxisSize.min,
+                                        children: [
+                                          const Icon(Icons.satellite_alt_rounded, color: AppTheme.blue, size: 38),
+                                          const SizedBox(height: 12),
+                                          Text('Waiting for GPS update', style: Theme.of(context).textTheme.titleMedium),
+                                          const SizedBox(height: 6),
+                                          Text(
+                                            'The bus is assigned, but no vehicle location has been reported yet.',
+                                            textAlign: TextAlign.center,
+                                            style: Theme.of(context).textTheme.bodyMedium,
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  ),
+                                ),
                         ),
                         Positioned(
                           top: 14,
@@ -183,7 +228,7 @@ class LiveTrackingScreen extends ConsumerWidget {
                             child: Text('Estimated arrival', style: Theme.of(context).textTheme.bodyMedium),
                           ),
                           Text(
-                            '${bus.etaMinutes} min',
+                            bus.etaMinutes == null ? 'Unavailable' : '${bus.etaMinutes} min',
                             style: Theme.of(context).textTheme.titleLarge?.copyWith(color: AppTheme.blue),
                           ),
                         ],
