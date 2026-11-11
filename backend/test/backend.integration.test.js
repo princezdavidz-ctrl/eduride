@@ -3,7 +3,7 @@ import assert from "node:assert/strict";
 import pg from "pg";
 import { hashPassword, hashSessionToken } from "../security.js";
 
-const databaseUrl = process.env.DATABASE_URL;
+const databaseUrl = process.env.TEST_DATABASE_URL;
 
 test("persistent API enforces identity, organization and device boundaries", { skip: !databaseUrl }, async () => {
   process.env.PORT = "0";
@@ -98,6 +98,13 @@ test("persistent API enforces identity, organization and device boundaries", { s
       body: JSON.stringify({ latitude: -1.2, longitude: 36.8, image: "not-accepted" }),
     });
     assert.equal(imagePayload.status, 400);
+
+    const missingCoordinates = await request("/api/device/telemetry", {
+      method: "POST",
+      headers: { "x-device-token": deviceToken },
+      body: JSON.stringify({ longitude: 36.8 }),
+    });
+    assert.equal(missingCoordinates.status, 400);
 
     const parentBuses = await request("/api/buses", { headers: { authorization: `Bearer ${parentToken}` } });
     assert.equal(parentBuses.status, 200);
