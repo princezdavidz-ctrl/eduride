@@ -6,6 +6,7 @@ import { hashPassword, hashSessionToken } from "../security.js";
 const databaseUrl = process.env.TEST_DATABASE_URL;
 
 test("persistent API enforces identity, organization and device boundaries", { skip: !databaseUrl }, async () => {
+  process.env.DATABASE_URL = databaseUrl;
   process.env.PORT = "0";
   process.env.CORS_ORIGIN = "https://parent-app.example";
   const { Pool } = pg;
