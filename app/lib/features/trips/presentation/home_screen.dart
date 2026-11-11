@@ -136,7 +136,7 @@ class _AppDrawer extends ConsumerWidget {
             ),
             ListTile(
               leading: const Icon(Icons.location_searching_rounded, color: AppTheme.blue),
-              title: const Text('Live bus tracking'),
+              title: const Text('Bus tracking'),
               onTap: () => open(const LiveTrackingScreen()),
             ),
             ListTile(
