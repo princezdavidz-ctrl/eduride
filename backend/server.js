@@ -367,7 +367,7 @@ async function handleRequest(request, response) {
   }
 
   if (request.method === "GET" && pathname === "/api/children") {
-    if (user.role !== "parent" && !requireRole(user, ["transport_admin", "school_admin"], reply)) return;
+    if (user.role !== "parent" && (!requireRole(user, ["transport_admin", "school_admin"], reply) || !organizationRequired(user, reply))) return;
     const result = user.role === "parent"
       ? await pool.query(
           `SELECT c.id,c.name,s.name AS school,c.verification_status AS "verificationStatus"
@@ -482,6 +482,7 @@ async function handleRequest(request, response) {
 
   if (request.method === "GET" && pathname === "/api/buses") {
     if (!["parent", "driver", "school_admin", "transport_admin"].includes(user.role)) return reply(403, { error: "Bus access is not permitted" });
+    if (user.role !== "parent" && !organizationRequired(user, reply)) return;
     return reply(200, { buses: await listBuses(user) });
   }
 
@@ -547,7 +548,7 @@ async function handleRequest(request, response) {
 
   if (request.method === "GET" && (pathname === "/api/alerts" || pathname === "/api/notifications")) {
     const isNotifications = pathname === "/api/notifications";
-    if (!isNotifications && !requireRole(user, ["transport_admin", "school_admin"], reply)) return;
+    if (!isNotifications && (!requireRole(user, ["transport_admin", "school_admin"], reply) || !organizationRequired(user, reply))) return;
     return reply(200, isNotifications
       ? { notifications: await listAlerts(user, true) }
       : { data: await listAlerts(user) });
