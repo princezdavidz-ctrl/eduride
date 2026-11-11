@@ -134,6 +134,7 @@ async function listBuses(user) {
     `SELECT b.id, b.fleet_number AS "fleetNumber", b.registration_number AS "registrationNumber",
       b.status, COALESCE(r.name, '') AS route, COALESCE(s.name, '') AS school,
       latest.latitude, latest.longitude, latest.recorded_at AS "updatedAt",
+      COALESCE(latest.recorded_at >= now() - interval '2 minutes', false) AS "locationFresh",
       NULL::integer AS "etaMinutes"
      FROM buses b
      LEFT JOIN schools s ON s.id = b.school_id
@@ -157,6 +158,7 @@ async function listBuses(user) {
     latitude: bus.latitude,
     longitude: bus.longitude,
     updatedAt: bus.updatedAt,
+    locationFresh: bus.locationFresh,
     etaMinutes: bus.etaMinutes,
     fleetNumber: bus.fleetNumber,
     registrationNumber: bus.registrationNumber,
