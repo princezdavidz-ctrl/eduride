@@ -137,7 +137,7 @@ class _LanguageScreenState extends State<LanguageScreen>
                           onPressed: () async {
                             final locale = _controller.locale;
                             await _controller.setLocale(locale);
-                            if (!mounted) return;
+                            if (!context.mounted) return;
                             Navigator.of(
                               context,
                             ).pushReplacementNamed(AppRoutes.login);
