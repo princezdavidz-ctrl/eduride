@@ -245,15 +245,15 @@ async function handleRequest(request, response) {
       if (Object.keys(body).some((field) => !acceptedFields.includes(field))) {
         return reply(400, { error: "Only GPS telemetry is accepted by this endpoint; image payloads are not supported" });
       }
-      const latitude = Number(body.latitude);
-      const longitude = Number(body.longitude);
-      const speedKph = body.speedKph == null ? null : Number(body.speedKph);
-      const heading = body.heading == null ? null : Number(body.heading);
+      const latitude = body.latitude;
+      const longitude = body.longitude;
+      const speedKph = body.speedKph === undefined ? null : body.speedKph;
+      const heading = body.heading === undefined ? null : body.heading;
       const recordedAt = body.recordedAt ? new Date(body.recordedAt) : new Date();
-      if (!Number.isFinite(latitude) || latitude < -90 || latitude > 90 ||
-          !Number.isFinite(longitude) || longitude < -180 || longitude > 180 ||
-          (speedKph !== null && (!Number.isFinite(speedKph) || speedKph < 0 || speedKph > 250)) ||
-          (heading !== null && (!Number.isFinite(heading) || heading < 0 || heading > 360)) ||
+      if (typeof latitude !== "number" || !Number.isFinite(latitude) || latitude < -90 || latitude > 90 ||
+          typeof longitude !== "number" || !Number.isFinite(longitude) || longitude < -180 || longitude > 180 ||
+          (speedKph !== null && (typeof speedKph !== "number" || !Number.isFinite(speedKph) || speedKph < 0 || speedKph > 250)) ||
+          (heading !== null && (typeof heading !== "number" || !Number.isFinite(heading) || heading < 0 || heading > 360)) ||
           Number.isNaN(recordedAt.getTime()) || recordedAt.getTime() > Date.now() + 60_000 ||
           recordedAt.getTime() < Date.now() - 24 * 60 * 60 * 1000) {
         return reply(400, { error: "Telemetry values are invalid or outside the accepted time window" });
