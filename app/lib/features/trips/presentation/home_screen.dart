@@ -455,7 +455,7 @@ class _HomeDashboardState extends ConsumerState<HomeDashboard> {
                         fm.MarkerLayer(
                           markers: [
                             fm.Marker(
-                              point: LatLng(bus.latitude!, bus.longitude!),
+                              point: LatLng(bus!.latitude!, bus.longitude!),
                               width: 56,
                               height: 56,
                               child: Container(
