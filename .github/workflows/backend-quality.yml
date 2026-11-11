@@ -35,6 +35,7 @@ jobs:
           --health-retries 5
     env:
       DATABASE_URL: postgresql://eduride:eduride_test@localhost:5432/eduride_test
+      TEST_DATABASE_URL: postgresql://eduride:eduride_test@localhost:5432/eduride_test
       PORT: 0
       CORS_ORIGIN: https://parent-app.example
     steps:
