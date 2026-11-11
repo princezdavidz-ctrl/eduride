@@ -1,7 +1,6 @@
 import 'package:flutter/foundation.dart';
 
 abstract final class AppConfig {
-  static const isDemoMode = kDebugMode;
   static const apiBaseUrl = String.fromEnvironment(
     'API_BASE_URL',
     defaultValue: 'https://s1103.usc1.mysecurecloudhost.com/backend/api',
