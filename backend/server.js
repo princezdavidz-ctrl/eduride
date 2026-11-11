@@ -1,13 +1,11 @@
 import { createServer } from "node:http";
 import { pathToFileURL } from "node:url";
-import { randomUUID } from "node:crypto";
 import pg from "pg";
 import { createSessionToken, hashPassword, hashSessionToken, normalizeEmail, publicUser, verifyPassword } from "./security.js";
 
 const { Pool } = pg;
 const PORT = Number(process.env.PORT || 8787);
 const APP_BASE_PATH = (process.env.APP_BASE_PATH || "").replace(/\/+$/, "");
-const SESSION_TTL_MS = 1000 * 60 * 60 * 8;
 const BODY_LIMIT_BYTES = 16 * 1024;
 const allowedOrigins = new Set((process.env.CORS_ORIGIN || "").split(",").map((value) => value.trim()).filter(Boolean));
 const pool = new Pool({
@@ -537,7 +535,7 @@ async function handleRequest(request, response) {
   return reply(404, { error: "Route not found" });
 }
 
-const server = createServer((request, response) => {
+export const server = createServer((request, response) => {
   handleRequest(request, response).catch((error) => {
     console.error("Unhandled request failure", error);
     if (!response.headersSent) sendJson(response, 500, { error: "Internal server error" });
@@ -548,11 +546,17 @@ const server = createServer((request, response) => {
 export async function startServer() {
   if (!process.env.DATABASE_URL) throw new Error("DATABASE_URL is required. In-memory mode is intentionally disabled.");
   await pool.query("SELECT 1");
-  server.listen(PORT, () => console.log(`Edu Ride backend listening on port ${PORT}`));
+  await new Promise((resolve, reject) => {
+    server.once("error", reject);
+    server.listen(PORT, resolve);
+  });
+  const address = server.address();
+  console.log(`Edu Ride backend listening on port ${typeof address === "object" && address ? address.port : PORT}`);
+  return address;
 }
 
 export async function stopServer() {
-  await new Promise((resolve) => server.close(resolve));
+  if (server.listening) await new Promise((resolve) => server.close(resolve));
   await pool.end();
 }
 
