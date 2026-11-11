@@ -160,7 +160,7 @@ void main() {
 
     await tester.tap(find.text('Open settings'));
     await tester.pumpAndSettle();
-    expect(find.text('Settings'), findsOneWidget);
+    expect(find.text('Settings'), findsNWidgets(2));
 
     await tester.tap(find.byTooltip('Open navigation menu'));
     await tester.pumpAndSettle(const Duration(milliseconds: 100));
@@ -183,7 +183,13 @@ void main() {
     expect(find.text('Choose your language'), findsOneWidget);
     expect(find.text('English'), findsOneWidget);
     expect(find.text('Kiswahili'), findsOneWidget);
-    expect(find.byType(SlideTransition), findsNWidgets(2));
+    expect(
+      find.descendant(
+        of: find.byType(LanguageScreen),
+        matching: find.byType(SlideTransition),
+      ),
+      findsNWidgets(2),
+    );
     expect(
       find.descendant(of: find.byType(Stack), matching: find.byType(Image)),
       findsOneWidget,
@@ -293,7 +299,7 @@ void main() {
 
       expect(find.text('Edu Ride'), findsOneWidget);
       expect(find.byType(Image), findsOneWidget);
-      expect(find.byType(LinearProgressIndicator), findsOneWidget);
+      expect(find.byType(CircularProgressIndicator), findsOneWidget);
       expect(find.text('Internet connection ready'), findsOneWidget);
       expect(find.byIcon(Icons.wifi_rounded), findsNothing);
       expect(find.byIcon(Icons.wifi_off_rounded), findsNothing);

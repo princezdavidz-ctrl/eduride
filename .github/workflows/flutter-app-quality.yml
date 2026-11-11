@@ -1,0 +1,43 @@
+name: Flutter app quality
+
+on:
+  push:
+    branches:
+      - main
+      - feature/edu-ride-main-app-ui-refresh
+  pull_request:
+    paths:
+      - "app/**"
+      - ".github/workflows/flutter-app-quality.yml"
+
+permissions:
+  contents: read
+
+jobs:
+  flutter-quality:
+    name: Analyze, test and build Flutter app
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: app
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          channel: stable
+          cache: true
+
+      - name: Install dependencies
+        run: flutter pub get
+
+      - name: Analyze
+        run: flutter analyze --no-pub
+
+      - name: Run tests
+        run: flutter test --no-pub
+
+      - name: Build Android debug APK
+        run: flutter build apk --debug --no-pub

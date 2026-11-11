@@ -83,53 +83,157 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
-      body: Center(
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Image.asset(
-              'assets/images/logo.jpeg',
-              width: 220,
-              height: 220,
-              fit: BoxFit.contain,
-            ),
-            const SizedBox(height: 12),
-            const Text(
-              AppConfig.appName,
-              style: TextStyle(
-                color: Color(0xFF1769E0),
-                fontSize: 42,
-                fontWeight: FontWeight.w700,
-                letterSpacing: 1,
+      body: DecoratedBox(
+        decoration: const BoxDecoration(
+          gradient: LinearGradient(
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+            colors: [Color(0xFF0F3D86), Color(0xFF1769E0), Color(0xFF4C91F2)],
+          ),
+        ),
+        child: SafeArea(
+          child: Stack(
+            children: [
+              Positioned(
+                top: -90,
+                right: -70,
+                child: _SplashGlow(size: 250),
               ),
-            ),
-            const SizedBox(height: 8),
-            const Text(
-              'Your school journey, made easier',
-              style: TextStyle(color: Color(0xFF667085), fontSize: 14),
-            ),
-            const SizedBox(height: 36),
-            SizedBox(
-              width: 220,
-              child: LinearProgressIndicator(
-                minHeight: 4,
-                borderRadius: BorderRadius.circular(4),
-                color: const Color(0xFF1769E0),
-                backgroundColor: const Color(0xFFEAF2FF),
+              Positioned(
+                bottom: 80,
+                left: -110,
+                child: _SplashGlow(size: 280),
               ),
-            ),
-            const SizedBox(height: 14),
-            Text(
-              _connectionStatus,
-              textAlign: TextAlign.center,
-              style: const TextStyle(color: Color(0xFF667085), fontSize: 13),
-            ),
-          ],
+              Center(
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 28),
+                  child: ConstrainedBox(
+                    constraints: const BoxConstraints(maxWidth: 420),
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Container(
+                          padding: const EdgeInsets.all(14),
+                          decoration: BoxDecoration(
+                            color: Colors.white,
+                            borderRadius: BorderRadius.circular(30),
+                            boxShadow: [
+                              BoxShadow(
+                                color: Colors.black.withValues(alpha: 0.16),
+                                blurRadius: 34,
+                                offset: const Offset(0, 16),
+                              ),
+                            ],
+                          ),
+                          child: ClipRRect(
+                            borderRadius: BorderRadius.circular(20),
+                            child: Image.asset(
+                              'assets/images/logo.jpeg',
+                              width: 142,
+                              height: 142,
+                              fit: BoxFit.contain,
+                            ),
+                          ),
+                        ),
+                        const SizedBox(height: 28),
+                        const Text(
+                          AppConfig.appName,
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 38,
+                            fontWeight: FontWeight.w900,
+                            letterSpacing: -0.8,
+                          ),
+                        ),
+                        const SizedBox(height: 9),
+                        const Text(
+                          'Every journey. Safely connected.',
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                            color: Color(0xFFE8F1FF),
+                            fontSize: 15,
+                            fontWeight: FontWeight.w500,
+                            letterSpacing: 0.2,
+                          ),
+                        ),
+                        const SizedBox(height: 42),
+                        Container(
+                          width: double.infinity,
+                          padding: const EdgeInsets.all(18),
+                          decoration: BoxDecoration(
+                            color: Colors.white.withValues(alpha: 0.12),
+                            borderRadius: BorderRadius.circular(20),
+                            border: Border.all(
+                              color: Colors.white.withValues(alpha: 0.2),
+                            ),
+                          ),
+                          child: Column(
+                            children: [
+                              const SizedBox(
+                                width: 30,
+                                height: 30,
+                                child: CircularProgressIndicator(
+                                  strokeWidth: 2.6,
+                                  valueColor: AlwaysStoppedAnimation<Color>(
+                                    Colors.white,
+                                  ),
+                                ),
+                              ),
+                              const SizedBox(height: 14),
+                              Text(
+                                _connectionStatus,
+                                textAlign: TextAlign.center,
+                                style: const TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 13,
+                                  height: 1.4,
+                                  fontWeight: FontWeight.w600,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+              const Positioned(
+                bottom: 18,
+                left: 0,
+                right: 0,
+                child: Text(
+                  'A safer school journey starts here',
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    color: Color(0xFFDCEAFF),
+                    fontSize: 11,
+                    letterSpacing: 0.6,
+                  ),
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );
   }
+}
+
+class _SplashGlow extends StatelessWidget {
+  const _SplashGlow({required this.size});
+
+  final double size;
+
+  @override
+  Widget build(BuildContext context) => Container(
+    width: size,
+    height: size,
+    decoration: BoxDecoration(
+      shape: BoxShape.circle,
+      color: Colors.white.withValues(alpha: 0.055),
+    ),
+  );
 }
 
 Future<String?> requestStartupPermissions() async {

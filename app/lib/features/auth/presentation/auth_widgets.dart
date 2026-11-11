@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../../core/config/app_config.dart';
+import '../../../core/theme/app_theme.dart';
 
 class BrandMark extends StatelessWidget {
   const BrandMark({required this.onTap, super.key});
@@ -15,11 +16,11 @@ class BrandMark extends StatelessWidget {
         mainAxisSize: MainAxisSize.min,
         children: [
           ClipRRect(
-            borderRadius: BorderRadius.circular(12),
+            borderRadius: BorderRadius.circular(15),
             child: Image.asset(
               'assets/images/logo.jpeg',
-              width: 48,
-              height: 48,
+              width: 52,
+              height: 52,
               fit: BoxFit.cover,
             ),
           ),
@@ -48,7 +49,7 @@ class FieldLabel extends StatelessWidget {
       child: Text(
         label,
         style: const TextStyle(
-          color: Color(0xFF34443B),
+          color: AppTheme.ink,
           fontSize: 13,
           fontWeight: FontWeight.w700,
         ),
@@ -76,13 +77,13 @@ class AuthLayout extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFFF7F9FC),
+      backgroundColor: AppTheme.background,
       body: SafeArea(
         child: Center(
           child: SingleChildScrollView(
-            padding: const EdgeInsets.fromLTRB(24, 34, 24, 24),
+            padding: const EdgeInsets.fromLTRB(22, 30, 22, 28),
             child: ConstrainedBox(
-              constraints: const BoxConstraints(maxWidth: 440),
+              constraints: const BoxConstraints(maxWidth: 460),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
@@ -93,7 +94,7 @@ class AuthLayout extends StatelessWidget {
                       ).popUntil((route) => route.isFirst),
                     ),
                   ),
-                  const SizedBox(height: 28),
+                  const SizedBox(height: 34),
                   Text(
                     title,
                     textAlign: TextAlign.center,
@@ -111,8 +112,15 @@ class AuthLayout extends StatelessWidget {
                     padding: const EdgeInsets.all(24),
                     decoration: BoxDecoration(
                       color: Colors.white,
-                      borderRadius: BorderRadius.circular(28),
-                      border: Border.all(color: const Color(0xFFE5E7EB)),
+                      borderRadius: BorderRadius.circular(24),
+                      border: Border.all(color: AppTheme.border),
+                      boxShadow: const [
+                        BoxShadow(
+                          color: Color(0x080F2B46),
+                          blurRadius: 24,
+                          offset: Offset(0, 10),
+                        ),
+                      ],
                     ),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
