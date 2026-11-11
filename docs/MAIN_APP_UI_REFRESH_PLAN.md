@@ -81,6 +81,7 @@ This workstream refreshes the Flutter parent-facing mobile app in `app/`. The pu
 ## Known follow-up items
 
 - The app currently uses a placeholder Flutter package identity (`com.example.trend`) and package name `trend`; replace these with approved production identifiers before store release.
+- The bus provider currently fetches a snapshot on demand; the UI now labels assignment accurately and exposes manual refresh. Continuous real-time telemetry/push updates are a backend milestone, not implemented by this UI branch.
 - The home map must be checked on-device with a real assigned bus and with location permission denied.
 - The full child, tracking, notifications, profile and secondary-page visual pass remains part of the next UI slices.
 - Backend persistence, role-based access, device telemetry ingestion and push delivery are intentionally deferred until the main app UI work is complete.
