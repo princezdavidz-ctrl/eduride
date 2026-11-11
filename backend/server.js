@@ -392,13 +392,14 @@ async function handleRequest(request, response) {
       const schoolName = String(body.school ?? "").trim();
       const childName = String(body.name ?? "").trim();
       if (!childName || childName.length > 120 || !schoolName || schoolName.length > 180) return reply(400, { error: "Child name and school are required" });
-      const school = await pool.query("SELECT id FROM schools WHERE lower(name)=lower($1) AND active=true ORDER BY created_at LIMIT 1", [schoolName]);
+      const school = await pool.query("SELECT id,name FROM schools WHERE lower(name)=lower($1) AND active=true ORDER BY created_at LIMIT 2", [schoolName]);
       if (!school.rows[0]) return reply(422, { error: "Select a registered school. Contact your school if it is not listed." });
+      if (school.rows.length > 1) return reply(409, { error: "More than one school has that name. Contact support so the correct school can be selected." });
       const result = await pool.query(
         "INSERT INTO children(parent_id,school_id,name) VALUES($1,$2,$3) RETURNING id,name,verification_status AS \"verificationStatus\"",
         [user.id, school.rows[0].id, childName],
       );
-      return reply(201, { child: { ...result.rows[0], school: schoolName } });
+      return reply(201, { child: { ...result.rows[0], school: school.rows[0].name } });
     } catch (error) {
       return reply(400, { error: error.message === "Request body too large" ? error.message : "Invalid child details" });
     }
@@ -424,12 +425,16 @@ async function handleRequest(request, response) {
         return reply(404, { error: "Child or registered school not found" });
       }
       const school = await client.query(
-        "SELECT id,name FROM schools WHERE lower(name)=lower($1) AND active=true ORDER BY created_at LIMIT 1",
+        "SELECT id,name FROM schools WHERE lower(name)=lower($1) AND active=true ORDER BY created_at LIMIT 2",
         [schoolName],
       );
       if (!school.rows[0]) {
         await client.query("ROLLBACK");
         return reply(404, { error: "Child or registered school not found" });
+      }
+      if (school.rows.length > 1) {
+        await client.query("ROLLBACK");
+        return reply(409, { error: "More than one school has that name. Contact support so the correct school can be selected." });
       }
       await client.query("DELETE FROM child_bus_assignments WHERE child_id=$1", [childId]);
       const result = await client.query(
