@@ -25,7 +25,7 @@ class BusRepositoryImpl implements BusRepository {
     );
   }
 
-  double _asDouble(Object? value) => value is num ? value.toDouble() : 0;
+  double? _asDouble(Object? value) => value is num ? value.toDouble() : null;
 
-  int _asInt(Object? value) => value is num ? value.toInt() : 0;
+  int? _asInt(Object? value) => value is num ? value.toInt() : null;
 }
