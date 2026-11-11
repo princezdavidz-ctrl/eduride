@@ -65,7 +65,7 @@ test("persistent API enforces identity, organization and device boundaries", { s
       body: JSON.stringify({ name: "Student One", school: "Integration Academy A" }),
     });
     assert.equal(child.status, 201);
-    await pool.query("INSERT INTO child_bus_assignments(child_id,bus_id) VALUES($1,$2)",[child.data.child.id,busA]);
+    await pool.query("INSERT INTO child_bus_assignments(child_id,bus_id,school_id) VALUES($1,$2,$3)",[child.data.child.id,busA,schoolA]);
 
     const parentBTriesChild = await request(`/api/children/${child.data.child.id}`, {
       method: "PATCH",
@@ -81,6 +81,13 @@ test("persistent API enforces identity, organization and device boundaries", { s
       body: JSON.stringify({ latitude: -1.2864, longitude: 36.8172, speedKph: 24, heading: 180, recordedAt: telemetryTime }),
     });
     assert.equal(telemetry.status, 202);
+
+    const imagePayload = await request("/api/device/telemetry", {
+      method: "POST",
+      headers: { "x-device-token": deviceToken },
+      body: JSON.stringify({ latitude: -1.2, longitude: 36.8, image: "not-accepted" }),
+    });
+    assert.equal(imagePayload.status, 400);
 
     const parentBuses = await request("/api/buses", { headers: { authorization: `Bearer ${parentToken}` } });
     assert.equal(parentBuses.status, 200);
