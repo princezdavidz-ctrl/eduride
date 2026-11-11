@@ -300,12 +300,14 @@ async function handleRequest(request, response) {
   }
 
   if (request.method === "POST" && pathname === "/api/auth/signup") {
+    const signupKey = `signup:${request.socket.remoteAddress || "unknown"}`;
+    if (isRateLimited(signupKey)) return reply(429, { error: "Too many registration attempts. Try again in one minute." });
     try {
       const body = await readBody(request);
       const email = normalizeEmail(body.email);
       const name = String(body.name ?? "").trim();
       const password = String(body.password ?? "");
-      if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email) || !name || name.length > 120 ||
+      if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email) || email.length > 254 || !name || name.length > 120 ||
           password.length < 12 || password.length > 128) {
         return reply(400, { error: "Enter a valid email and name, and use a password of at least 12 characters" });
       }
