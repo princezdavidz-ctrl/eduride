@@ -18,7 +18,7 @@ class LiveTrackingScreen extends ConsumerWidget {
     return Scaffold(
       backgroundColor: AppTheme.background,
       appBar: const DrawerPageAppBar(
-        title: 'Live bus tracking',
+        title: 'Bus tracking',
         backgroundColor: AppTheme.background,
       ),
       body: buses.when(
@@ -62,7 +62,7 @@ class LiveTrackingScreen extends ConsumerWidget {
                 ),
                 const SizedBox(height: 6),
                 Text(
-                  'Location and status are based on the latest update received from the assigned bus.',
+                  'Location and status reflect the latest update returned by the server. Pull down to refresh.',
                   style: Theme.of(context).textTheme.bodyMedium,
                 ),
                 const SizedBox(height: 18),
