@@ -24,12 +24,19 @@ Fine-resolution PDN results:
 
 **Git synchronization caveat:** The PCBKit workspace placement revision has not been confirmed in the KiCad PCB file stored in GitHub. The latest verified PCB workspace and GitHub PCB source must be reconciled before PR #4 can be considered a complete source snapshot. The commit associated with this status update changes documentation only.
 
-## Fine-resolution DC and thermal model limitations
+## Updated preliminary DC, thermal and PDN scenario
 
-- Modelled V3V3 drop to U1.2: 12.8 mV (0.4%) at 97.1 mA.
-- Modelled board temperature under U1: 32.9 °C in 25 °C still air.
-- Model assumes ESP32-S3 Wi-Fi peak current of 97 mA and U1 dissipation of 320 mW.
-- MODEM_5V_EXT and MODEM_5V_RAW have no modeled loads. The model does not validate cellular modem transmit bursts, GNSS, display, peripherals, startup/inrush, or simultaneous peak loading. Apparent low temperature and voltage drop are not system-level sign-off.
+The earlier 97 mA ESP32-S3 load assumption was replaced. Espressif's ESP32-S3-WROOM-1 datasheet reports up to 355 mA peak for 802.11b TX at 20.5 dBm. The preliminary model therefore assigns U1 a 450 mA design allowance and a 550 mA total V3V3 rail load, including small placeholder loads for the exposed headers and microSD. The 5 V logic rail is modelled at 470 mA. These are analysis scenarios, not measured system loads.
+
+Fine-resolution results at 40 °C ambient:
+- V3V3: 550 mA total; worst modeled drop 77.6 mV (2.4%) at J4.1; drop to U1.2 is 70.9 mV.
+- V5_LOGIC: 470 mA total; worst modeled drop 19.8 mV (0.4%) at J8.1.
+- PDN: V3V3 impedance at U1 is 557 mΩ at 29.9 MHz against the current 600 mΩ model target.
+- Nearest V3V3 capacitor remains C13, 100 nF, at 9.76 mm from U1; still too far for ideal high-frequency local decoupling.
+- Thermal scenario: board under U3 is 79.9 °C and estimated U3 junction is 94 °C; board under U1 is 63.5 °C and under U2 is 62.6 °C.
+- Component heat-loss inputs (U1 0.8 W, U2 0.3 W, U3 0.4 W) are provisional estimates, not measured dissipation. Thermal output is therefore indicative only.
+
+The board's modem connectors remain unloaded in the model: MODEM_5V_EXT and MODEM_5V_RAW have no modeled current. There is no approved modem part/carrier profile yet. GNSS, display, external peripherals, startup/inrush, and simultaneous worst-case loads are not fully characterized. Do not treat these results as system-level or automotive sign-off.
 
 ## Remaining engineering gates
 
