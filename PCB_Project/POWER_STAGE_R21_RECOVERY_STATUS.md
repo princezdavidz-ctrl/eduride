@@ -117,3 +117,19 @@ The current PCBKit four-layer prototype enables F.Cu, In1.Cu, In2.Cu and B.Cu. C
 
 ### Current DRC status
 The latest PCBKit check of `Edu-Ride-Bus-Tracker-4L.kicad_pcb` reports 0 unconnected pads, 8 J3 hole-clearance errors and 0 warnings. The errors remain 0.1751–0.2099 mm actual versus the 0.2500 mm rule. No global clearance rule was relaxed. The original two-layer baseline remains untouched. The four-layer PCB remains a PCBKit-workspace-only prototype and is not synchronized to GitHub.
+
+
+## Revision B continuation — 25 November 2026 J3 manufacturer verification and four-layer DRC rule
+
+### J3 exact part identified and verified
+The existing J3 value is **GCT USB4105-GF-A**. Its manufacturer drawing (USB4105, recommended PCB layout, component-side view, ±0.05 mm land-pattern tolerance) was compared against the current PCBKit footprint and KiCad's installed `USB_C_Receptacle_GCT_USB4105-xx-A_16P_TopMnt_Horizontal` footprint. The contact-land coordinates, widths, two Ø0.65 mm locating holes at ±2.89 mm / 1.075 mm relative to the current contact-row datum, and four shell-stake positions/dimensions match after a simple footprint-origin translation. The current J3 is therefore consistent with the selected GCT part; retain it.
+
+G-Switch GT-USB-7010B (C2837092) was investigated as a possible alternative but is **not a verified drop-in replacement**: its shell-stake arrangement differs from the current GCT USB4105 geometry. It is not selected and must not be substituted without a new placement, mechanical check and routing revision.
+
+### Four-layer board-specific J3 rule
+The two-layer project already contains a narrowly scoped KiCad rule named `J3: pads by its own holes`, applying the hole-clearance exception only between objects within footprint J3. The four-layer board has a different filename and was not loading that rule. A corresponding `Edu-Ride-Bus-Tracker-4L.kicad_dru` was therefore created for the four-layer prototype only, preserving the same J3-only scope and leaving global clearance rules unchanged.
+
+After applying the board-specific rule, PCBKit/KiCad check reports: **no violations, nothing unconnected** for `Edu-Ride-Bus-Tracker-4L.kicad_pcb`. This resolves the eight nominal DRC reports by applying the existing manufacturer-land-pattern exception; it does not constitute fabricator acceptance. Before fabrication, the selected board house must confirm its hole-to-copper capability against the GCT recommended land pattern and tolerances. Do not broaden this exception beyond J3.
+
+### Source synchronization remains open
+The four-layer PCB and its new board-specific rule file remain in PCBKit workspace and are not yet synchronized to GitHub. PR #4 remains draft/unmerged. No manufacturing release is authorized.
