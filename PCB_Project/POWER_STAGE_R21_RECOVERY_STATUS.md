@@ -105,3 +105,15 @@ Fine analysis of `Edu-Ride-Bus-Tracker-4L.kicad_pcb` reports:
 - V5_LOGIC PDN is within its modeled target; this is not a substitute for measured load-transient testing.
 
 These are simulation/model results from the current preliminary 4-layer stackup (35 µm copper, 0.18/1.07/0.18 mm FR-4 dielectrics, εr 4.2). The fabricator must confirm the actual dielectric, copper and impedance tolerances before controlled-impedance routing is finalized. The 4-layer board still has 0 unconnected pads and 8 J3 hole-clearance DRC errors; no manufacturing release.
+
+
+## Revision B continuation — 25 November 2026 connector candidate and layer audit
+
+### USB-C connector candidate under verification (not yet approved)
+PCBKit parts search identified G-Switch GT-USB-7010B (JLCPCB C2837092) as a stocked USB 2.0 Type-C, 16-contact, right-angle SMD receptacle. Its linked manufacturer drawing states 5 A VBUS rating, 24 V rating, -40 °C to +85 °C operating range and 10,000 mating cycles. The drawing's recommended PCB land pattern and the library footprint still require a pad-by-pad comparison, including contact-row geometry, shell-anchor geometry, solder lands, drill/slot dimensions and connector body datum. Do not replace J3 or waive its DRC errors until that comparison is complete. This candidate is not an approved BOM selection.
+
+### Four-layer layer/zone audit
+The current PCBKit four-layer prototype enables F.Cu, In1.Cu, In2.Cu and B.Cu. Current zones include In1.Cu GND, B.Cu VIN_RAW, and existing F.Cu/B.Cu supply regions. In2.Cu currently has no power-distribution zone. The current layer audit found 269 GND tracks and 26 GND vias; V3V3 has 145 tracks and 10 vias; V5_LOGIC has 24 tracks and 1 via. A future In2.Cu distribution scheme must be based on confirmed load budgets and real transitions from SMD pads, with continuous GND reference retained on In1.Cu. Do not pour isolated or floating power islands, and do not allocate modem rails until a modem/carrier and its TX peak current are selected.
+
+### Current DRC status
+The latest PCBKit check of `Edu-Ride-Bus-Tracker-4L.kicad_pcb` reports 0 unconnected pads, 8 J3 hole-clearance errors and 0 warnings. The errors remain 0.1751–0.2099 mm actual versus the 0.2500 mm rule. No global clearance rule was relaxed. The original two-layer baseline remains untouched. The four-layer PCB remains a PCBKit-workspace-only prototype and is not synchronized to GitHub.
