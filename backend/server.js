@@ -230,6 +230,64 @@ async function handleRequest(request, response) {
     }
   }
 
+  if (request.method === "POST" && pathname === "/api/device/events") {
+    const deviceToken = request.headers["x-device-token"];
+    if (typeof deviceToken !== "string" || deviceToken.length < 32) return reply(401, { error: "Device authentication required" });
+    const result = await pool.query("SELECT id, device_code, variant FROM devices WHERE token_hash=$1 AND active=true", [hashSessionToken(deviceToken)]);
+    const device = result.rows[0];
+    if (!device) return reply(401, { error: "Invalid device credentials" });
+    try {
+      const body = await readBody(request);
+      if (body.schema_version !== 1 || !Array.isArray(body.events) || body.events.length < 1 || body.events.length > 10) return reply(400, { error: "Event batch must contain 1–10 events and schema_version 1" });
+      const types = new Set(["BOOT","TRIP_STARTED","TRIP_ENDED","STUDENT_BOARDING_MATCHED","STUDENT_BOARDING_UNCERTAIN","STUDENT_BOARDING_UNMATCHED","DRIVER_PICKUP_CONFIRMED","DRIVER_NEXT_STOP","DEVICE_HEALTH","DEVICE_FAULT"]);
+      const qualities = new Set(["UNSYNCED","RTC","GNSS","NETWORK"]);
+      const sensitive = /student|child|face|biometric|embedding|image|photo|parent|guardian|email|phone|national.?id|password|token/i;
+      const hasSensitiveKey = (value) => value && typeof value === "object" && Object.entries(value).some(([key, child]) => sensitive.test(key) || hasSensitiveKey(child));
+      const acknowledged = [], duplicates = [], rejected = [];
+      for (const event of body.events) {
+        const reject = (reason) => rejected.push({ event_id: typeof event?.event_id === "string" ? event.event_id : null, reason });
+        if (!event || typeof event !== "object" || Array.isArray(event) ||
+            (event.schema_version !== undefined && event.schema_version !== 1) ||
+            typeof event.event_id !== "string" || !/^[0-9a-f]{32}$/.test(event.event_id) ||
+            event.device_id !== device.device_code ||
+            typeof event.device_sequence !== "string" || !/^[1-9][0-9]{0,19}$/.test(event.device_sequence) ||
+            !types.has(event.event_type) ||
+            (event.trip_id !== null && event.trip_id !== undefined && (typeof event.trip_id !== "string" || event.trip_id.length > 40)) ||
+            typeof event.monotonic_time_us !== "string" || !/^(0|[1-9][0-9]{0,19})$/.test(event.monotonic_time_us) ||
+            !qualities.has(event.time_quality) ||
+            typeof event.firmware_version !== "string" || event.firmware_version.length < 1 || event.firmware_version.length > 24 ||
+            typeof event.hardware_revision !== "string" || event.hardware_revision.length < 1 || event.hardware_revision.length > 24 ||
+            event.variant !== device.variant ||
+            (event.event_time_utc !== null && event.event_time_utc !== undefined && (typeof event.event_time_utc !== "string" || Number.isNaN(Date.parse(event.event_time_utc)) || Date.parse(event.event_time_utc) > Date.now()+300000 || Date.parse(event.event_time_utc) < Date.now()-366*86400000)) ||
+            (device.variant === "gps_only" && event.event_type.startsWith("STUDENT_BOARDING_"))) {
+          reject("Event schema, identity, timestamp or device variant is invalid"); continue;
+        }
+        const payload = event.payload === undefined ? {} : event.payload;
+        if (!payload || typeof payload !== "object" || Array.isArray(payload) || Buffer.byteLength(JSON.stringify(payload),"utf8") > 192 || hasSensitiveKey(payload)) {
+          reject("Payload must be a small operational object without personal or biometric data"); continue;
+        }
+        try {
+          const inserted = await pool.query(
+            "INSERT INTO device_events(device_id,event_id,device_sequence,schema_version,event_type,trip_id,event_time_utc,monotonic_time_us,time_quality,firmware_version,hardware_revision,variant,payload) VALUES($1,$2,$3,1,$4,$5,$6,$7,$8,$9,$10,$11,$12::jsonb) ON CONFLICT(device_id,event_id) DO NOTHING RETURNING event_id",
+            [device.id,event.event_id,event.device_sequence,event.event_type,event.trip_id ?? null,event.event_time_utc ?? null,event.monotonic_time_us,event.time_quality,event.firmware_version,event.hardware_revision,event.variant,JSON.stringify(payload)]);
+          if (inserted.rows[0]) acknowledged.push(event.event_id);
+          else {
+            const existing = await pool.query("SELECT device_sequence FROM device_events WHERE device_id=$1 AND event_id=$2",[device.id,event.event_id]);
+            if (existing.rows[0] && String(existing.rows[0].device_sequence) === event.device_sequence) duplicates.push(event.event_id);
+            else reject("Event ID or sequence conflicts with an existing device event");
+          }
+        } catch (error) {
+          if (error.code === "23505") reject("Device sequence was already used by another event");
+          else throw error;
+        }
+      }
+      await pool.query("UPDATE devices SET last_seen_at=now() WHERE id=$1",[device.id]);
+      return reply(202,{accepted:true,acknowledged,duplicates,rejected});
+    } catch (error) {
+      return reply(400,{error:error.message === "Request body too large" ? error.message : "Invalid device event batch"});
+    }
+  }
+
   if (request.method === "POST" && pathname === "/api/device/telemetry") {
     const deviceToken = request.headers["x-device-token"];
     if (typeof deviceToken !== "string" || deviceToken.length < 32) return reply(401, { error: "Device authentication required" });

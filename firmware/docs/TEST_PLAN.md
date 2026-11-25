@@ -1,6 +1,6 @@
 # Edu Ride Embedded Firmware — Test List (Deferred)
 
-Tests will be executed in the dedicated testing phase; this document does not claim tests have passed.
+No tests in this document are claimed to have passed. Execute in the dedicated testing phase.
 
 ## Unit tests
 - GNSS parsing, invalid sentences, missing fields, checksum failure and stale-fix handling.
@@ -11,12 +11,17 @@ Tests will be executed in the dedicated testing phase; this document does not cl
 - Queue atomicity, corruption recovery, capacity policy and power-loss recovery.
 - Time quality and UTC conversion.
 - Variant capability enforcement.
+- Event JSON serialization, uint64 decimal-string preservation and sensitive-payload rejection.
 
 ## Integration tests
 - GNSS UART and receiver reset/recovery.
 - Modem UART, registration, data session, reconnect and modem reset.
 - Backend authentication, upload acknowledgement, retry and duplicate delivery.
 - Offline queue replay in order and partial batch acknowledgement.
+- Lost response after server commit followed by safe duplicate retry.
+- Reused sequence with different event ID rejection.
+- Unknown device, wrong device ID, variant mismatch and invalid event schema rejection.
+- GPS-only rejection of all STUDENT_BOARDING_* event types.
 - Driver confirmation workflow with uncertain recognition.
 - Vision computer link authentication, disconnect/reconnect and malformed payload rejection (Vision + GPS only).
 - Configuration download, validation and rollback.
