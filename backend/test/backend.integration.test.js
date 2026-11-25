@@ -94,6 +94,7 @@ test("persistent API enforces identity, organization and device boundaries", { s
     assert.equal(telemetry.status, 202);
 
     const deviceEvent = {
+      schema_version: 1,
       event_id: "0123456789abcdef0123456789abcdef",
       device_id: "INTEGRATION-DEVICE-A",
       device_sequence: "1",

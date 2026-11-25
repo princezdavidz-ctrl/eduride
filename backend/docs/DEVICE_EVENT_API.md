@@ -10,6 +10,7 @@ Batch size 1–10; HTTP body limit 16 KiB. Keep events queued until their exact 
 {
   "schema_version": 1,
   "events": [{
+    "schema_version": 1,
     "event_id": "0123456789abcdef0123456789abcdef",
     "device_id": "BUS-DEVICE-001",
     "device_sequence": "42",

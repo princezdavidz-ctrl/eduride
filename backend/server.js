@@ -247,7 +247,7 @@ async function handleRequest(request, response) {
       for (const event of body.events) {
         const reject = (reason) => rejected.push({ event_id: typeof event?.event_id === "string" ? event.event_id : null, reason });
         if (!event || typeof event !== "object" || Array.isArray(event) ||
-            (event.schema_version !== undefined && event.schema_version !== 1) ||
+            event.schema_version !== 1 ||
             typeof event.event_id !== "string" || !/^[0-9a-f]{32}$/.test(event.event_id) ||
             event.device_id !== device.device_code ||
             typeof event.device_sequence !== "string" || !/^[1-9][0-9]{0,19}$/.test(event.device_sequence) ||
@@ -255,6 +255,7 @@ async function handleRequest(request, response) {
             (event.trip_id !== null && event.trip_id !== undefined && (typeof event.trip_id !== "string" || event.trip_id.length > 40)) ||
             typeof event.monotonic_time_us !== "string" || !/^(0|[1-9][0-9]{0,19})$/.test(event.monotonic_time_us) ||
             !qualities.has(event.time_quality) ||
+            ((event.event_time_utc === null || event.event_time_utc === undefined) !== (event.time_quality === "UNSYNCED")) ||
             typeof event.firmware_version !== "string" || event.firmware_version.length < 1 || event.firmware_version.length > 24 ||
             typeof event.hardware_revision !== "string" || event.hardware_revision.length < 1 || event.hardware_revision.length > 24 ||
             event.variant !== device.variant ||
