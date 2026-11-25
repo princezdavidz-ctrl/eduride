@@ -80,3 +80,12 @@ A separate file, `Edu-Ride-Bus-Tracker-4L.kicad_pcb`, was created so the two-lay
 - The four-layer prototype is not yet source-synchronized to GitHub. Only the status document is being updated here. Do not merge this PR as a final hardware source snapshot and do not manufacture this prototype.
 
 Next revision tasks: verify the stackup with the selected fabricator; assign In2.Cu power distribution; reroute USB_D+/D− and SD_SCK with controlled return paths; validate differential impedance and skew; review the buck converter high-di/dt loops and thermal path; resolve J3 hole-clearance errors against its exact datasheet/footprint; run full DRC and signal/PDN/thermal/EMC analyses.
+
+
+## Revision B continuation — J3 USB-C clearance investigation
+
+The eight DRC hole-clearance errors were traced to the USB-C receptacle footprint J3 (`USB_C_Receptacle_USB2.0_16P`) and its shell-anchor NPTH holes. The closest reported signal-pad-to-anchor-hole clearances are 0.1751 mm (GND pads) and 0.2099 mm (VBUS pads), against the current 0.25 mm board rule. The two shell-anchor NPTH centres are at approximately (178.36, 192.925) mm and (184.14, 192.925) mm. The affected signal pads are the outer GND/VBUS pads.
+
+No global hole-clearance rule was weakened and no footprint pad was moved. The exact connector manufacturer/part number is not yet confirmed, so it is not safe to waive these errors or alter the land pattern. Next step: select the exact USB-C receptacle and compare the library footprint to its manufacturer-recommended PCB land pattern, including shell-anchor drill, copper-to-hole clearance, courtyard and board-fabrication capability. Then either correct the footprint from the manufacturer drawing or add a narrowly scoped, documented rule exception only if the manufacturer explicitly permits it and the fabricator confirms capability.
+
+Power-layer planning: the board has 23 V3V3 pads, but they are predominantly F.Cu SMD pads. An In2.Cu V3V3 plane alone would be electrically isolated from those pads unless properly placed transition vias and short surface connections are added. Do not add a floating plane and call it power distribution. First define the actual load budget and place a via-transition strategy at the source and loads, then zone In2.Cu and verify connectivity, voltage drop, clearances and thermal behavior. MODEM_5V_EXT and MODEM_5V_RAW are still connector-fed rails without a selected modem load and should not be committed to a plane width/current assumption yet.
