@@ -1,0 +1,11 @@
+menu "Edu Ride controller"
+
+config ER_ENABLE_DRIVER_UI
+    bool "Enable driver buttons and status LEDs"
+    default n
+    help
+        Enables active-low button inputs and active-high LED outputs on the
+        currently documented PCB pin map. Keep disabled until the assembled
+        PCB revision and electrical characteristics are verified.
+
+endmenu
