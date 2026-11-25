@@ -26,7 +26,7 @@ try {
     "INSERT INTO devices(organization_id,bus_id,device_code,token_hash,variant) VALUES($1,$2,$3,$4,$5)",
     [bus.rows[0].organization_id,bus.rows[0].id,process.env.DEVICE_CODE,hashSessionToken(token),process.env.DEVICE_VARIANT],
   );
-  process.stdout.write(`Device provisioned. Store this token securely on the device; it will not be shown again:\n${token}\n`);
+  process.stdout.write(`Device provisioned.\nDevice code: ${process.env.DEVICE_CODE}\nVariant: ${process.env.DEVICE_VARIANT}\nStore this token securely on the device; it will not be shown again:\n${token}\n`);
 } finally {
   client.release();
   await pool.end();

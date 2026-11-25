@@ -93,6 +93,7 @@ Bearer-authenticated:
 
 Device-authenticated:
 - `POST /api/device/telemetry` with `X-Device-Token` and JSON `latitude`, `longitude`, optional `speedKph`, `heading`, and `recordedAt`.
+- `POST /api/device/events` with `X-Device-Token` and schema-versioned event batches; exact event IDs are acknowledged idempotently. See `docs/DEVICE_EVENT_API.md`.
 
 ## Data model
 
