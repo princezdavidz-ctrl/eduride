@@ -89,3 +89,19 @@ The eight DRC hole-clearance errors were traced to the USB-C receptacle footprin
 No global hole-clearance rule was weakened and no footprint pad was moved. The exact connector manufacturer/part number is not yet confirmed, so it is not safe to waive these errors or alter the land pattern. Next step: select the exact USB-C receptacle and compare the library footprint to its manufacturer-recommended PCB land pattern, including shell-anchor drill, copper-to-hole clearance, courtyard and board-fabrication capability. Then either correct the footprint from the manufacturer drawing or add a narrowly scoped, documented rule exception only if the manufacturer explicitly permits it and the fabricator confirms capability.
 
 Power-layer planning: the board has 23 V3V3 pads, but they are predominantly F.Cu SMD pads. An In2.Cu V3V3 plane alone would be electrically isolated from those pads unless properly placed transition vias and short surface connections are added. Do not add a floating plane and call it power distribution. First define the actual load budget and place a via-transition strategy at the source and loads, then zone In2.Cu and verify connectivity, voltage drop, clearances and thermal behavior. MODEM_5V_EXT and MODEM_5V_RAW are still connector-fed rails without a selected modem load and should not be committed to a plane width/current assumption yet.
+
+
+## Revision B continuation — connector mismatch and signal-integrity results
+
+### J3 connector identification remains unresolved
+A manufacturer drawing was located for SHOUHAN TYPE-C 16P LCH9.3-A143 (LCSC C32713002). Its recommended PCB layout shows two rows of eight contact holes, 0.5 mm pitch, plus elongated shell-retention slots; its stated rating is 3 A, 20 V, and 10,000 cycles. The present generic `USB_C_Receptacle_USB2.0_16P` footprint in J3 instead has all 16 contact pads in one SMD row, two NPTH holes and four shell tabs. It is visibly not the A143 footprint. Therefore A143 is evidence of a possible connector family, not a confirmed replacement. Do not fit this part to the existing footprint. Exact connector selection and a matching footprint/drawing are still required. The eight 0.1751–0.2099 mm hole-clearance DRC errors remain open against the 0.25 mm rule.
+
+### Four-layer signal and EMC analysis
+Fine analysis of `Edu-Ride-Bus-Tracker-4L.kicad_pcb` reports:
+- USB_DN/USB_DP differential impedance: 171 Ω against a 90 Ω target (+90%); pair length 39.1 mm, skew 13 ps, 4 vias. The pair is not within 10% of target. Re-route and tune track width/gap against the actual confirmed stackup/fabricator impedance capability; do not accept this result.
+- USB_DN loop area: 39.5 mm²; USB_DP: 38.6 mm²; SD_SCK: 16.9 mm². EMC model reports no fast nets crossing a reference gap, but this does not establish compliance at the cable/connector or in an enclosure.
+- Crosstalk candidates: MODEM_RESET/MODEM_STATUS 9.1% near-end over 27.3 mm at 0.2 mm spacing; USB_DP/MODEM_PWRKEY 5.7% over 8.46 mm; GPS_PPS/GPS_RESET 5.6% over 53.2 mm. Review and separate where practical.
+- V3V3 PDN maximum at U1: 412 mΩ at 3.76 MHz against 600 mΩ target. Nearest 100 nF C13 remains about 9.76 mm from U1; still needs a closer local bypass.
+- V5_LOGIC PDN is within its modeled target; this is not a substitute for measured load-transient testing.
+
+These are simulation/model results from the current preliminary 4-layer stackup (35 µm copper, 0.18/1.07/0.18 mm FR-4 dielectrics, εr 4.2). The fabricator must confirm the actual dielectric, copper and impedance tolerances before controlled-impedance routing is finalized. The 4-layer board still has 0 unconnected pads and 8 J3 hole-clearance DRC errors; no manufacturing release.
