@@ -55,3 +55,15 @@ The board's modem connectors remain unloaded in the model: MODEM_5V_EXT and MODE
 - Do not describe this board as fully validated or manufacturing-ready.
 - Do not suppress design checks to obtain a nominal pass.
 - No Gerber, drill, pick-and-place or BOM manufacturing package is approved by this status record.
+
+
+## LMR38010 layout and EMC review — new blockers
+
+A PCB geometry inspection found the following in the current PCBKit workspace:
+- U2 input bypass capacitors C6 (100 nF) and C5 (10 µF) are approximately 4.61 mm and 5.59 mm from the U2 footprint centre, respectively. C8 (100 nF bootstrap) is approximately 5.22 mm from the centre. These centre-to-centre distances are screening measurements, not pin-to-pad loop measurements; the VIN/GND and BOOT/SW loops still require detailed review.
+- The exposed thermal pad has four split copper segments and **zero thermal vias within 4 mm of U2**. The board is a two-layer stackup and currently has no B.Cu GND zone/plane. This does not implement TI's recommended thermal-via array into a ground-plane heat spreader.
+- Fine/normal EMC analysis identifies reference discontinuities on all three fast nets: USB_DN crosses a 5.8 mm B.Cu reference gap, USB_DP crosses a 9.97 mm gap, and SD_SCK crosses a 2.32 mm gap. USB_DN also changes reference at a via without a nearby ground via. USB_DP has the largest modeled loop area (64.1 mm²).
+
+TI's LMR38010 guidance calls for a very small VIN/input-capacitor high-di/dt loop, short/wide BOOT-to-SW capacitor connections, a short FB divider connection away from SW, the thermal pad tied to ground, and thermal vias into a ground-plane heat spreader. The present two-layer layout needs a deliberate ground-reference and thermal redesign; simply adding vias without a continuous B.Cu ground plane and preserving the ESP32 antenna keepout would not close this gate.
+
+Recommended corrective direction: evaluate a four-layer stackup with a continuous inner GND plane, a ground-backed routing strategy for USB and SD clock, thermal vias under U2 EP, and an explicit copper keepout beneath/around the ESP32-S3 module antenna per Espressif's module layout requirements. If retaining two layers, prove the same return-path and heat-spreading objectives with a verified B.Cu GND pour and explicit antenna keepout before rerouting.
