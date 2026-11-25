@@ -67,3 +67,16 @@ A PCB geometry inspection found the following in the current PCBKit workspace:
 TI's LMR38010 guidance calls for a very small VIN/input-capacitor high-di/dt loop, short/wide BOOT-to-SW capacitor connections, a short FB divider connection away from SW, the thermal pad tied to ground, and thermal vias into a ground-plane heat spreader. The present two-layer layout needs a deliberate ground-reference and thermal redesign; simply adding vias without a continuous B.Cu ground plane and preserving the ESP32 antenna keepout would not close this gate.
 
 Recommended corrective direction: evaluate a four-layer stackup with a continuous inner GND plane, a ground-backed routing strategy for USB and SD clock, thermal vias under U2 EP, and an explicit copper keepout beneath/around the ESP32-S3 module antenna per Espressif's module layout requirements. If retaining two layers, prove the same return-path and heat-spreading objectives with a verified B.Cu GND pour and explicit antenna keepout before rerouting.
+
+
+## Revision B four-layer prototype (PCBKit workspace only; not synchronized to GitHub)
+
+A separate file, `Edu-Ride-Bus-Tracker-4L.kicad_pcb`, was created so the two-layer recovery baseline remains unchanged. This is an early engineering prototype, not a completed four-layer layout:
+- Copper layer count: 4; stackup declared as F.Cu / In1.Cu / In2.Cu / B.Cu with nominal FR-4 dielectric total 1.43 mm and 35 µm copper on each layer (nominal total before masks about 1.57 mm). Fabricator stackup and impedance capability still need confirmation.
+- A GND reference plane zone was added on In1.Cu. The ESP32 module antenna keepout remains defined across copper layers by its footprint keepout.
+- Four 0.60 mm / 0.30 mm tented through vias were placed at the centres of the four U2 LMR38010 exposed-pad GND segments. The In1.Cu plane provides their intended ground/thermal connection.
+- The existing outer-layer routing was carried over; it has not yet been migrated or optimized for four layers. In2.Cu is currently available but not assigned a completed power-plane strategy.
+- PCBKit check reports 0 unconnected pads but 8 hole-clearance errors at USB connector J3 between signal pads and its NPTH shell/anchor holes (actual 0.1751–0.2099 mm against the current 0.25 mm rule). These need footprint/manufacturer-rule review; do not globally weaken hole clearance.
+- The four-layer prototype is not yet source-synchronized to GitHub. Only the status document is being updated here. Do not merge this PR as a final hardware source snapshot and do not manufacture this prototype.
+
+Next revision tasks: verify the stackup with the selected fabricator; assign In2.Cu power distribution; reroute USB_D+/D− and SD_SCK with controlled return paths; validate differential impedance and skew; review the buck converter high-di/dt loops and thermal path; resolve J3 hole-clearance errors against its exact datasheet/footprint; run full DRC and signal/PDN/thermal/EMC analyses.
