@@ -1,0 +1,22 @@
+Reference,Function,Signal,ESP32-S3 GPIO,Direction,Electrical requirement,Notes
+J_GNSS,GNSS,GNSS_RX,17,ESP to GNSS,3.3V only if module supports it,Verify GNSS module logic and supply
+J_GNSS,GNSS,GNSS_TX,18,GNSS to ESP,Translate if voltage differs,Verify GNSS module logic
+J_MODEM,SIM7600G-H,MODEM_RX,15,ESP to modem,Level shift if modem UART is 1.8V,Carrier-specific connector pinout
+J_MODEM,SIM7600G-H,MODEM_TX,16,Modem to ESP,Level shift if modem UART is 1.8V,Carrier-specific connector pinout
+J_DISPLAY,Display controller,DISPLAY_RX,8,ESP to display,3.3V logic or level translate,HDMI handled by external display controller
+J_DISPLAY,Display controller,DISPLAY_TX,9,Display to ESP,3.3V logic or level translate,No HDMI signals on ESP32 PCB
+J_RTC,External RTC,I2C_SDA,10,Bidirectional,Pull-ups to 3V3; verify module pull-ups,External RTC module
+J_RTC,External RTC,I2C_SCL,11,Bidirectional,Pull-ups to 3V3; verify module pull-ups,External RTC module
+J_SD,microSD,SPI_SCK,4,ESP to SD,3.3V SPI,Card socket and ESD protection
+J_SD,microSD,SPI_MOSI,5,ESP to SD,3.3V SPI,Card socket and ESD protection
+J_SD,microSD,SPI_MISO,6,SD to ESP,3.3V SPI,Card socket and ESD protection
+J_SD,microSD,SPI_CS,7,ESP to SD,3.3V SPI,Card socket and ESD protection
+SW1,Pickup confirm,BTN_PICKUP,1,Input,Active low to GND with pull-up,Debounce in firmware
+SW2,Next stop,BTN_NEXT,2,Input,Active low to GND with pull-up,Debounce in firmware
+SW3,Menu/back,BTN_MENU,3,Input,Active low to GND with pull-up,Debounce in firmware
+D_GPS,GNSS status,LED_GPS,38,Output,Series resistor,Verify GPIO drive current
+D_NET,Cellular status,LED_NET,39,Output,Series resistor,Verify GPIO drive current
+D_SYS,System status,LED_SYS,40,Output,Series resistor,Verify GPIO drive current
+Q_BUZ,Buzzer,BUZZER_EN,41,Output,Transistor/MOSFET driver,Do not drive buzzer directly from GPIO
+J_USB,USB-C,USB_D-,19,Bidirectional,Native USB with ESD protection,Controlled differential routing
+J_USB,USB-C,USB_D+,20,Bidirectional,Native USB with ESD protection,Controlled differential routing
