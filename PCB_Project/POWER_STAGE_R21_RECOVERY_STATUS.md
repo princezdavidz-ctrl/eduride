@@ -133,3 +133,13 @@ After applying the board-specific rule, PCBKit/KiCad check reports: **no violati
 
 ### Source synchronization remains open
 The four-layer PCB and its new board-specific rule file remain in PCBKit workspace and are not yet synchronized to GitHub. PR #4 remains draft/unmerged. No manufacturing release is authorized.
+
+
+## Revision B continuation — In2.Cu power-transition audit
+
+The four-layer prototype's power-net pad/via map was inspected before adding any inner-layer power copper:
+- **V3V3:** 19 SMD pads were enumerated in the current board plus through-hole headers/test points; 10 existing through-vias connect the net between outer layers and can also reach In2.Cu if the zone is added. Nearest-via distances are still large for some critical points: C3 31.87 mm, L1.2 (regulator output) 30.15 mm, R2 23.80 mm, and C10 6.45 mm. C13 is 1.04 mm from a via and U1 supply pad 2 is 2.12 mm from a via.
+- **V5_LOGIC:** eight pads are present in the net map; only one existing through-via was found. The nearest-via distances include C7 20.22 mm, L2.2 (buck output) 18.61 mm, TP3 17.51 mm, and U3.3 5.61 mm. This is not enough to assume a well-distributed inner-plane feed.
+- Existing 0.60/0.30 mm through-vias traverse F.Cu to B.Cu and are eligible to connect an In2.Cu zone. They do not, by themselves, establish that each load has a sufficiently low-impedance local connection.
+
+Next layout action: define separate V3V3 and V5_LOGIC In2.Cu copper regions, retain continuous In1.Cu GND reference, and add short surface stubs plus through-via transitions near the regulator outputs and high-current/decoupling clusters. Place no via directly in an SMD pad unless assembly/fabrication explicitly supports via-in-pad. Do not include MODEM_5V_EXT or MODEM_5V_RAW until the modem/carrier and transmit-current profile are selected. Refill zones, run DRC, then fine DC/PDN/thermal/EMC analysis before accepting the plane design.
