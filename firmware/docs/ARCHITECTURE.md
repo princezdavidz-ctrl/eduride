@@ -58,3 +58,7 @@ GPS-only builds must not contain or expose the camera/vision event interface, im
 - Vision-link failure: GPS and controller functions continue; recognition events unavailable; never convert this to a confirmed boarding event.
 - Watchdog reset: record reset reason; recover queue; do not automatically start or end trips without explicit persisted state logic.
 - Critical power/system faults: alert and attempt controlled recovery without interfering with vehicle operation.
+
+## GNSS driver foundation
+
+The portable NMEA parser accepts checksum-validated RMC and GGA sentences, converts coordinates from degrees/minutes to decimal degrees, converts speed from knots to km/h, and requires both an active RMC status and a positive GGA fix with nearby coordinates before declaring a valid fix. UART1 reception is separately gated by `CONFIG_ER_ENABLE_GNSS_UART` and defaults off. Receiver-specific baud, electrical levels, update rate, antenna behavior and reset timing must be confirmed against the selected module before activation. The parser snapshot's monotonic receive time is not a UTC fix timestamp; stale-fix policy must use age checks in the consumer.

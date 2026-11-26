@@ -67,3 +67,7 @@ Ground: module pads 1, 40 and 41. Supply: module pad 2 (3V3).
 5. Confirm modem and GNSS control timing from the selected module/carrier datasheets.
 6. Confirm the microSD socket wiring and card voltage requirements.
 7. Only then enable the relevant driver behind an explicit board-I/O configuration option.
+
+## GNSS UART driver assignment
+
+The opt-in GNSS receiver driver uses UART1, ESP32-S3 GPIO18 as RX (GPS_TO_MCU_RX) and GPIO17 as TX (MCU_TO_GPS_RX). UART0 remains reserved for console/debug. The driver is disabled by default. Confirm the selected GNSS module's electrical interface, default baud, sentence set and TX/RX wiring before enabling it.

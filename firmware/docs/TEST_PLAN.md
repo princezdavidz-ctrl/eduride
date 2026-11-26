@@ -55,3 +55,9 @@ No tests in this document are claimed to have passed. Execute in the dedicated t
 - Secure token delivery, encrypted storage lifecycle, interrupted provisioning and factory-reset recovery.
 
 - Firmware event journal refuses all three STUDENT_BOARDING_* event types when initialized as GPS_ONLY.
+
+- NMEA RMC/GGA valid checksums, malformed fields, empty optional fields, unsupported sentence types and overlength input.
+- Coordinate hemisphere/sign and boundary validation; speed conversion; fix invalidation on RMC void or GGA no-fix.
+- RMC/GGA coordinate mismatch, sentence ordering, stale snapshot age and receiver silence.
+- UART chunking across sentence boundaries, multiple sentences per read, overlong line discard and UART driver startup failure.
+- Confirm selected receiver UART voltage, baud, TX/RX direction, startup output and reset behavior before enabling CONFIG_ER_ENABLE_GNSS_UART.
