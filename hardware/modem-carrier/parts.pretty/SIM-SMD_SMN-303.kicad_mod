@@ -1,0 +1,547 @@
+(footprint "SIM-SMD_SMN-303"
+	(descr "SIM-SMD_SMN-303 (easyeda-cloud)")
+	(property "Reference" ""
+		(at 0 -8.322071 0)
+		(layer "F.SilkS")
+		(effects
+			(font
+				(size 1 1)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "Value" ""
+		(at 0 8.72207 0)
+		(layer "F.Fab")
+		(effects
+			(font
+				(size 1 1)
+				(thickness 0.15)
+			)
+		)
+	)
+	(attr smd)
+	(fp_line
+		(start -6.042127 5.390871)
+		(end -6.042127 -4.04683)
+		(stroke
+			(width 0.254)
+			(type solid)
+		)
+		(layer "F.SilkS")
+	)
+	(fp_line
+		(start -5.768975 7.48599)
+		(end 5.768721 7.48599)
+		(stroke
+			(width 0.254)
+			(type solid)
+		)
+		(layer "F.SilkS")
+	)
+	(fp_line
+		(start -5.768848 -6.077991)
+		(end -5.364988 -6.077991)
+		(stroke
+			(width 0.254)
+			(type solid)
+		)
+		(layer "F.SilkS")
+	)
+	(fp_line
+		(start -0.435153 -6.006821)
+		(end -0.435153 -0.559968)
+		(stroke
+			(width 0.254)
+			(type solid)
+		)
+		(layer "F.SilkS")
+	)
+	(fp_line
+		(start -0.435153 -0.559968)
+		(end 1.850847 -0.559968)
+		(stroke
+			(width 0.254)
+			(type solid)
+		)
+		(layer "F.SilkS")
+	)
+	(fp_line
+		(start 0.072847 -5.766968)
+		(end 2.612847 -5.766968)
+		(stroke
+			(width 0.254)
+			(type solid)
+		)
+		(layer "F.SilkS")
+	)
+	(fp_line
+		(start 0.072847 -0.559968)
+		(end 0.072847 -5.766968)
+		(stroke
+			(width 0.254)
+			(type solid)
+		)
+		(layer "F.SilkS")
+	)
+	(fp_line
+		(start 1.342847 -5.004968)
+		(end 1.342847 -0.559968)
+		(stroke
+			(width 0.254)
+			(type solid)
+		)
+		(layer "F.SilkS")
+	)
+	(fp_line
+		(start 1.399921 -2.227834)
+		(end 2.599817 -2.227834)
+		(stroke
+			(width 0.254)
+			(type solid)
+		)
+		(layer "F.SilkS")
+	)
+	(fp_line
+		(start 1.850847 -4.496968)
+		(end 3.120847 -4.496968)
+		(stroke
+			(width 0.254)
+			(type solid)
+		)
+		(layer "F.SilkS")
+	)
+	(fp_line
+		(start 1.850847 -0.559968)
+		(end 1.850847 -4.496968)
+		(stroke
+			(width 0.254)
+			(type solid)
+		)
+		(layer "F.SilkS")
+	)
+	(fp_line
+		(start 2.358847 1.091032)
+		(end 4.644847 1.091032)
+		(stroke
+			(width 0.254)
+			(type solid)
+		)
+		(layer "F.SilkS")
+	)
+	(fp_line
+		(start 2.358847 6.679032)
+		(end 2.358847 1.091032)
+		(stroke
+			(width 0.254)
+			(type solid)
+		)
+		(layer "F.SilkS")
+	)
+	(fp_line
+		(start 2.599817 -2.227834)
+		(end 2.599817 1.57226)
+		(stroke
+			(width 0.254)
+			(type solid)
+		)
+		(layer "F.SilkS")
+	)
+	(fp_line
+		(start 2.599817 1.57226)
+		(end 1.399921 1.57226)
+		(stroke
+			(width 0.254)
+			(type solid)
+		)
+		(layer "F.SilkS")
+	)
+	(fp_line
+		(start 2.612847 -5.766968)
+		(end 2.612847 -5.004968)
+		(stroke
+			(width 0.254)
+			(type solid)
+		)
+		(layer "F.SilkS")
+	)
+	(fp_line
+		(start 2.612847 -5.004968)
+		(end 1.342847 -5.004968)
+		(stroke
+			(width 0.254)
+			(type solid)
+		)
+		(layer "F.SilkS")
+	)
+	(fp_line
+		(start 2.739847 3.250032)
+		(end 4.263847 3.250032)
+		(stroke
+			(width 0.254)
+			(type solid)
+		)
+		(layer "F.SilkS")
+	)
+	(fp_line
+		(start 2.739847 6.679032)
+		(end 2.358847 6.679032)
+		(stroke
+			(width 0.254)
+			(type solid)
+		)
+		(layer "F.SilkS")
+	)
+	(fp_line
+		(start 2.739847 6.679032)
+		(end 2.739847 3.250032)
+		(stroke
+			(width 0.254)
+			(type solid)
+		)
+		(layer "F.SilkS")
+	)
+	(fp_line
+		(start 3.120847 -4.496968)
+		(end 3.120847 -6.006821)
+		(stroke
+			(width 0.254)
+			(type solid)
+		)
+		(layer "F.SilkS")
+	)
+	(fp_line
+		(start 3.120847 -4.496968)
+		(end 3.120847 -6.006821)
+		(stroke
+			(width 0.254)
+			(type solid)
+		)
+		(layer "F.SilkS")
+	)
+	(fp_line
+		(start 3.501847 4.266032)
+		(end 4.263847 6.679032)
+		(stroke
+			(width 0.254)
+			(type solid)
+		)
+		(layer "F.SilkS")
+	)
+	(fp_line
+		(start 3.568751 -6.16397)
+		(end 5.768721 -6.16397)
+		(stroke
+			(width 0.254)
+			(type solid)
+		)
+		(layer "F.SilkS")
+	)
+	(fp_line
+		(start 3.755847 -3.607968)
+		(end 3.755847 -0.559968)
+		(stroke
+			(width 0.254)
+			(type solid)
+		)
+		(layer "F.SilkS")
+	)
+	(fp_line
+		(start 3.755847 -0.559968)
+		(end 4.771847 -0.559968)
+		(stroke
+			(width 0.254)
+			(type solid)
+		)
+		(layer "F.SilkS")
+	)
+	(fp_line
+		(start 4.263847 3.250032)
+		(end 4.263847 3.631032)
+		(stroke
+			(width 0.254)
+			(type solid)
+		)
+		(layer "F.SilkS")
+	)
+	(fp_line
+		(start 4.263847 3.631032)
+		(end 3.501847 4.266032)
+		(stroke
+			(width 0.254)
+			(type solid)
+		)
+		(layer "F.SilkS")
+	)
+	(fp_line
+		(start 4.390847 -3.099968)
+		(end 4.771847 -3.099968)
+		(stroke
+			(width 0.254)
+			(type solid)
+		)
+		(layer "F.SilkS")
+	)
+	(fp_line
+		(start 4.390847 -1.067968)
+		(end 4.390847 -3.099968)
+		(stroke
+			(width 0.254)
+			(type solid)
+		)
+		(layer "F.SilkS")
+	)
+	(fp_line
+		(start 4.644847 1.091032)
+		(end 4.644847 6.679032)
+		(stroke
+			(width 0.254)
+			(type solid)
+		)
+		(layer "F.SilkS")
+	)
+	(fp_line
+		(start 4.644847 6.679032)
+		(end 4.263847 6.679032)
+		(stroke
+			(width 0.254)
+			(type solid)
+		)
+		(layer "F.SilkS")
+	)
+	(fp_line
+		(start 4.771847 -3.607968)
+		(end 3.755847 -3.607968)
+		(stroke
+			(width 0.254)
+			(type solid)
+		)
+		(layer "F.SilkS")
+	)
+	(fp_line
+		(start 4.771847 -3.099968)
+		(end 4.771847 -3.607968)
+		(stroke
+			(width 0.254)
+			(type solid)
+		)
+		(layer "F.SilkS")
+	)
+	(fp_line
+		(start 4.771847 -1.067968)
+		(end 4.390847 -1.067968)
+		(stroke
+			(width 0.254)
+			(type solid)
+		)
+		(layer "F.SilkS")
+	)
+	(fp_line
+		(start 4.771847 -0.559968)
+		(end 4.771847 -1.067968)
+		(stroke
+			(width 0.254)
+			(type solid)
+		)
+		(layer "F.SilkS")
+	)
+	(fp_line
+		(start 6.041847 -4.04683)
+		(end 6.041873 5.390871)
+		(stroke
+			(width 0.254)
+			(type solid)
+		)
+		(layer "F.SilkS")
+	)
+	(fp_circle
+		(center -4.499229 5.66293)
+		(end -3.987165 5.66293)
+		(stroke
+			(width 0.254)
+			(type solid)
+		)
+		(fill no)
+		(layer "F.SilkS")
+	)
+	(fp_circle
+		(center -4.372229 -1.06807)
+		(end -3.860165 -1.06807)
+		(stroke
+			(width 0.254)
+			(type solid)
+		)
+		(fill no)
+		(layer "F.SilkS")
+	)
+	(fp_circle
+		(center -1.705229 5.66293)
+		(end -1.193165 5.66293)
+		(stroke
+			(width 0.254)
+			(type solid)
+		)
+		(fill no)
+		(layer "F.SilkS")
+	)
+	(fp_circle
+		(center -1.578229 -1.06807)
+		(end -1.066165 -1.06807)
+		(stroke
+			(width 0.254)
+			(type solid)
+		)
+		(fill no)
+		(layer "F.SilkS")
+	)
+	(fp_circle
+		(center 0.961771 5.66293)
+		(end 1.473835 5.66293)
+		(stroke
+			(width 0.254)
+			(type solid)
+		)
+		(fill no)
+		(layer "F.SilkS")
+	)
+	(fp_circle
+		(center -4.999863 5.422138)
+		(end -4.849749 5.422138)
+		(stroke
+			(width 0.299999)
+			(type solid)
+		)
+		(fill no)
+		(layer "Dwgs.User")
+	)
+	(fp_circle
+		(center 3.499993 5.422138)
+		(end 3.650107 5.422138)
+		(stroke
+			(width 0.299999)
+			(type solid)
+		)
+		(fill no)
+		(layer "Dwgs.User")
+	)
+	(fp_rect
+		(start -7.25 -7.58)
+		(end 7.25 7.98)
+		(stroke
+			(width 0.05)
+			(type solid)
+		)
+		(fill no)
+		(layer "F.CrtYd")
+	)
+	(fp_circle
+		(center -6.699885 -7.128002)
+		(end -6.669913 -7.128002)
+		(stroke
+			(width 0)
+			(type solid)
+		)
+		(fill yes)
+		(layer "F.Fab")
+	)
+	(fp_poly
+		(pts
+			(xy -6.205982 7.421982) (xy -6.206007 -6.077991) (xy 6.206007 -6.077991) (xy 6.206007 7.422007)
+		)
+		(stroke
+			(width 0)
+			(type solid)
+		)
+		(fill yes)
+		(layer "F.Fab")
+	)
+	(fp_text user "${REFERENCE}"
+		(at 0 0.2 0)
+		(layer "F.Fab")
+		(effects
+			(font
+				(size 0.5 0.5)
+				(thickness 0.08)
+			)
+		)
+	)
+	(pad "" np_thru_hole circle
+		(at -4.999863 5.422138)
+		(size 0.750011 0.750011)
+		(drill 0.750011)
+		(layers "*.Cu" "*.Mask")
+	)
+	(pad "" np_thru_hole circle
+		(at 3.499993 5.422138)
+		(size 0.750011 0.750011)
+		(drill 0.750011)
+		(layers "*.Cu" "*.Mask")
+	)
+	(pad "8" smd rect
+		(at -6.499987 -5.327904)
+		(size 0.999998 2.099996)
+		(layers "F.Cu" "F.Mask" "F.Paste")
+		(solder_mask_margin 0.0508)
+	)
+	(pad "9" smd rect
+		(at 6.499987 -5.327904)
+		(size 0.999998 2.099996)
+		(layers "F.Cu" "F.Mask" "F.Paste")
+		(solder_mask_margin 0.0508)
+	)
+	(pad "10" smd rect
+		(at 6.499987 6.672072)
+		(size 0.999998 2.099996)
+		(layers "F.Cu" "F.Mask" "F.Paste")
+		(solder_mask_margin 0.0508)
+	)
+	(pad "11" smd rect
+		(at -6.499987 6.672072)
+		(size 0.999998 2.099996)
+		(layers "F.Cu" "F.Mask" "F.Paste")
+		(solder_mask_margin 0.0508)
+	)
+	(pad "C1" smd rect
+		(at 0.250063 -6.672072)
+		(size 0.799998 1.299997)
+		(layers "F.Cu" "F.Mask" "F.Paste")
+		(solder_mask_margin 0.0508)
+	)
+	(pad "C2" smd rect
+		(at -2.289937 -6.672072)
+		(size 0.799998 1.299997)
+		(layers "F.Cu" "F.Mask" "F.Paste")
+		(solder_mask_margin 0.0508)
+	)
+	(pad "C3" smd rect
+		(at -4.829937 -6.671818)
+		(size 0.799998 1.299997)
+		(layers "F.Cu" "F.Mask" "F.Paste")
+		(solder_mask_margin 0.0508)
+	)
+	(pad "C5" smd rect
+		(at 1.520063 -6.672072)
+		(size 0.650011 1.299997)
+		(layers "F.Cu" "F.Mask" "F.Paste")
+		(solder_mask_margin 0.0508)
+	)
+	(pad "C6" smd rect
+		(at -1.019937 -6.672072)
+		(size 0.799998 1.299997)
+		(layers "F.Cu" "F.Mask" "F.Paste")
+		(solder_mask_margin 0.0508)
+	)
+	(pad "C7" smd rect
+		(at -3.559937 -6.672072)
+		(size 0.799998 1.299997)
+		(layers "F.Cu" "F.Mask" "F.Paste")
+		(solder_mask_margin 0.0508)
+	)
+	(pad "CD" smd rect
+		(at 2.470023 -6.672072)
+		(size 0.650011 1.299997)
+		(layers "F.Cu" "F.Mask" "F.Paste")
+		(solder_mask_margin 0.0508)
+	)
+	(embedded_fonts no)
+)

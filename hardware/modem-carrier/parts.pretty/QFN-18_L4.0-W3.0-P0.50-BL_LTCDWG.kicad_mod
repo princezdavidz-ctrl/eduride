@@ -1,0 +1,301 @@
+(footprint "QFN-18_L4.0-W3.0-P0.50-BL_LTCDWG"
+	(descr "QFN-18_L4.0-W3.0-P0.50-BL_LTCDWG (easyeda-cloud)")
+	(property "Reference" ""
+		(at 0 -3.377034 0)
+		(layer "F.SilkS")
+		(effects
+			(font
+				(size 1 1)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "Value" ""
+		(at 0 3.377034 0)
+		(layer "F.Fab")
+		(effects
+			(font
+				(size 1 1)
+				(thickness 0.15)
+			)
+		)
+	)
+	(attr smd)
+	(fp_line
+		(start -1.499972 -1.999996)
+		(end -1.499972 -1.631442)
+		(stroke
+			(width 0.254)
+			(type solid)
+		)
+		(layer "F.SilkS")
+	)
+	(fp_line
+		(start -1.499972 0.630682)
+		(end -1.499972 0.868426)
+		(stroke
+			(width 0.254)
+			(type solid)
+		)
+		(layer "F.SilkS")
+	)
+	(fp_line
+		(start -1.499972 1.63068)
+		(end -1.499972 1.999996)
+		(stroke
+			(width 0.254)
+			(type solid)
+		)
+		(layer "F.SilkS")
+	)
+	(fp_line
+		(start -1.499972 1.999996)
+		(end -1.132459 1.999996)
+		(stroke
+			(width 0.254)
+			(type solid)
+		)
+		(layer "F.SilkS")
+	)
+	(fp_line
+		(start -1.129157 -1.999996)
+		(end -1.499972 -1.999996)
+		(stroke
+			(width 0.254)
+			(type solid)
+		)
+		(layer "F.SilkS")
+	)
+	(fp_line
+		(start 1.128395 1.999996)
+		(end 1.500048 1.999996)
+		(stroke
+			(width 0.254)
+			(type solid)
+		)
+		(layer "F.SilkS")
+	)
+	(fp_line
+		(start 1.500048 -1.999996)
+		(end 1.133221 -1.999996)
+		(stroke
+			(width 0.254)
+			(type solid)
+		)
+		(layer "F.SilkS")
+	)
+	(fp_line
+		(start 1.500048 -1.999996)
+		(end 1.500048 -1.631188)
+		(stroke
+			(width 0.254)
+			(type solid)
+		)
+		(layer "F.SilkS")
+	)
+	(fp_line
+		(start 1.500048 0.63119)
+		(end 1.500048 0.86868)
+		(stroke
+			(width 0.254)
+			(type solid)
+		)
+		(layer "F.SilkS")
+	)
+	(fp_line
+		(start 1.500048 1.631188)
+		(end 1.500048 1.999996)
+		(stroke
+			(width 0.254)
+			(type solid)
+		)
+		(layer "F.SilkS")
+	)
+	(fp_circle
+		(center -2.000123 -1.75006)
+		(end -1.900123 -1.75006)
+		(stroke
+			(width 0.254)
+			(type solid)
+		)
+		(fill no)
+		(layer "F.SilkS")
+	)
+	(fp_circle
+		(center -1.999996 -1.249985)
+		(end -1.849984 -1.249985)
+		(stroke
+			(width 0.299999)
+			(type solid)
+		)
+		(fill no)
+		(layer "Dwgs.User")
+	)
+	(fp_rect
+		(start -2.13 -2.63)
+		(end 2.13 2.63)
+		(stroke
+			(width 0.05)
+			(type solid)
+		)
+		(fill no)
+		(layer "F.CrtYd")
+	)
+	(fp_line
+		(start -1.499997 -1.999996)
+		(end 1.499997 -1.999996)
+		(stroke
+			(width 0.0508)
+			(type solid)
+		)
+		(layer "F.Fab")
+	)
+	(fp_line
+		(start -1.499997 1.999996)
+		(end -1.499997 -1.999996)
+		(stroke
+			(width 0.0508)
+			(type solid)
+		)
+		(layer "F.Fab")
+	)
+	(fp_line
+		(start 1.499997 -1.999996)
+		(end 1.499997 1.999996)
+		(stroke
+			(width 0.0508)
+			(type solid)
+		)
+		(layer "F.Fab")
+	)
+	(fp_line
+		(start 1.499997 1.999996)
+		(end -1.499997 1.999996)
+		(stroke
+			(width 0.0508)
+			(type solid)
+		)
+		(layer "F.Fab")
+	)
+	(fp_circle
+		(center -1.499997 -2.00152)
+		(end -1.440002 -2.00152)
+		(stroke
+			(width 0)
+			(type solid)
+		)
+		(fill yes)
+		(layer "F.Fab")
+	)
+	(fp_text user "${REFERENCE}"
+		(at 0 0 0)
+		(layer "F.Fab")
+		(effects
+			(font
+				(size 0.5 0.5)
+				(thickness 0.08)
+			)
+		)
+	)
+	(pad "1" smd rect
+		(at -1.500505 -1.250442 270)
+		(size 0.299974 0.750011)
+		(layers "F.Cu" "F.Mask" "F.Paste")
+	)
+	(pad "2" smd rect
+		(at -1.500505 -0.750316 270)
+		(size 0.299974 0.750011)
+		(layers "F.Cu" "F.Mask" "F.Paste")
+	)
+	(pad "3" smd rect
+		(at -1.500505 -0.25019 270)
+		(size 0.299974 0.750011)
+		(layers "F.Cu" "F.Mask" "F.Paste")
+	)
+	(pad "4" smd rect
+		(at -1.500505 0.249682 270)
+		(size 0.299974 0.750011)
+		(layers "F.Cu" "F.Mask" "F.Paste")
+	)
+	(pad "6" smd rect
+		(at -1.500505 1.24968 270)
+		(size 0.299974 0.750011)
+		(layers "F.Cu" "F.Mask" "F.Paste")
+	)
+	(pad "7" smd rect
+		(at -0.751205 1.999996 270)
+		(size 0.750011 0.28001)
+		(layers "F.Cu" "F.Mask" "F.Paste")
+	)
+	(pad "8" smd rect
+		(at -0.252857 2.002028 270)
+		(size 0.750011 0.28001)
+		(layers "F.Cu" "F.Mask" "F.Paste")
+	)
+	(pad "9" smd rect
+		(at 0.247015 2.002028 270)
+		(size 0.750011 0.28001)
+		(layers "F.Cu" "F.Mask" "F.Paste")
+	)
+	(pad "10" smd rect
+		(at 0.747141 2.002028 270)
+		(size 0.750011 0.28001)
+		(layers "F.Cu" "F.Mask" "F.Paste")
+	)
+	(pad "11" smd rect
+		(at 1.500505 1.249934 270)
+		(size 0.299974 0.750011)
+		(layers "F.Cu" "F.Mask" "F.Paste")
+	)
+	(pad "13" smd rect
+		(at 1.500505 0.249936 270)
+		(size 0.299974 0.750011)
+		(layers "F.Cu" "F.Mask" "F.Paste")
+	)
+	(pad "14" smd rect
+		(at 1.500505 -0.249936 270)
+		(size 0.299974 0.750011)
+		(layers "F.Cu" "F.Mask" "F.Paste")
+	)
+	(pad "15" smd rect
+		(at 1.500505 -0.750062 270)
+		(size 0.299974 0.750011)
+		(layers "F.Cu" "F.Mask" "F.Paste")
+	)
+	(pad "16" smd rect
+		(at 1.500505 -1.249934 270)
+		(size 0.299974 0.750011)
+		(layers "F.Cu" "F.Mask" "F.Paste")
+	)
+	(pad "17" smd rect
+		(at 0.751967 -2.002028 270)
+		(size 0.750011 0.28001)
+		(layers "F.Cu" "F.Mask" "F.Paste")
+	)
+	(pad "18" smd rect
+		(at 0.251841 -2.002028 270)
+		(size 0.750011 0.28001)
+		(layers "F.Cu" "F.Mask" "F.Paste")
+	)
+	(pad "19" smd rect
+		(at -0.248031 -2.002028 270)
+		(size 0.750011 0.28001)
+		(layers "F.Cu" "F.Mask" "F.Paste")
+	)
+	(pad "20" smd rect
+		(at -0.748157 -2.002028 270)
+		(size 0.750011 0.28001)
+		(layers "F.Cu" "F.Mask" "F.Paste")
+	)
+	(pad "21" smd rect
+		(at -0.000635 1.07475)
+		(size 0.250012 0.499999)
+		(layers "F.Cu" "F.Mask" "F.Paste")
+	)
+	(pad "22" smd rect
+		(at 0.000381 0.304902)
+		(size 0.250012 0.499999)
+		(layers "F.Cu" "F.Mask" "F.Paste")
+	)
+	(embedded_fonts no)
+)

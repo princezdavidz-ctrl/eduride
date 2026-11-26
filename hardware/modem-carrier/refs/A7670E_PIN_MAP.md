@@ -18,7 +18,7 @@ Source: SIMCom A7670 Series Hardware Design V1.03, Figure 2 and Table 4, pp. 14â
 | 12 | PCM_SYNC | 1.8V digital I/O | NC |
 | 13 | PCM_DIN | 1.8V digital input | NC |
 | 14 | PCM_DOUT | 1.8V digital output | NC |
-| 15 | VDD_1V8 | 1.8V power output, max 50mA | TXU0202 VCCB and status translator VCCB after sequencing validation |
+| 15 | VDD_1V8 | 1.8V power output, max 50mA | TXU0202 VCCB after sequencing validation |
 | 16 | RESET | 1.8V-domain input, internally pulled up to VBAT | Open-drain low-side transistor from controller GPIO39 |
 | 17 | GND | Ground | GND plane |
 | 18 | GND | Ground | GND plane |
@@ -39,7 +39,7 @@ Source: SIMCom A7670 Series Hardware Design V1.03, Figure 2 and Table 4, pp. 14â
 | 33 | SIM_RST | SIM reset output | SIM RST through ESD / series network per SIMCom |
 | 34 | SIM_DET | SIM detect input | Socket card-detect switch; polarity to be checked against socket drawing |
 | 35 | NC | No connect | Leave open |
-| 36 | NC / GPIO6 variant-dependent | GPIO6 appears in the separate A7670C-only GPIO table, not the A7670E GPIO table | HOLD open until exact A7670E-LASA variant pin map is confirmed |
+| 36 | NC | A7670E top-view assignment diagram marks NC; GPIO6 appears only in the separate A7670C-only GPIO table | Leave open; do not repurpose |
 | 37 | I2C_SDA | 1.8V IÂ²C bidirectional | NC |
 | 38 | I2C_SCL | 1.8V IÂ²C clock | NC |
 | 39 | GND | Ground | GND plane |
@@ -50,11 +50,11 @@ Source: SIMCom A7670 Series Hardware Design V1.03, Figure 2 and Table 4, pp. 14â
 | 44 | NC | No connect | Leave open |
 | 45 | GND | Ground | GND plane |
 | 46 | GND | Ground | GND plane |
-| 47 | NC / GPIO8 variant-dependent | GPIO8 appears in the separate A7670C-only GPIO table, not the A7670E GPIO table | HOLD open until exact A7670E-LASA variant pin map is confirmed |
+| 47 | NC | A7670E top-view assignment diagram marks NC; GPIO8 appears only in the separate A7670C-only GPIO table | Leave open; do not repurpose |
 | 48 | GPIO9 | 1.8V GPIO | NC |
 | 49 | GPIO4 / UART3_RX | 1.8V GPIO / UART3 input | NC |
 | 50 | GPIO5 / UART3_TX | 1.8V GPIO / UART3 output | NC |
-| 51 | NC / ADC1 variant-dependent | ADC1 is listed as pin 25 or 51 in family documentation | HOLD open until exact A7670E-LASA variant pin map is confirmed |
+| 51 | NC | A7670E top-view assignment diagram marks NC; ADC1 alternate pad 51 is listed for other family variants | Leave open; do not repurpose |
 | 52 | NETLIGHT | 1.8V digital output | Optional LED only after current and drive checks; default NC |
 | 53 | NC | No connect | Leave open |
 | 54 | GND | Ground | GND plane |
@@ -69,7 +69,7 @@ Source: SIMCom A7670 Series Hardware Design V1.03, Figure 2 and Table 4, pp. 14â
 | 63 | GND | Ground | GND plane |
 | 64 | GND | Ground | GND plane |
 | 65 | GND | Ground | GND plane |
-| 66 | STATUS? / GND conflict | 1.8V status output in status table; simultaneously included in GND pin list | HOLD â€” do not connect to GND, translator, or J2 until SIMCom confirms exact LASA pad assignment in writing |
+| 66 | STATUS / GND documentation conflict | Figure 2 and Table 4 show STATUS; Table 8 also includes pad 66 in its GND list, and STATUS type is inconsistently marked DI | HOLD â€” do not connect to GND, translator, or J2 until SIMCom confirms exact LASA pad assignment and electrical direction in writing |
 | 67 | GPIO10 | 1.8V GPIO | NC |
 | 68 | GPIO11 | 1.8V GPIO | NC |
 | 69 | GND | Ground | Central ground-pad array; connect to GND plane |
@@ -95,8 +95,8 @@ Source: SIMCom A7670 Series Hardware Design V1.03, Figure 2 and Table 4, pp. 14â
 
 ## Critical pin-map conflicts â€” release blockers
 
-1. **Pad 66 conflict:** the V1.03 pin assignment / power table's GND list includes pad 66 (Table 8), while the later Other Pins table assigns pad 66 to STATUS. The STATUS row is also marked DI even though the status timing section describes a module-driven status output. Do not route pad 66 or connect it to the controller until SIMCom confirms the exact A7670E-LASA pad function and electrical direction.
-2. **Pad 36 / 47 / 51 usage:** the GPIO6 / GPIO8 entries are in the separate A7670C-only table, not the A7670E GPIO table. ADC1 is shown as pin 25 or 51 in the family guide. Leave these pads open; do not repurpose them until SIMCom confirms the exact LASA variant pinout.
+1. **Pad 66 conflict:** the V1.03 top-view pin assignment diagram (Figure 1) and Other Pins table assign pad 66 to STATUS, but Table 8's GND list also includes pad 66. The STATUS row is marked DI even though the status timing section describes the module driving STATUS high after initialization. The GND-list entry may be a documentation error, but do not route pad 66 or connect it to the controller until SIMCom confirms the exact A7670E-LASA pad function and electrical direction.
+2. **Pads 36 / 47 / 51:** the A7670E top-view assignment diagram marks these pads NC. Alternate GPIO/ADC functions appear for other A7670 family variants. Keep them NC and do not repurpose them.
 
 ## Critical checks before schematic release
 

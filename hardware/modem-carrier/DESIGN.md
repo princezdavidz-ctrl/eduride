@@ -62,9 +62,9 @@ J14 is the separate two-terminal protected 5 V modem input. Its pin polarity and
 | Modem | SIMCom A7670E-LASA | Selected candidate; exact module revision, pad drawing and stock must be checked before footprint release |
 | 3.8 V buck | Analog Devices LT8640EUDC#TRPBF | 5 A continuous / 7 A peak transient family capability; 3.4–42 V input. Candidate only; calculate 3.8 V feedback, switching frequency, inductor, input/output capacitors and thermal behavior from the current datasheet |
 | UART translator | TI TXU0202DCU | Two channels with opposite fixed directions; A1→B1Y for ESP TX→modem RX, B2→A2Y for modem TX→ESP RX; VCCA=3.3 V, VCCB=1.8 V. Confirm VDD_EXT capability and startup sequencing |
-| Local 3.3 V logic LDO | Diodes Incorporated AP2112K-3.3TRG1 | 2.5–6 V input, fixed 3.3 V output, 600 mA; supplies only translator A-side and OE because controller J2 has no 3.3 V power pin |
-| PWRKEY / RESET transistor | MMBT3904 NPN, SOT-23 | SIMCom reference-style low-side open-collector control; 4.7 kΩ base drive, 47 kΩ base-emitter pull-down and 1 kΩ collector series resistor |
-| VBAT / control TVS | Leiditech ESDBW5V0A1 | SIMCom-listed 5 V VRWM example; candidate at VBAT, PWRKEY and RESET nodes |
+| Local 3.3 V logic LDO | Diodes Incorporated AP2112K-3.3TRG1 | 2.5–6 V input, fixed 3.3 V output, 600 mA; powers only translator A-side and OE | Candidate; confirm input rail limits and thermal dissipation |
+| PWRKEY / RESET transistor | MMBT3904 NPN, SOT-23 | SIMCom-style low-side open-collector control with 4.7 kΩ base drive, 47 kΩ pull-down and 1 kΩ collector resistor | Candidate; verify exact timing and pinout on purchased module |
+| VBAT / control TVS | Leiditech ESDBW5V0A1 | SIMCom-listed 5 V VRWM example at VBAT, PWRKEY and RESET | Candidate; confirm clamping and footprint |
 | STATUS translator (conditional) | TI SN74AXC1T45DBV | Only populate if SIMCom confirms pad 66 is a 1.8 V STATUS output; otherwise omit and leave controller J2 pin 6 NC |
 | SIM socket | XUNPU SMN-303 | Candidate SIM card push-push with card detect; footprint and card pin mapping must be checked against its manufacturer drawing |
 
@@ -112,19 +112,19 @@ Initial recommendation: four-layer prototype. L1 components, short high-current 
 - Modem peak current and bulk-capacitance design envelope: SIMCom A7670 Series Hardware Design V1.00, power-supply section (pp. 22–23 in the downloaded document). Conservative 2.8 A until exact A7670E-LASA revision is reconciled.
 - LT8640 capability and package: Analog Devices LT8640/LT8640-1 datasheet, current revision; 5 A continuous and 7 A peak transient; 3.4–42 V input. Use official package drawing and reference circuit, not a generic footprint.
 - UART level translation: TI TXU0202 datasheet; dual-supply, two fixed-direction channels in opposite directions, 1.1–5.5 V rails.
-- Carrier USB host port is included to allow a Linux vision computer to use the modem independently of ESP32 UART. Cat 1 remains limited bandwidth and requires field testing on the intended route/operator.
+- Carrier USB device port is included so a Linux vision computer can act as the USB host and use the modem independently of ESP32 UART. Cat 1 remains limited bandwidth and requires field testing on the intended route/operator.
 
 ## Not verified
 
-- Exact A7670E-LASA-specific hardware design guide and revision, resolution of pad 66 STATUS/GND conflict, pad 36/47/51 variant ambiguity, and confirmation of the complete 88-pad assignment and recommended land pattern.
+- Exact A7670E-LASA-specific hardware design guide and revision, resolution of pad 66 STATUS/GND conflict and exact LASA order-code confirmation, and confirmation of the complete 88-pad assignment and recommended land pattern.
 - Whether A7670E-LASA VDD_EXT can safely power the selected translators through all startup and shutdown conditions.
 - LT8640 feedback resistor values, switching frequency, inductor saturation/current rating, input/output capacitor effective values, loop stability and thermal dissipation at 5 V→3.8 V / 2.8 A.
 - Controller J14 connector, Q1 reverse-protection FET, tracks, vias, cable and upstream 5 V source current capacity.
 - Exact PWRKEY / RESET polarity, timing and electrical requirements for the purchased module revision.
 - SIM socket exact mechanical drawing and SIM pin mapping.
-- RF matching, antenna performance, RF keep-out, LTE bands and installation performance in the vehicle.
-- USB VBUS interface, Type-C CC requirements (if USB-C is selected), ESD device capacitance and signal-integrity margin.
-- PCB schematic/ERC, board connectivity, DRC, impedance, thermal, EMC, bench power-up and network tests.
+- RF matching component values and tuning, antenna selection/performance, RF keep-out, LTE band coverage and installation performance in the vehicle.
+- USB host enumeration, VBUS detection behavior, ESD clamping and USB signal-integrity margin.
+- PCB board connectivity, DRC, impedance, thermal, EMC, bench power-up and network tests; schematic ERC has passed, but no PCB layout exists yet.
 
 ## First power-up (draft; complete after schematic and layout)
 
@@ -143,17 +143,17 @@ This project is a prototype design definition, not a released PCB or an approved
 The newer V1.03 hardware guide explicitly includes A7670E in its 88-pad pin assignment table. It specifies VBAT pins 55/56/57, 3.4–4.2 V operating range, 3.8 V typical, and a 2 A peak-current figure; the test setup uses 330 µF at the module supply. The older V1.00 guide gives a 2.8 A peak and recommends ≥300 µF when the supply can deliver the peak. Until the exact A7670E-LASA module revision is confirmed by SIMCom, retain the conservative 2.8 A design envelope and ≥300 µF effective local capacitance. The LT8640 5 A / 7 A capability is intentionally selected with margin; this does not waive rail droop or thermal testing.
 
 The V1.03 guide further confirms:
-- Pin 15 VDD_1V8 is a module output, on by default, up to 50 mA. It can supply the 1.8 V translator rail only after power-sequencing and startup behavior are validated.
+- Pin 15 VDD_1V8 is a module output, on by default, up to 50 mA. It can supply the TXU0202 1.8 V translator rail only after power-sequencing and startup behavior are validated.
 - Pin 1 PWRKEY and pin 16 RESET are active-low inputs with internal 50 kΩ pull-ups to VBAT. Their VIH is specified as 0.7 × VBAT and VIL ≤0.5 V. Use open-drain transistor stages; never connect ESP32 3.3 V directly. Do not place capacitors above 10 nF on PWRKEY or RESET.
 - PWRKEY power-on pulse is typically 50 ms; the STATUS signal goes high when initialization is ready (typical 11.2 s). Power-off pulse is at least 2.5 s. RESET pulse is 2–2.5 s and should be reserved for emergency recovery, not routine power control.
-- Pad 66 is a release blocker: the same V1.03 guide lists pad 66 in its GND pad list and later labels it STATUS (with an inconsistent DI type). Do not connect it until SIMCom confirms the exact A7670E-LASA pin assignment and direction.
+- Figure 2 and Table 4 assign pad 66 to STATUS, but Table 8 also includes pad 66 in the GND list and labels STATUS as DI although the timing description shows a module-driven output. Treat this as a likely documentation inconsistency and keep pad 66 isolated until SIMCom confirms the exact A7670E-LASA pin assignment and direction.
 - UART pins 9 TXD and 10 RXD are 1.8 V. The full-function UART supports RTS/CTS, but the existing controller J2 only provides TX/RX; leave RTS/CTS open as SIMCom permits when unused.
 - USB pins 27 USB_DP and 28 USB_DM form a USB 2.0 device/slave interface; the modem does not support USB host mode. The carrier's USB connector must connect to a Linux host computer, not another USB device. Route 90 Ω differential, protect at the connector, and connect host VBUS to module pin 24 only as the SIMCom reference design requires. Do not back-feed the host.
 - SIM pins 30 SIM_VDD, 31 SIM_DATA, 32 SIM_CLK, 33 SIM_RST, 34 SIM_DET. SIMCom recommends ESD protection beside the socket and shows 22 Ω series resistors on SIM_RST, SIM_CLK and SIM_DATA, with local SIM_VDD decoupling. Use the exact module guide's reference circuit and the selected socket's verified contact numbering.
 - Pin 60 RF_ANT is the main antenna interface. Follow the SIMCom RF matching, grounding, 50 Ω routing, and antenna requirements; do not assume a connector alone is sufficient.
 - The manufacturer footprint recommendation is a 25 × 25 mm land-pattern envelope around a 24 × 24 mm module, with 88 electrical pads including the central ground-pad array and explicit forbidden/mold/keep-out regions. The footprint must be transcribed from the manufacturer drawing (V1.03 Figure 5) and checked pad-by-pad against the pin assignment (Figure 2 / Table 4). No footprint has yet been created or approved.
 
-The USB-C connector is the preferred external host connector for the Linux vision computer. If USB-C is used, include separate 5.1 kΩ Rd resistors from CC1 and CC2 to GND, a USB 2.0 ESD part with low capacitance, and a VBUS isolation/current-limiting strategy that prevents the host's 5 V from feeding the carrier's 5 V modem input. The USB port is a modem data path only; it does not make the modem a USB host.
+The selected USB-C receptacle is configured as a USB 2.0 device/UFP with separate 5.1 kΩ Rd resistors from CC1 and CC2 to GND, low-capacitance data ESD, and a VBUS detection link that does not feed the carrier 5 V rail. Host enumeration and VBUS behavior still require bench verification. The USB port is a modem data path only; it does not make the modem a USB host.
 
 ## Power-stage calculation and candidate support parts — preliminary only
 
@@ -170,14 +170,17 @@ A 1 MHz switching target is preferred over 2 MHz for this 5.0 V → 3.8 V conver
 | VBAT bulk capacitor | Panasonic 6SVPC330M, LCSC C139569 | 330 µF, 6.3 V polymer, 17 mΩ ESR, 3.39 A ripple rating, 2000 h at 105 °C | Two in parallel are a candidate to maintain >300 µF after −20% tolerance; confirm ripple, life, effective capacitance and regulator stability |
 | USB-C receptacle | SHOU HAN TYPE-C 16PIN 2MD(073), LCSC C2765186 | 16 contacts, 3 A / 5 V connector rating | Candidate only; verify mechanical drawing, pad numbering and USB-C UFP CC implementation |
 | USB data ESD | WILLSEMI ESD73011N-2/TR, LCSC C506104 | 0.4 pF single-line bidirectional TVS | Candidate for each USB data line; satisfies SIMCom's <1 pF data-line guidance |
-| SIM ESD | ST ESDA6V1W5, LCSC C48677 | Four-channel ESD array | Manufacturer-recommended example; verify pin map and capacitance against SIM lines |
-| SIM socket | Amphenol C707 10M006 512 | Named by SIMCom as a recommended 6-pin socket | Reference candidate only; no PCBKit footprint and current listed stock is zero; confirm card format and find a verified in-stock equivalent |
+| SIM socket | XUNPU SMN-303 | Nano-SIM push-push socket with card-detect contact | Candidate only; verify card-detect switch polarity, mechanical drawing and footprint before layout |
+| SIM ESD | ST ESDA6V1W5 | Four-line ESD array explicitly recommended by SIMCom for USIM | Candidate; verify channel pin map and footprint; 90 pF line capacitance is accepted only because SIMCom names this device |
+| USB VBUS TVS | WAYON WS07DP | 7 V VRWM surge/ESD device for host VBUS detection line | Candidate; verify actual clamp behavior and footprint; it is not a USB power source |
+| RF connector | Hirose U.FL-R-SMT-1(10), LCSC C88373 | 50 Ω board-side IPEX connector, 6 GHz rating, −40 to +90 °C | Candidate; verify mechanical drawing, coax pigtail and strain relief |
+| RF TVS | PRISEMI PESD0402-03 | SIMCom-recommended 0402 RF ESD part | Candidate; no local stock at time of lookup; verify availability and RF capacitance before use |
 
 Do not use ST USBLC6-2SC6 for the USB D+/D− pair in this design: its listed 3.5 pF capacitance exceeds SIMCom's stated <1 pF maximum for the USB data-line TVS devices. The ESD73011N-2/TR is a better candidate on capacitance, but its footprint, surge clamping and connector placement still need validation.
 
 The USB-C receptacle is a USB 2.0 device/UFP port. Provide 5.1 kΩ Rd from CC1 and CC2 to GND. Connect the host's VBUS to modem pin 24 only through the SIMCom-recommended VBUS detection/protection arrangement. Pin 24 is a valid USB-detection input; it is not a modem power input. Do not connect USB VBUS to MODEM_5V_IN or use it to power VBAT. Reserve 0 Ω links/test points for USB_DP, USB_DM and VBUS as SIMCom recommends.
 
-For the SIM circuit, use the SIMCom reference topology: ESD protection beside the socket, 22 Ω series resistors on SIM_RST/SIM_CLK/SIM_DATA, 100 nF local SIM_VDD decoupling, and the module's internal 4.7 kΩ SIM_DATA pull-up. Verify whether SIM_DET is active-high or active-low in the modem configuration and socket drawing before wiring the card-detect switch.
+The SIM circuit follows the SIMCom reference topology: ESD protection beside the socket, 22 Ω series resistors on SIM_RST/SIM_CLK/SIM_DATA, 100 nF + 33 pF local SIM_VDD decoupling, and the module's internal 4.7 kΩ SIM_DATA pull-up. Verify whether SIM_DET is active-high or active-low in the modem configuration and socket drawing before wiring the card-detect switch.
 
 ## Controller harness connector definition
 
@@ -190,31 +193,34 @@ The carrier should therefore use a matching 1×06 female socket for J2 and a key
 
 ## Power-control and status detail
 
-Use SIMCom's recommended transistor-level PWRKEY circuit (MMBT3904 is its example), not a direct ESP32 connection. The internal PWRKEY and RESET pull-ups go to VBAT, so their high level can exceed the ESP32's 3.3 V domain. Keep external capacitance on either control pin at or below 10 nF. Firmware timing must follow the guide: approximately 50 ms low pulse for power-on, at least 2.5 s low for power-off, and approximately 2.5 s low for emergency reset. Never pull PWRKEY and RESET low together. The STATUS assignment is not safe to route: the same guide also lists pad 66 as GND and labels STATUS as DI. Keep pad 66 isolated until SIMCom resolves the conflict for the exact purchased module revision.
+Use SIMCom's recommended transistor-level PWRKEY circuit (MMBT3904 is its example), not a direct ESP32 connection. The internal PWRKEY and RESET pull-ups go to VBAT, so their high level can exceed the ESP32's 3.3 V domain. Keep external capacitance on either control pin at or below 10 nF. Firmware timing must follow the guide: approximately 50 ms low pulse for power-on, at least 2.5 s low for power-off, and approximately 2.5 s low for emergency reset. Never pull PWRKEY and RESET low together. The STATUS assignment is not safe to route: Figure 2 and Table 4 show pad 66 as STATUS, but Table 8 also includes it in the GND list and labels STATUS as DI. Keep pad 66 isolated until SIMCom resolves the conflict for the exact purchased module revision.
 
 The 1.8 V VDD_1V8 output (pin 15) is specified up to 50 mA and is on by default. It is a suitable candidate supply for the translator's VCCB rails, subject to sequencing and back-power validation. TXU0202 provides Ioff partial-power-down support and fixed-direction channels; tie its OE to a defined state, not a floating pin. If pad 66 is confirmed as STATUS, the status translator direction is B→A (1.8 V modem to 3.3 V controller); validate DIR and OE logic against the chosen SN74AXC1T45 datasheet before schematic release. Until then, omit the status translator and leave controller J2 pin 6 NC.
 
 
 ## Explicit manufacturer confirmation required
 
-The family guide has an internal pad-66 contradiction: Table 8's GND list includes pad 66, while the later Other Pins table assigns STATUS to pad 66. The STATUS row also labels its type DI although the power-state timing section describes the module driving STATUS high after initialization. Pads 36 and 47 are listed in a separate A7670C-only GPIO table; ADC1 is shown on pad 25 or 51 depending on variant. Keep them unused until exact LASA confirmation. These are not acceptable assumptions for an LGA footprint or schematic. Keep pads 36, 47, 51 and 66 unrouted / no-connect in the carrier draft until SIMCom confirms the exact A7670E-LASA order code's pad map and status electrical direction in writing.
+The family guide has an internal pad-66 contradiction: Figure 2 and Table 4 assign STATUS to pad 66, while Table 8's GND list also includes pad 66. The STATUS row labels its type DI although the power-on/off timing section describes the module driving STATUS high after initialization. The GND-list entry may be a documentation error, but keep pad 66 isolated until SIMCom confirms the exact A7670E-LASA order code's pad map and status electrical direction in writing. Figure 2 marks pads 36, 47 and 51 NC for A7670E; keep them NC and do not repurpose them.
 
 ## First-pass carrier schematic milestone — A0 prototype
 
-A first-pass carrier schematic with the LT8640 5 V → 3.8 V power stage and controller UART / power-control interfaces (41 parts, 24 nets) has been generated in `board.kicad_sch` from `scripts/design.py`.
+A first-pass carrier schematic with the LT8640 5 V → 3.8 V power stage, controller UART / power-control interfaces, USB-C device port, SIM-card interface and LTE RF matching path (66 parts, 44 nets) has been generated in `board.kicad_sch` from `scripts/design.py`.
 
 - Includes J14 carrier power input, 0 Ω input measurement link, LT8640, 2.7 µH inductor, 1 MHz timing resistor, 3.8 V feedback divider, soft-start and bootstrap capacitors, input bypassing, 47 µF ceramic output capacitor, two 330 µF polymer bulk capacitors, the SIMCom-recommended 33 pF / 10 pF / 100 nF / 1 µF local VBAT ceramics, a 5 V VRWM VBAT TVS candidate, and a 3.8 V output/test connector.
 - Adds an AP2112K-3.3 local LDO because controller J2 exposes no 3.3 V supply pin; this rail powers only the A-side and OE of the TXU0202.
 - Adds a TXU0202 fixed-direction UART translator: ESP32 TX 3.3 V → modem RX 1.8 V, and modem TX 1.8 V → ESP32 RX 3.3 V. Its B-side supply comes from the modem VDD_1V8 output.
 - Adds MMBT3904 open-collector stages for PWRKEY and RESET, with 4.7 kΩ base resistors, 47 kΩ base pull-downs, 1 kΩ collector series resistors and 5 V VRWM TVS candidates.
-- Adds J3 for the controller's existing J2 interface and J4 as a **schematic-only module signal placeholder**. J4 is not a physical connector and must be replaced by the verified A7670E-LASA LGA symbol before PCB layout. Controller J2 pin 6 remains NC.
+- Adds J3 for the controller's existing J2 interface and J4/J5 as **schematic-only module signal placeholders**. J4/J5 are not physical connectors and must be replaced by the verified A7670E-LASA LGA symbol before PCB layout. Controller J2 pin 6 remains NC pending pad-66 confirmation.
+- Adds a 16-pin USB-C USB 2.0 device/UFP connector candidate, 5.1 kΩ CC1/CC2 Rd resistors, SBU no-connects, a 0 Ω shield-ground link, 0.4 pF ESD protection on D+/D−, and a 7 V VRWM VBUS TVS candidate. USB D+/D− and VBUS each have a 0 Ω series link. USB VBUS reaches only the modem VBUS-detect pin; it is not tied to the 5 V modem power rail.
+- Adds a nano-SIM socket candidate, SIMCom-style four-line ESDA6V1W5 array, 22 Ω series resistors on SIM_RST/SIM_CLK/SIM_DATA, 100 nF + 33 pF SIM_VDD bypass, and a direct SIM_DET card-detect connection. SIM VPP is left NC; no external SIM_DATA pull-up is added because the module has an internal 4.7 kΩ pull-up.
+- Adds the SIMCom Figure 31 RF network: two 0 Ω series links, two DNP tuning-capacitor positions, optional PESD0402-03 RF TVS and a 50 Ω Hirose U.FL connector. C1/C2 values remain unset until antenna-vendor tuning.
 - Preliminary buck values: 1.000 MΩ / 343 kΩ feedback divider (about 3.798 V at 0.970 V reference), 41.2 kΩ RT (1 MHz), 2.7 µH inductor, 10 nF soft start, 100 nF bootstrap capacitor, 1 µF INTVCC bypass, 4.7 pF feed-forward, 4.7 µF + 2×1 µF input ceramic bypass, and 47 µF ceramic + 2×330 µF polymer output capacitance.
 - LT8640 switch pins are modeled as passive switching nodes to avoid false ERC output-to-output conflicts; externally supplied rails use explicit PWR_FLAG symbols. The VDD_1V8 and modem TXD flags represent the not-yet-integrated module symbol and must be removed when J4 is replaced.
-- KiCad schematic ERC result: **0 errors, 0 warnings**. Netlist export completed successfully; UART and PWRKEY/RESET pin-to-net connectivity was inspected.
+- KiCad schematic ERC result: **0 errors, 0 warnings**. Netlist export completed successfully; UART, PWRKEY/RESET, SIM_VDD, SIM signal paths and USB VBUS isolation were inspected.
 
-This is still a partial carrier schematic. J4 is a temporary logical placeholder, not a physical connector; the complete A7670E-LASA symbol and pad map are not integrated. It is not a routed PCB, DRC, thermal analysis, stability validation or bench test. Capacitor effective values under DC bias, LT8640 loop stability with the selected bulk bank, input current path, inductor saturation, PCB thermal behavior, TVS clamping and output droop still require calculations and bench verification. No footprint is assigned to the schematic symbols yet.
+This is still a partial carrier schematic. J4/J5/J8 are temporary logical module placeholders, not physical connectors; the complete A7670E-LASA symbol and pad map are not integrated. J6/J7/J9 and their footprints are candidate parts requiring mechanical verification. It is not a routed PCB, DRC, impedance analysis, thermal analysis, RF tuning, USB compliance test, stability validation or bench test. Capacitor effective values under DC bias, LT8640 loop stability with the selected bulk bank, input current path, inductor saturation, PCB thermal behavior, TVS clamping and output droop still require calculations and bench verification. Some candidate footprints are assigned to the USB-C, nano-SIM, SIM ESD and U.FL symbols; these have not been mechanically verified or DRC-tested. Many other schematic symbols still have no footprint assigned.
 
-Candidate symbol/footprint library files are saved locally in `parts.kicad_sym` and `parts.pretty/`. The LT8640, inductor, polymer-capacitor and TXU0202 footprints are library candidates only; none is assigned to the schematic, and all must be checked against current manufacturer mechanical drawings before PCB placement.
+Candidate symbol/footprint library files are saved locally in `parts.kicad_sym` and `parts.pretty/`. LT8640, inductor, polymer-capacitor and TXU0202 footprints are library candidates; USB-C, nano-SIM, SIM ESD and U.FL footprints are assigned as candidates but not mechanically verified. All footprints must be checked against current manufacturer drawings before PCB placement.
 
 
 ## Additional SIMCom VBAT implementation requirements
@@ -228,3 +234,12 @@ The V1.03 guide recommends a TVS diode at the module VBAT pins (listed examples 
 - SIMCom, *A7670 Series Hardware Design V1.00* (older 2.8 A conservative VBAT sizing reference): https://nostris.ee/pdf/A7670%20Series%20Hardware%20Design_V1.00.pdf
 - Analog Devices, *LT8640/LT8640-1 Datasheet*: https://www.analog.com/media/en/technical-documentation/data-sheets/LT8640-8640-1.pdf
 - Texas Instruments, *TXU0202 Datasheet*: https://www.ti.com/lit/ds/symlink/txu0202.pdf
+
+
+## LTE RF path and antenna implementation notes
+
+- J8 is a logical placeholder for module MAIN_ANT pad 60 and GND; it is not a physical connector and must be replaced by the confirmed module symbol.
+- R23/R24 are default 0 Ω series links. C21/C22 are DNP tuning positions; values are selected only after antenna-vendor guidance and conducted/OTA tuning. D7 is an optional PESD0402-03 low-capacitance RF TVS candidate.
+- J9 is a Hirose U.FL-R-SMT-1(10), 50 Ω, 6 GHz connector candidate. Place the RF connector and matching components close to MAIN_ANT. Use a strain-relieved coax pigtail to an external vehicle antenna; U.FL is a board-side connector, not a repeatedly handled field-service connector.
+- Maintain a 50 Ω controlled-impedance RF feed 
+… (1680 more characters cut)

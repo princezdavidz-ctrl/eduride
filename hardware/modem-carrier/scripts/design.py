@@ -149,4 +149,85 @@ s.part("D3", "Device:D_TVS", "ESDBW5V0A1 RESET TVS", {"1": "MODEM_RESET_N", "2":
 # module symbol is added after SIMCom resolves the exact LASA pad map.
 s.flag("MODEM_VDD_1V8", "MODEM_TXD")
 
+
+
+
+# USB 2.0 device/UFP interface. Linux vision computer is the USB host.
+block3 = "USB-C HOST DATA INTERFACE"
+s.note(block3, "A7670 USB is a USB 2.0 device only. The Linux vision computer is the host. USB VBUS is a detection input to the modem, not a modem power input; do not connect it to MODEM_5V_SW.")
+s.note(block3, "Route USB D+/D− as a 90 Ω differential pair with short stubs. ESD73011N-2/TR is a 0.4 pF data-line TVS candidate. SBU pins are unused; CC1/CC2 use 5.1 kΩ Rd for USB-C UFP mode.")
+
+# USB-C receptacle candidate with combined A/B pad numbers matching its footprint.
+s.part("J7", "parts:TYPE-C16PIN2MD_bcb96b08", "TYPE-C 16PIN 2MD(073) USB2 UFP", {
+    "13": "USB_SHIELD", "14": "USB_SHIELD",
+    "A1B12": "GND", "A4B9": "USB_VBUS_HOST", "A5": "USB_CC1",
+    "A6": "USB_D+_CONN", "A7": "USB_D-_CONN", "A8": None,
+    "B1A12": "GND", "B4A9": "USB_VBUS_HOST", "B5": "USB_CC2",
+    "B6": "USB_D+_CONN", "B7": "USB_D-_CONN", "B8": None,
+}, block=block3, footprint="parts:USB-C-SMD_TYPE-C-16PIN-2MD-073")
+
+# Low-capacitance data-line ESD devices and replaceable 0-ohm links.
+s.part("D4", "Device:D_TVS", "ESD73011N-2/TR USB D+ ESD 0.4pF", {"1": "USB_D+_CONN", "2": "GND"}, block=block3, footprint="parts:DFN1006-2L-BI")
+s.part("D5", "Device:D_TVS", "ESD73011N-2/TR USB D- ESD 0.4pF", {"1": "USB_D-_CONN", "2": "GND"}, block=block3, footprint="parts:DFN1006-2L-BI")
+s.part("D6", "Device:D_TVS", "WS07DP 7V VRWM USB VBUS TVS CANDIDATE", {"1": "USB_VBUS_HOST", "2": "GND"}, block=block3)
+s.part("R14", "Device:R", "0R USB D+ LINK", {"1": "USB_D+_CONN", "2": "MODEM_USB_DP"}, block=block3)
+s.part("R15", "Device:R", "0R USB D- LINK", {"1": "USB_D-_CONN", "2": "MODEM_USB_DM"}, block=block3)
+s.part("R16", "Device:R", "0R USB VBUS DETECT LINK", {"1": "USB_VBUS_HOST", "2": "MODEM_USB_VBUS"}, block=block3)
+s.part("R17", "Device:R", "5.1k CC1 Rd", {"1": "USB_CC1", "2": "GND"}, block=block3)
+s.part("R18", "Device:R", "5.1k CC2 Rd", {"1": "USB_CC2", "2": "GND"}, block=block3)
+s.part("R19", "Device:R", "0R USB SHIELD GROUND LINK", {"1": "USB_SHIELD", "2": "GND"}, block=block3)
+
+# Logical placeholder for USB/SIM pins on the not-yet-confirmed A7670E-LASA module symbol.
+s.part("J5", "Connector_Generic:Conn_01x09", "A7670E USB-SIM PORT — LOGICAL PLACEHOLDER ONLY", {
+    "1": "MODEM_USB_DP", "2": "MODEM_USB_DM", "3": "MODEM_USB_VBUS",
+    "4": "SIM_VDD", "5": "SIM_DATA", "6": "SIM_CLK",
+    "7": "SIM_RST", "8": "SIM_DET", "9": "GND",
+}, block=block3)
+
+# Nano-SIM socket and SIMCom-style ESD / series network.
+block4 = "SIM CARD INTERFACE"
+s.note(block4, "Nano-SIM socket is a candidate only; verify the manufacturer's drawing, card-detect switch polarity and footprint before layout. The module provides SIM_VDD (1.8V/3.0V) and its internal 4.7k SIM_DATA pull-up; do not add another pull-up.")
+s.part("J6", "parts:SMN-303", "XUNPU SMN-303 NANO-SIM SOCKET CANDIDATE", {
+    "C1": "SIM_VDD", "C2": "SIM_CARD_RST", "C3": "SIM_CARD_CLK",
+    "C5": "GND", "C6": None, "C7": "SIM_CARD_DATA", "CD": "SIM_DET",
+    "8": "GND", "9": "GND", "10": "GND", "11": "GND",
+}, block=block4, footprint="parts:SIM-SMD_SMN-303")
+s.part("U4", "parts:ESDA6V1W5", "ESDA6V1W5 FOUR-LINE SIM ESD ARRAY", {
+    "1": "SIM_VDD", "2": "GND", "3": "SIM_CARD_RST",
+    "4": "SIM_CARD_CLK", "5": "SIM_CARD_DATA",
+}, block=block4, footprint="parts:SC-70-5_L2.1-W1.3-P0.65-LS2.1-BR")
+s.part("R20", "Device:R", "22R SIM RESET SERIES", {"1": "SIM_RST", "2": "SIM_CARD_RST"}, block=block4)
+s.part("R21", "Device:R", "22R SIM CLOCK SERIES", {"1": "SIM_CLK", "2": "SIM_CARD_CLK"}, block=block4)
+s.part("R22", "Device:R", "22R SIM DATA SERIES", {"1": "SIM_DATA", "2": "SIM_CARD_DATA"}, block=block4)
+s.part("C19", "Device:C", "100nF SIM VDD LOCAL BYPASS", {"1": "SIM_VDD", "2": "GND"}, block=block4)
+s.part("C20", "Device:C", "33pF SIM VDD LOCAL BYPASS", {"1": "SIM_VDD", "2": "GND"}, block=block4)
+
+# Temporary power flags represent external host VBUS and module SIM_VDD outputs
+# until the complete module symbol is integrated.
+s.flag("USB_VBUS_HOST", "SIM_VDD")
+
+
+
+
+# MAIN_ANT RF matching and external coax interface.
+block5 = "LTE MAIN ANTENNA RF PATH"
+s.note(block5, "SIMCom Figure 31: R1/R2 default 0 ohm; C1/C2 are reserved for tuning and their values come from the antenna vendor after RF tuning. Keep this path 50 ohm controlled impedance.")
+s.note(block5, "J9 is a 50 ohm U.FL test/antenna connector candidate. Place it and the matching network close to module MAIN_ANT pad 60. Use a strain-relieved coax pigtail to a vehicle-rated external antenna; do not repeatedly flex the U.FL connector.")
+s.note(block5, "Antenna target: omnidirectional, 50 ohm, average gain > -3 dBi, efficiency > 50%, VSWR < 2, with coverage for the exact module LTE bands. Confirm antenna and cable losses with the vendor and field test.")
+
+# Logical module RF placeholder; replace with the exact LGA module symbol.
+s.part("J8", "Connector_Generic:Conn_01x02", "A7670E MAIN_ANT / GND — LOGICAL PLACEHOLDER", {
+    "1": "MODEM_MAIN_ANT", "2": "GND"
+}, block=block5)
+
+# Two series zero-ohm links and two unpopulated shunt tuning positions.
+s.part("R23", "Device:R", "0R RF MATCH SERIES 1", {"1": "MODEM_MAIN_ANT", "2": "RF_MATCH_1"}, block=block5, footprint="Resistor_SMD:R_0402_1005Metric")
+s.part("C21", "Device:C", "DNP RF TUNING CAP C1", {"1": "RF_MATCH_1", "2": "GND"}, block=block5, footprint="Capacitor_SMD:C_0201_0603Metric")
+s.part("R24", "Device:R", "0R RF MATCH SERIES 2", {"1": "RF_MATCH_1", "2": "RF_MATCH_2"}, block=block5, footprint="Resistor_SMD:R_0402_1005Metric")
+s.part("C22", "Device:C", "DNP RF TUNING CAP C2", {"1": "RF_MATCH_2", "2": "GND"}, block=block5, footprint="Capacitor_SMD:C_0201_0603Metric")
+s.part("D7", "Device:D_TVS", "PESD0402-03 OPTIONAL RF TVS", {"1": "RF_MATCH_2", "2": "GND"}, block=block5, footprint="Resistor_SMD:R_0402_1005Metric")
+s.part("J9", "parts:U_FL-R-SMT-1_10_", "HIROSE U.FL-R-SMT-1(10) 50R RF CONNECTOR", {
+    "1": "RF_MATCH_2", "2": "GND"
+}, block=block5, footprint="parts:U.FL_Hirose_U.FL-R-SMT-1_Vertical")
+
 s.write("board.kicad_sch", overwrite=True)
