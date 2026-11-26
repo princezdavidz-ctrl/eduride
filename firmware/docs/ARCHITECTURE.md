@@ -62,3 +62,8 @@ GPS-only builds must not contain or expose the camera/vision event interface, im
 ## GNSS driver foundation
 
 The portable NMEA parser accepts checksum-validated RMC and GGA sentences, converts coordinates from degrees/minutes to decimal degrees, converts speed from knots to km/h, and requires both an active RMC status and a positive GGA fix with nearby coordinates before declaring a valid fix. UART1 reception is separately gated by `CONFIG_ER_ENABLE_GNSS_UART` and defaults off. Receiver-specific baud, electrical levels, update rate, antenna behavior and reset timing must be confirmed against the selected module before activation. The UART snapshot accessor invalidates fixes older than five seconds using the ESP monotonic clock. This is a conservative initial freshness threshold and must be validated against the selected receiver's configured update rate.
+
+
+## Cellular driver boundary
+
+The generic cellular lifecycle/status contract is separate from the selected modem adapter. It tracks OFF, POWERING, SIM_CHECK, REGISTERING, PDP_CONNECTING, ONLINE, DEGRADED and FAULT states, but performs no UART, PWRKEY, RESET, SIM or APN operations. It can be compiled independently while the exact modem/carrier board remains unselected. See `CELLULAR_DRIVER.md` for electrical, adapter and validation gates.

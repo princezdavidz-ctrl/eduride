@@ -4,6 +4,7 @@
 #include "esp_system.h"
 #include "system_state.h"
 #include "gnss_uart.h"
+#include "cellular_link.h"
 
 static const char *TAG = "edu_ride";
 
@@ -22,7 +23,18 @@ static void supervisor_task(void *arg)
 #else
     ESP_LOGI(TAG, "GNSS UART is disabled by configuration.");
 #endif
-    ESP_LOGI(TAG, "Cellular modem driver remains disabled pending module selection.");
+
+#if CONFIG_ER_ENABLE_CELLULAR_LINK
+    esp_err_t cellular_err = er_cellular_link_init();
+    if (cellular_err == ESP_OK) {
+        ESP_LOGI(TAG, "Generic cellular status interface initialized; modem hardware remains inactive.");
+    } else {
+        ESP_LOGE(TAG, "Cellular interface initialization failed: %s", esp_err_to_name(cellular_err));
+    }
+#else
+    ESP_LOGI(TAG, "Cellular link interface is disabled by configuration.");
+#endif
+
     er_state_set(ER_STATE_DEGRADED);
     for (;;) {
         er_gnss_snapshot_t fix = {0};

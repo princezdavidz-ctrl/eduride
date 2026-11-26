@@ -21,4 +21,11 @@ config ER_GNSS_UART_BAUD
     range 1200 921600
     default 9600
 
+config ER_ENABLE_CELLULAR_LINK
+    bool "Enable generic cellular link status contract"
+    default n
+    help
+        Initializes the hardware-agnostic cellular lifecycle/status module.
+        Does not configure UART or drive modem power/reset pins.
+
 endmenu
