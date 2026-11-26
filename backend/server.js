@@ -230,6 +230,23 @@ async function handleRequest(request, response) {
     }
   }
 
+  if (request.method === "GET" && pathname === "/api/device/config") {
+    const token = request.headers["x-device-token"];
+    if (typeof token !== "string" || token.length < 32) return reply(401, { error: "Device authentication required" });
+    const result = await pool.query("SELECT device_code, variant FROM devices WHERE token_hash=$1 AND active=true", [hashSessionToken(token)]);
+    const device = result.rows[0];
+    if (!device) return reply(401, { error: "Invalid or revoked device credentials" });
+    await pool.query("UPDATE devices SET last_seen_at=now() WHERE token_hash=$1", [hashSessionToken(token)]);
+    return reply(200, {
+      protocol_version: 1,
+      device_code: device.device_code,
+      variant: device.variant,
+      event_endpoint: "/api/device/events",
+      server_time_utc: new Date().toISOString(),
+      capabilities: device.variant === "vision_gps" ? ["gps", "event_sync", "vision_link"] : ["gps", "event_sync"]
+    });
+  }
+
   if (request.method === "POST" && pathname === "/api/device/events") {
     const deviceToken = request.headers["x-device-token"];
     if (typeof deviceToken !== "string" || deviceToken.length < 32) return reply(401, { error: "Device authentication required" });

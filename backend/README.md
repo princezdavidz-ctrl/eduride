@@ -119,3 +119,5 @@ The backend GitHub Actions workflow runs unit and PostgreSQL-backed integration 
 - Complete school/family authorization, operational acceptance tests and Kenyan privacy/DPIA review before any student identity or vision workflow is piloted.
 
 Apply all database migrations with `npm run migrate` before starting the API. Migration `002_device_event_ingestion.sql` creates the event store required by `POST /api/device/events`; the server requires migrations 001 and 002.
+
+See `docs/DEVICE_PROVISIONING.md` for credential provisioning, rotation, revocation and authenticated runtime configuration.

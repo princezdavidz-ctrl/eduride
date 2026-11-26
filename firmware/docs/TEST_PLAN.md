@@ -49,3 +49,7 @@ No tests in this document are claimed to have passed. Execute in the dedicated t
 - Uploader exact-ID acknowledgement parsing, malformed JSON and oversized response handling.
 - HTTPS-only URL validation, root-CA trust and credential redaction.
 - Uploader remains inactive until endpoint, device token and trusted CA are securely provisioned.
+
+- Authenticated config returns server-assigned device variant and capabilities; revoked credentials receive 401.
+- Duplicate device-code provisioning is refused; rotation invalidates old token; revocation prevents config/event access.
+- Secure token delivery, encrypted storage lifecycle, interrupted provisioning and factory-reset recovery.

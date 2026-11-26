@@ -93,6 +93,14 @@ test("persistent API enforces identity, organization and device boundaries", { s
     });
     assert.equal(telemetry.status, 202);
 
+    const deviceConfig = await request("/api/device/config", { headers: { "x-device-token": deviceToken } });
+    assert.equal(deviceConfig.status, 200);
+    assert.equal(deviceConfig.data.device_code, "INTEGRATION-DEVICE-A");
+    assert.equal(deviceConfig.data.variant, "gps_only");
+    assert.deepEqual(deviceConfig.data.capabilities, ["gps", "event_sync"]);
+    const unauthenticatedConfig = await request("/api/device/config");
+    assert.equal(unauthenticatedConfig.status, 401);
+
     const deviceEvent = {
       schema_version: 1,
       event_id: "0123456789abcdef0123456789abcdef",

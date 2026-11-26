@@ -17,3 +17,5 @@ The uploader is opt-in and is not started by app_main. A future secure provision
 - NVS journal is a low-rate prototype, not production high-volume storage.
 - Pin down the ESP-IDF version and verify component/API compatibility before enabling.
 - Build, TLS, reconnect, power-loss and hardware tests are pending. No tests are claimed to have passed.
+
+The backend configuration endpoint and credential lifecycle are documented in `backend/docs/DEVICE_PROVISIONING.md`. Firmware accepts credentials in RAM only; secure persistent provisioning remains a production gate.
