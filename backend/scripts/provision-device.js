@@ -49,7 +49,7 @@ try {
   await client.query("ROLLBACK");
   throw error;
 }
-} finally {
+finally {
   client.release();
   await pool.end();
 }
