@@ -3,6 +3,7 @@
 #include <stdbool.h>
 #include <stddef.h>
 #include <stdint.h>
+#include "esp_err.h"
 
 #ifdef __cplusplus
 extern "C" {
@@ -26,6 +27,8 @@ typedef struct {
     uint32_t checksum_error_count;
     uint32_t malformed_count;
 } er_gnss_snapshot_t;
+
+esp_err_t er_gnss_parser_init(void);
 
 /* Feed one complete NMEA sentence, including its checksum and line ending. */
 bool er_gnss_parser_feed(const char *sentence, size_t length,

@@ -4,16 +4,17 @@
 #include <math.h>
 #include <stdio.h>
 #include "freertos/FreeRTOS.h"
-#include "freertos/portmacro.h"
+#include "freertos/semphr.h"
 #include <stdlib.h>
 #include <string.h>
 
 #define ER_KNOTS_TO_KPH 1.852
 
 static er_gnss_snapshot_t s_snapshot;
-static portMUX_TYPE s_parser_mux = portMUX_INITIALIZER_UNLOCKED;
+static SemaphoreHandle_t s_parser_mutex;
 static bool s_rmc_active;
 static bool s_gga_fix;
+static char s_gga_time[11];
 static double s_rmc_lat, s_rmc_lon, s_gga_lat, s_gga_lon;
 
 static bool parse_number(const char *text, double *out)
@@ -105,8 +106,9 @@ static size_t split_fields(char *body, char *fields[], size_t capacity)
 static void refresh_fix(void)
 {
     s_snapshot.fix_valid = s_rmc_active && s_gga_fix &&
-        fabs(s_rmc_lat - s_gga_lat) < 0.02 &&
-        fabs(s_rmc_lon - s_gga_lon) < 0.02;
+        strncmp(s_snapshot.utc_time, s_gga_time, 6) == 0 &&
+        fabs(s_rmc_lat - s_gga_lat) < 0.01 &&
+        fabs(s_rmc_lon - s_gga_lon) < 0.01;
     if (s_snapshot.fix_valid) {
         s_snapshot.latitude_deg = s_rmc_lat;
         s_snapshot.longitude_deg = s_rmc_lon;
@@ -179,7 +181,10 @@ static bool parser_feed_unlocked(const char *sentence, size_t length,
             return false;
         }
         s_gga_fix = quality > 0.0;
-        if (s_gga_fix) { s_gga_lat = lat; s_gga_lon = lon; }
+        if (s_gga_fix) {
+            s_gga_lat = lat; s_gga_lon = lon;
+            (void)snprintf(s_gga_time, sizeof(s_gga_time), "%s", fields[1]);
+        } else { s_gga_time[0] = '\0'; }
         s_snapshot.satellites = (uint8_t)satellites;
         s_snapshot.hdop = hdop;
         ++s_snapshot.valid_gga_count;
@@ -192,29 +197,38 @@ static bool parser_feed_unlocked(const char *sentence, size_t length,
     return true;
 }
 
+esp_err_t er_gnss_parser_init(void)
+{
+    if (s_parser_mutex != NULL) return ESP_OK;
+    s_parser_mutex = xSemaphoreCreateMutex();
+    return s_parser_mutex != NULL ? ESP_OK : ESP_ERR_NO_MEM;
+}
+
 bool er_gnss_parser_feed(const char *sentence, size_t length,
                          int64_t received_monotonic_us)
 {
-    taskENTER_CRITICAL(&s_parser_mux);
+    if (s_parser_mutex == NULL || xSemaphoreTake(s_parser_mutex, portMAX_DELAY) != pdTRUE)
+        return false;
     bool accepted = parser_feed_unlocked(sentence, length, received_monotonic_us);
-    taskEXIT_CRITICAL(&s_parser_mux);
+    xSemaphoreGive(s_parser_mutex);
     return accepted;
 }
 
 void er_gnss_parser_get_snapshot(er_gnss_snapshot_t *snapshot)
 {
-    if (snapshot == NULL) return;
-    taskENTER_CRITICAL(&s_parser_mux);
+    if (snapshot == NULL || s_parser_mutex == NULL) return;
+    if (xSemaphoreTake(s_parser_mutex, portMAX_DELAY) != pdTRUE) return;
     *snapshot = s_snapshot;
-    taskEXIT_CRITICAL(&s_parser_mux);
+    xSemaphoreGive(s_parser_mutex);
 }
 
 void er_gnss_parser_reset(void)
 {
-    taskENTER_CRITICAL(&s_parser_mux);
+    if (s_parser_mutex == NULL || xSemaphoreTake(s_parser_mutex, portMAX_DELAY) != pdTRUE) return;
     memset(&s_snapshot, 0, sizeof(s_snapshot));
     s_rmc_active = false;
     s_gga_fix = false;
     s_rmc_lat = s_rmc_lon = s_gga_lat = s_gga_lon = 0.0;
-    taskEXIT_CRITICAL(&s_parser_mux);
+    s_gga_time[0] = '\0';
+    xSemaphoreGive(s_parser_mutex);
 }

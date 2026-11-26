@@ -51,6 +51,8 @@ esp_err_t er_gnss_uart_start(void)
     return ESP_ERR_NOT_SUPPORTED;
 #else
     if (s_running) return ESP_ERR_INVALID_STATE;
+    esp_err_t parser_err = er_gnss_parser_init();
+    if (parser_err != ESP_OK) return parser_err;
     const uart_config_t config = {
         .baud_rate = CONFIG_ER_GNSS_UART_BAUD,
         .data_bits = UART_DATA_8_BITS,
