@@ -73,8 +73,9 @@ The A7670E-LASA has no trusted PCBKit footprint. Create a project-local footprin
 
 ### In
 - 3.8 V and 5 V test pads, ground probe point, and current-measurement link in the modem power path.
-- Local 300 µF minimum effective VBAT bulk plus ceramics, placed at the module VBAT pins.
+- Local 300 µF minimum effective VBAT bulk plus 33 pF, 10 pF, 100 nF and 1 µF ceramics placed at the module VBAT pins, as recommended by SIMCom.
 - Input reverse-polarity / transient protection appropriate to the controller's already-protected 5 V output, without duplicating a series drop that consumes buck headroom.
+- A 5 V VRWM TVS at the module VBAT node (SIMCom-listed example ESDBW5V0A1) for surge protection.
 - SIM and USB ESD protection close to user-accessible connectors.
 - RF connector, antenna keep-out and the exact matching network specified by SIMCom.
 - A way to isolate the modem supply for bench bring-up and current measurement.
@@ -197,13 +198,26 @@ The family guide has an internal pad-66 contradiction: Table 8's GND list includ
 
 ## Power-stage schematic milestone — A0 prototype
 
-A first-pass, standalone LT8640 5 V → 3.8 V power-stage schematic has been generated in `board.kicad_sch` from `scripts/design.py`.
+A first-pass, standalone LT8640 5 V → 3.8 V power-stage schematic (23 parts, 10 nets) has been generated in `board.kicad_sch` from `scripts/design.py`.
 
-- Includes J14 carrier power input, 0 Ω input measurement link, LT8640, 2.7 µH inductor, 1 MHz timing resistor, 3.8 V feedback divider, soft-start and bootstrap capacitors, input bypassing, 47 µF ceramic output capacitor, two 330 µF polymer bulk capacitors, and a 3.8 V output/test connector.
-- Preliminary values: 1.000 MΩ / 343 kΩ feedback divider (about 3.798 V at 0.970 V reference), 41.2 kΩ RT (1 MHz), 2.7 µH inductor, 10 nF soft start, 100 nF bootstrap capacitor, 1 µF INTVCC bypass, 4.7 pF feed-forward, 4.7 µF + 2×1 µF input ceramic bypass, and 47 µF ceramic + 2×330 µF polymer output capacitance.
+- Includes J14 carrier power input, 0 Ω input measurement link, LT8640, 2.7 µH inductor, 1 MHz timing resistor, 3.8 V feedback divider, soft-start and bootstrap capacitors, input bypassing, 47 µF ceramic output capacitor, two 330 µF polymer bulk capacitors, two 330 µF polymer bulk capacitors, the SIMCom-recommended 33 pF / 10 pF / 100 nF / 1 µF local VBAT ceramics, a 5 V VRWM VBAT TVS candidate, and a 3.8 V output/test connector.
+- Preliminary values: 1.000 MΩ / 343 kΩ feedback divider (about 3.798 V at 0.970 V reference), 41.2 kΩ RT (1 MHz), 2.7 µH inductor, 10 nF soft start, 100 nF bootstrap capacitor, 1 µF INTVCC bypass, 4.7 pF feed-forward, 4.7 µF + 2×1 µF input ceramic bypass, and 47 µF ceramic + 2×330 µF polymer output capacitance plus 33 pF / 10 pF / 100 nF / 1 µF local module bypass capacitors and an ESDBW5V0A1 TVS candidate.
 - LT8640 switch pins are modeled as passive switching nodes to avoid false ERC output-to-output conflicts; the regulated output and externally supplied rails use explicit PWR_FLAG symbols.
 - KiCad schematic ERC result: **0 errors, 0 warnings**. Netlist export also completed successfully.
 
-This is only the regulator subcircuit. It is not the complete modem carrier schematic, PCB layout, DRC, thermal analysis, stability validation or bench test. Capacitor effective values under DC bias, LT8640 loop stability with the selected bulk bank, input current path, inductor saturation, PCB thermal behavior and output droop still require calculations and bench verification. No footprint is assigned to the schematic symbols yet.
+This is only the regulator subcircuit. It is not the complete modem carrier schematic, PCB layout, DRC, thermal analysis, stability validation or bench test. Capacitor effective values under DC bias, LT8640 loop stability with the selected bulk bank, input current path, inductor saturation, PCB thermal behavior, TVS clamping and output droop still require calculations and bench verification. No footprint is assigned to the schematic symbols yet.
 
 Candidate symbol/footprint library files are saved locally in `parts.kicad_sym` and `parts.pretty/`. The LT8640, inductor and polymer-capacitor footprints are library candidates only; none is assigned to the schematic, and all must be checked against the current manufacturer mechanical drawings before PCB placement.
+
+
+## Additional SIMCom VBAT implementation requirements
+
+The V1.03 guide recommends a TVS diode at the module VBAT pins (listed examples include JCET ESDBW5V0A1, WAYON WS05DPF-B and WILL ESD5611N / ESD56151W05). The preliminary power schematic now includes ESDBW5V0A1 as a candidate from the regulated 3.8 V node to GND. It also adds the recommended 33 pF, 10 pF, 100 nF and 1 µF local ceramic bypass capacitors. SIMCom specifies at least 2 mm width for the PCB power route from the supply to the module VBAT pins. These capacitors and TVS must be placed close to the module power pads; the final PCB layout must preserve a short, low-inductance loop.
+
+
+## Manufacturer references
+
+- SIMCom, *A7670 Series Hardware Design V1.03* (A7670E family pin assignment, land-pattern recommendation, VBAT design, USB, SIM and PWRKEY/RESET circuits): https://www.ktron.in/wp-content/uploads/2022/10/A7670-Series_Hardware-Design_V1.03-1.pdf
+- SIMCom, *A7670 Series Hardware Design V1.00* (older 2.8 A conservative VBAT sizing reference): https://nostris.ee/pdf/A7670%20Series%20Hardware%20Design_V1.00.pdf
+- Analog Devices, *LT8640/LT8640-1 Datasheet*: https://www.analog.com/media/en/technical-documentation/data-sheets/LT8640-8640-1.pdf
+- Texas Instruments, *TXU0202 Datasheet*: https://www.ti.com/lit/ds/symlink/txu0202.pdf

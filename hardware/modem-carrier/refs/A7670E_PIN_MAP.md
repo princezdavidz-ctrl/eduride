@@ -39,7 +39,7 @@ Source: SIMCom A7670 Series Hardware Design V1.03, Figure 2 and Table 4, pp. 14â
 | 33 | SIM_RST | SIM reset output | SIM RST through ESD / series network per SIMCom |
 | 34 | SIM_DET | SIM detect input | Socket card-detect switch; polarity to be checked against socket drawing |
 | 35 | NC | No connect | Leave open |
-| 36 | NC / GPIO6 variant-dependent | Variant-dependent 1.8V GPIO in some A7670 family tables | HOLD open until exact A7670E-LASA variant pin map is confirmed |
+| 36 | NC / GPIO6 variant-dependent | GPIO6 appears in the separate A7670C-only GPIO table, not the A7670E GPIO table | HOLD open until exact A7670E-LASA variant pin map is confirmed |
 | 37 | I2C_SDA | 1.8V IÂ²C bidirectional | NC |
 | 38 | I2C_SCL | 1.8V IÂ²C clock | NC |
 | 39 | GND | Ground | GND plane |
@@ -50,7 +50,7 @@ Source: SIMCom A7670 Series Hardware Design V1.03, Figure 2 and Table 4, pp. 14â
 | 44 | NC | No connect | Leave open |
 | 45 | GND | Ground | GND plane |
 | 46 | GND | Ground | GND plane |
-| 47 | NC / GPIO8 variant-dependent | Variant-dependent 1.8V GPIO / keyboard function in family documentation | HOLD open until exact A7670E-LASA variant pin map is confirmed |
+| 47 | NC / GPIO8 variant-dependent | GPIO8 appears in the separate A7670C-only GPIO table, not the A7670E GPIO table | HOLD open until exact A7670E-LASA variant pin map is confirmed |
 | 48 | GPIO9 | 1.8V GPIO | NC |
 | 49 | GPIO4 / UART3_RX | 1.8V GPIO / UART3 input | NC |
 | 50 | GPIO5 / UART3_TX | 1.8V GPIO / UART3 output | NC |
@@ -96,7 +96,7 @@ Source: SIMCom A7670 Series Hardware Design V1.03, Figure 2 and Table 4, pp. 14â
 ## Critical pin-map conflicts â€” release blockers
 
 1. **Pad 66 conflict:** the V1.03 pin assignment / power table's GND list includes pad 66 (Table 8), while the later Other Pins table assigns pad 66 to STATUS. The STATUS row is also marked DI even though the status timing section describes a module-driven status output. Do not route pad 66 or connect it to the controller until SIMCom confirms the exact A7670E-LASA pad function and electrical direction.
-2. **Pad 47 / 36 / 51 variant ambiguity:** family documentation includes GPIO/keyboard functions on these pad numbers for some variants and an ADC1 assignment that may use pad 25 or 51. The A7670E-specific GPIO table does not fully reconcile all these references. Leave these pads open until SIMCom confirms the exact LASA pinout.
+2. **Pad 36 / 47 / 51 usage:** the GPIO6 / GPIO8 entries are in the separate A7670C-only table, not the A7670E GPIO table. ADC1 is shown as pin 25 or 51 in the family guide. Leave these pads open; do not repurpose them until SIMCom confirms the exact LASA variant pinout.
 
 ## Critical checks before schematic release
 

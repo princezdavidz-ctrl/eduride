@@ -2,7 +2,7 @@
 	(version 20250114)
 	(generator "pcbkit")
 	(generator_version "9.0")
-	(uuid "67dbc0f2-09e2-4bd3-947a-f2441694440b")
+	(uuid "fb936ee7-e078-48f1-b9ed-0bbe24c28d48")
 	(paper "A3")
 	(title_block
 		(title "Edu Ride LTE Carrier — Preliminary 3.8 V Modem Power Stage")
@@ -1051,6 +1051,124 @@
 				)
 			)
 		)
+		(symbol "Device:D_TVS"
+			(pin_numbers (hide yes))
+			(pin_names (offset 1.016) (hide yes))
+			(exclude_from_sim no)
+			(in_bom yes)
+			(on_board yes)
+			(in_pos_files yes)
+			(duplicate_pin_numbers_are_jumpers no)
+			(property "Reference" "D"
+				(at 0 2.54 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(effects
+					(font (size 1.27 1.27))
+				)
+			)
+			(property "Value" "D_TVS"
+				(at 0 -2.54 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(effects
+					(font (size 1.27 1.27))
+				)
+			)
+			(property "Footprint" ""
+				(at 0 0 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font (size 1.27 1.27))
+				)
+			)
+			(property "Datasheet" ""
+				(at 0 0 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font (size 1.27 1.27))
+				)
+			)
+			(property "Description" "Bidirectional transient-voltage-suppression diode"
+				(at 0 0 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font (size 1.27 1.27))
+				)
+			)
+			(property "ki_keywords" "diode TVS thyrector"
+				(at 0 0 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font (size 1.27 1.27))
+				)
+			)
+			(property "ki_fp_filters" "TO-???* *_Diode_* *SingleDiode* D_*"
+				(at 0 0 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font (size 1.27 1.27))
+				)
+			)
+			(embedded_fonts no)
+			(symbol "D_TVS_0_1"
+				(polyline
+					(pts (xy -2.54 1.27) (xy -2.54 -1.27) (xy 2.54 1.27) (xy 2.54 -1.27) (xy -2.54 1.27))
+					(stroke (width 0.254) (type default))
+					(fill (type none))
+				)
+				(polyline
+					(pts (xy 0.508 1.27) (xy 0 1.27) (xy 0 -1.27) (xy -0.508 -1.27))
+					(stroke (width 0.254) (type default))
+					(fill (type none))
+				)
+				(polyline
+					(pts (xy 1.27 0) (xy -1.27 0))
+					(stroke (width 0) (type default))
+					(fill (type none))
+				)
+			)
+			(symbol "D_TVS_1_1"
+				(pin passive line
+					(at -3.81 0 0)
+					(length 2.54)
+					(name "A1"
+						(effects
+							(font (size 1.27 1.27))
+						)
+					)
+					(number "1"
+						(effects
+							(font (size 1.27 1.27))
+						)
+					)
+				)
+				(pin passive line
+					(at 3.81 0 180)
+					(length 2.54)
+					(name "A2"
+						(effects
+							(font (size 1.27 1.27))
+						)
+					)
+					(number "2"
+						(effects
+							(font (size 1.27 1.27))
+						)
+					)
+				)
+			)
+		)
 		(symbol "power:PWR_FLAG"
 			(power global)
 			(pin_numbers (hide yes))
@@ -1141,10 +1259,10 @@
 	)
 	(rectangle
 		(start 12.7 12.7)
-		(end 218.44 161.29)
+		(end 278.13 161.29)
 		(stroke (width 0) (type dash))
 		(fill (type none))
-		(uuid "6a16627e-8c77-4507-abe8-cd16e393efcb")
+		(uuid "4efe3fd7-2878-4e60-bb7e-9440dabe21ce")
 	)
 	(text "3.8V MODEM POWER STAGE"
 		(exclude_from_sim no)
@@ -1153,7 +1271,7 @@
 			(font (size 2.54 2.54))
 			(justify left bottom)
 		)
-		(uuid "ebf31607-757c-4a37-ada3-d1d8f0eac178")
+		(uuid "fe226add-8e18-4d94-a4f9-94ac243ccadd")
 	)
 	(text "Preliminary 5 V to 3.8 V / 2.8 A conservative modem rail. Values and layout remain subject to datasheet, stability, thermal and bench verification."
 		(exclude_from_sim no)
@@ -1162,12 +1280,12 @@
 			(font (size 1.27 1.27))
 			(justify left bottom)
 		)
-		(uuid "c07223a2-c535-4fd4-87eb-1ea3e26bd15c")
+		(uuid "f67b45ba-75c5-435e-96e1-93cbf0793aae")
 	)
 	(wire
 		(pts (xy 35.56 33.02) (xy 33.02 33.02))
 		(stroke (width 0) (type default))
-		(uuid "a575346d-8227-4127-a917-69831d6a6a9d")
+		(uuid "f70fbc49-041e-41e7-9407-fa0e2e6ac27a")
 	)
 	(global_label "MODEM_5V_IN"
 		(shape passive)
@@ -1176,7 +1294,7 @@
 			(font (size 1.27 1.27))
 			(justify right)
 		)
-		(uuid "23fd8d0f-612a-4a4b-b950-54e0a768bef9")
+		(uuid "272d36e0-1827-447b-aa78-a3bd63d4ee4f")
 		(property "Intersheetrefs" "${INTERSHEET_REFS}"
 			(at 0 0 0)
 			(effects
@@ -1188,7 +1306,7 @@
 	(wire
 		(pts (xy 35.56 35.56) (xy 33.02 35.56))
 		(stroke (width 0) (type default))
-		(uuid "65dca610-3139-4df2-8f9a-b8aae595277a")
+		(uuid "1b7c91f5-7b5c-4072-b1d6-03e710bcb868")
 	)
 	(global_label "GND"
 		(shape passive)
@@ -1197,7 +1315,7 @@
 			(font (size 1.27 1.27))
 			(justify right)
 		)
-		(uuid "002f2168-e512-4830-9066-d94c07030269")
+		(uuid "19926895-2cfd-4964-ab2c-3bf0f5ec1de8")
 		(property "Intersheetrefs" "${INTERSHEET_REFS}"
 			(at 0 0 0)
 			(effects
@@ -1214,7 +1332,7 @@
 		(in_bom yes)
 		(on_board yes)
 		(dnp no)
-		(uuid "d326dd13-fb15-48e5-9199-8e492ad76e85")
+		(uuid "41ae3007-c000-46ec-b9f5-8ccdd11b6776")
 		(property "Reference" "J1"
 			(at 39.37 27.94 0)
 			(effects
@@ -1243,11 +1361,11 @@
 				(hide yes)
 			)
 		)
-		(pin "1" (uuid "48c7ea43-78ae-43da-ad24-81a2280bc4ba"))
-		(pin "2" (uuid "fbfe0189-23a8-487b-864b-3edb10cd1b02"))
+		(pin "1" (uuid "82eb516e-713a-4150-b34c-7798bad4db43"))
+		(pin "2" (uuid "97289c1d-da4b-4bdf-9925-1ba0bf3ca787"))
 		(instances
 			(project "Edu Ride A7670E LTE Carrier"
-				(path "/67dbc0f2-09e2-4bd3-947a-f2441694440b" (reference "J1") (unit 1))
+				(path "/fb936ee7-e078-48f1-b9ed-0bbe24c28d48" (reference "J1") (unit 1))
 			)
 		)
 	)
@@ -1259,7 +1377,7 @@
 		(in_bom yes)
 		(on_board yes)
 		(dnp no)
-		(uuid "409b0674-8580-499d-a409-3fe9d8e2717c")
+		(uuid "c5e8ccef-87a1-4ed9-8899-dddfe2c0fd55")
 		(property "Reference" "R1"
 			(at 90.17 28.194 90)
 			(effects
@@ -1286,18 +1404,18 @@
 				(hide yes)
 			)
 		)
-		(pin "1" (uuid "5f1de1a6-eec8-4f75-9ddf-e3ec5df55ae7"))
-		(pin "2" (uuid "9fd6875d-a290-4dc2-a5de-b514c1970aeb"))
+		(pin "1" (uuid "cdbbccf3-30b7-4bfa-9e6c-6986f8632607"))
+		(pin "2" (uuid "efbd65a3-cb54-4039-9fa7-538af8c81478"))
 		(instances
 			(project "Edu Ride A7670E LTE Carrier"
-				(path "/67dbc0f2-09e2-4bd3-947a-f2441694440b" (reference "R1") (unit 1))
+				(path "/fb936ee7-e078-48f1-b9ed-0bbe24c28d48" (reference "R1") (unit 1))
 			)
 		)
 	)
 	(wire
 		(pts (xy 83.82 33.02) (xy 86.36 33.02))
 		(stroke (width 0) (type default))
-		(uuid "bc03187b-11a2-4cf2-9ffb-8d467f389554")
+		(uuid "1fd15990-9adc-48dd-87f2-6263c5912449")
 	)
 	(global_label "MODEM_5V_IN"
 		(shape passive)
@@ -1306,7 +1424,7 @@
 			(font (size 1.27 1.27))
 			(justify right)
 		)
-		(uuid "5f550985-5fad-4eda-9d7a-60909b49fcc0")
+		(uuid "e6239c5f-5b93-4f41-a735-f8b3fdf8d981")
 		(property "Intersheetrefs" "${INTERSHEET_REFS}"
 			(at 0 0 0)
 			(effects
@@ -1318,7 +1436,7 @@
 	(wire
 		(pts (xy 93.98 33.02) (xy 96.52 33.02))
 		(stroke (width 0) (type default))
-		(uuid "d76ad156-5bd8-4254-9115-f52c551661dc")
+		(uuid "9fbbec81-2d31-41bb-b43d-32012da2acfa")
 	)
 	(global_label "MODEM_5V_SW"
 		(shape passive)
@@ -1327,7 +1445,7 @@
 			(font (size 1.27 1.27))
 			(justify left)
 		)
-		(uuid "8e199ce2-8c57-4528-8e14-399bb27bf126")
+		(uuid "b18cb09f-04e7-4084-b769-d7fd0477757e")
 		(property "Intersheetrefs" "${INTERSHEET_REFS}"
 			(at 0 0 0)
 			(effects
@@ -1336,11 +1454,11 @@
 			)
 		)
 	)
-	(no_connect (at 175.26 43.18) (uuid "dfc751c4-88cb-46bf-99db-068962288a07"))
+	(no_connect (at 175.26 43.18) (uuid "eae26f6c-bd5c-4383-8882-68b2abbb51a1"))
 	(wire
 		(pts (xy 139.7 35.56) (xy 137.16 35.56))
 		(stroke (width 0) (type default))
-		(uuid "5cdddf9d-449d-40ab-acd0-20be46d3f9b4")
+		(uuid "f7203ef7-fa52-41ff-9909-82486c534214")
 	)
 	(global_label "MODEM_VBAT_3V8"
 		(shape passive)
@@ -1349,7 +1467,7 @@
 			(font (size 1.27 1.27))
 			(justify right)
 		)
-		(uuid "02a53a65-9f0f-4e71-8190-0c9e981c0823")
+		(uuid "93929bdf-a748-4800-8033-81fb140035ae")
 		(property "Intersheetrefs" "${INTERSHEET_REFS}"
 			(at 0 0 0)
 			(effects
@@ -1361,7 +1479,7 @@
 	(wire
 		(pts (xy 139.7 38.1) (xy 137.16 38.1))
 		(stroke (width 0) (type default))
-		(uuid "23ae2bbf-4287-47e4-8f2d-6cc96c991e69")
+		(uuid "4fbc3868-2504-4083-a1d0-1fe90ef01288")
 	)
 	(global_label "INTVCC"
 		(shape passive)
@@ -1370,7 +1488,7 @@
 			(font (size 1.27 1.27))
 			(justify right)
 		)
-		(uuid "a2d90508-ab88-4dac-b734-795d39459d5d")
+		(uuid "4977f507-2f14-4b39-991b-f1322fb2098f")
 		(property "Intersheetrefs" "${INTERSHEET_REFS}"
 			(at 0 0 0)
 			(effects
@@ -1382,7 +1500,7 @@
 	(wire
 		(pts (xy 139.7 40.64) (xy 137.16 40.64))
 		(stroke (width 0) (type default))
-		(uuid "285c8a58-0540-4441-b7bf-105f8bba6dab")
+		(uuid "aaeaff58-d545-4c2f-8661-4076cfd1cc0e")
 	)
 	(global_label "BST"
 		(shape passive)
@@ -1391,7 +1509,7 @@
 			(font (size 1.27 1.27))
 			(justify right)
 		)
-		(uuid "f7c0398a-495c-4a95-b64b-a13093556984")
+		(uuid "b60296fc-5ebc-435b-b23c-f54488eee0c3")
 		(property "Intersheetrefs" "${INTERSHEET_REFS}"
 			(at 0 0 0)
 			(effects
@@ -1403,7 +1521,7 @@
 	(wire
 		(pts (xy 139.7 43.18) (xy 137.16 43.18))
 		(stroke (width 0) (type default))
-		(uuid "9237b102-ea57-464b-aa55-ba0eeff8c165")
+		(uuid "5e12060a-7cb0-452d-b6b3-6b11acb90969")
 	)
 	(global_label "MODEM_5V_SW"
 		(shape passive)
@@ -1412,7 +1530,7 @@
 			(font (size 1.27 1.27))
 			(justify right)
 		)
-		(uuid "2078690d-8b8c-46cd-be6f-ba515ecb68d5")
+		(uuid "3a842ef8-cb97-419f-8789-7b55f9d33fc3")
 		(property "Intersheetrefs" "${INTERSHEET_REFS}"
 			(at 0 0 0)
 			(effects
@@ -1424,118 +1542,15 @@
 	(wire
 		(pts (xy 139.7 48.26) (xy 137.16 48.26))
 		(stroke (width 0) (type default))
-		(uuid "841fd201-3bbc-4c61-a5d4-0af47076a8a3")
+		(uuid "340e4ada-152a-4f0d-af3d-cce8ad57879b")
 	)
 	(wire
 		(pts (xy 139.7 50.8) (xy 137.16 50.8))
 		(stroke (width 0) (type default))
-		(uuid "2dc714cc-b028-40d0-9ff1-2e6b28595db7")
+		(uuid "33159e36-0e03-46c7-b7e0-c6dcd707fe37")
 	)
 	(wire
 		(pts (xy 137.16 48.26) (xy 137.16 50.8))
 		(stroke (width 0) (type default))
-		(uuid "760e631a-406e-43c6-bafd-11dc18b34ac8")
-	)
-	(global_label "GND"
-		(shape passive)
-		(at 137.16 48.26 180)
-		(effects
-			(font (size 1.27 1.27))
-			(justify right)
-		)
-		(uuid "25ca95bf-a9ab-4d45-b1d0-82c05018dadd")
-		(property "Intersheetrefs" "${INTERSHEET_REFS}"
-			(at 0 0 0)
-			(effects
-				(font (size 1.27 1.27))
-				(hide yes)
-			)
-		)
-	)
-	(wire
-		(pts (xy 139.7 53.34) (xy 137.16 53.34))
-		(stroke (width 0) (type default))
-		(uuid "765ea668-24e2-40db-a960-940f61b1a0fc")
-	)
-	(wire
-		(pts (xy 139.7 55.88) (xy 137.16 55.88))
-		(stroke (width 0) (type default))
-		(uuid "ee72af6f-5205-4f40-b9a7-741b6d7b596e")
-	)
-	(wire
-		(pts (xy 137.16 53.34) (xy 137.16 55.88))
-		(stroke (width 0) (type default))
-		(uuid "8034e413-9316-4ddb-b197-f3dd27d195c0")
-	)
-	(global_label "SW_MODEM"
-		(shape passive)
-		(at 137.16 53.34 180)
-		(effects
-			(font (size 1.27 1.27))
-			(justify right)
-		)
-		(uuid "2b16016e-c8f1-479c-b9d1-7d44a86d5f82")
-		(property "Intersheetrefs" "${INTERSHEET_REFS}"
-			(at 0 0 0)
-			(effects
-				(font (size 1.27 1.27))
-				(hide yes)
-			)
-		)
-	)
-	(wire
-		(pts (xy 139.7 58.42) (xy 137.16 58.42))
-		(stroke (width 0) (type default))
-		(uuid "62a4d507-b2f9-42bf-a585-1ebeda09e557")
-	)
-	(wire
-		(pts (xy 139.7 60.96) (xy 137.16 60.96))
-		(stroke (width 0) (type default))
-		(uuid "a7000aa5-4fd8-4d20-a0df-09c4c4a8459d")
-	)
-	(wire
-		(pts (xy 137.16 58.42) (xy 137.16 60.96))
-		(stroke (width 0) (type default))
-		(uuid "ad1faa8e-4222-4cd8-89fd-07a9c18d3713")
-	)
-	(global_label "GND"
-		(shape passive)
-		(at 137.16 58.42 180)
-		(effects
-			(font (size 1.27 1.27))
-			(justify right)
-		)
-		(uuid "65cd1644-c6d2-4969-b939-fc6f04dbb297")
-		(property "Intersheetrefs" "${INTERSHEET_REFS}"
-			(at 0 0 0)
-			(effects
-				(font (size 1.27 1.27))
-				(hide yes)
-			)
-		)
-	)
-	(wire
-		(pts (xy 175.26 35.56) (xy 177.8 35.56))
-		(stroke (width 0) (type default))
-		(uuid "c52e7eb0-84bb-457d-b32e-ad767930856d")
-	)
-	(wire
-		(pts (xy 175.26 38.1) (xy 177.8 38.1))
-		(stroke (width 0) (type default))
-		(uuid "3bb0bb43-67b9-407d-8229-a95dd59d2d90")
-	)
-	(wire
-		(pts (xy 177.8 35.56) (xy 177.8 38.1))
-		(stroke (width 0) (type default))
-		(uuid "5f4a1651-6414-4289-87a0-64a54fb32c26")
-	)
-	(global_label "SW_MODEM"
-		(shape passive)
-		(at 177.8 35.56 0)
-		(effects
-			(font (size 1.27 1.27))
-			(justify left)
-		)
-		(uuid "d33f6f20-f95b-47af-8e8a-f88618d6a456")
-		(property "I
-… (36526 more characters cut)
+		
+… (45886 more characters cut)

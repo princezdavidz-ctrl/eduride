@@ -63,6 +63,11 @@ s.part("C7", "Device:C", "1uF VIN2 LOCAL", {"1": "MODEM_5V_SW", "2": "GND"}, blo
 s.part("C8", "Device:C", "47uF X7R OUTPUT CERAMIC", {"1": "MODEM_VBAT_3V8", "2": "GND"}, block=block)
 s.part("C9", "Device:C_Polarized", "330uF 6.3V POLYMER", {"1": "MODEM_VBAT_3V8", "2": "GND"}, block=block)
 s.part("C10", "Device:C_Polarized", "330uF 6.3V POLYMER", {"1": "MODEM_VBAT_3V8", "2": "GND"}, block=block)
+s.part("C11", "Device:C", "100nF MODULE VBAT LOCAL", {"1": "MODEM_VBAT_3V8", "2": "GND"}, block=block)
+s.part("C12", "Device:C", "1uF MODULE VBAT LOCAL", {"1": "MODEM_VBAT_3V8", "2": "GND"}, block=block)
+s.part("C13", "Device:C", "33pF MODULE VBAT LOCAL", {"1": "MODEM_VBAT_3V8", "2": "GND"}, block=block)
+s.part("C14", "Device:C", "10pF MODULE VBAT LOCAL", {"1": "MODEM_VBAT_3V8", "2": "GND"}, block=block)
+s.part("D1", "Device:D_TVS", "ESDBW5V0A1 5V VRWM TVS", {"1": "MODEM_VBAT_3V8", "2": "GND"}, block=block)
 
 # Output connector is a test / future module VBAT connection, not the modem LGA footprint.
 s.part("J2", "Connector_Generic:Conn_01x02", "3V8 MODEM VBAT OUTPUT", {
