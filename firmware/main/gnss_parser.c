@@ -143,7 +143,7 @@ static bool parser_feed_unlocked(const char *sentence, size_t length,
             (strcmp(fields[2], "A") != 0 && strcmp(fields[2], "V") != 0) ||
             (strcmp(fields[2], "A") == 0 &&
              (!parse_coordinate(fields[3], fields[4], true, &lat) ||
-              !parse_coordinate(fields[5], fields[6], false, &lon)) ||
+              !parse_coordinate(fields[5], fields[6], false, &lon))) ||
             (fields[7][0] && !parse_number(fields[7], &knots)) ||
             (fields[8][0] && !parse_number(fields[8], &course)) ||
             knots < 0.0 || course < 0.0 || course >= 360.0) {
