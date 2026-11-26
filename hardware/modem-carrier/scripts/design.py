@@ -79,7 +79,7 @@ s.flag("MODEM_5V_IN", "MODEM_5V_SW", "MODEM_VBAT_3V8", "GND")
 # SIMCom's family guide conflicts on A7670 pad 66 (GND vs STATUS).
 block2 = "MODEM LOGIC INTERFACE"
 s.note(block2, "J2 supplies only signals and GND; the carrier generates its own 3.3V translator rail from MODEM_5V_SW. The module supplies the 1.8V translator rail from VDD_1V8 (50mA max).")
-s.note(block2, "PWRKEY and RESET are active-low at the modem. The NPN stages invert controller GPIO levels: J2 GPIO HIGH pulls the module pin LOW. Use the SIMCom pulse timings; never assert both together.")
+s.note(block2, "PWRKEY and RESET are active-low at the modem. The NPN stages invert controller GPIO levels: J2 GPIO HIGH pulls the module pin LOW. PWRKEY low 50 ms powers on; low at least 2.5 s powers off; wait at least 2 s before power-on again. RESET low 2.0–2.5 s is emergency reset only. Never assert both together and do not add capacitors over 10 nF to either pin.")
 s.note(block2, "J4 is a logical placeholder for the module pins, not a physical connector. Replace it with the complete, manufacturer-confirmed A7670E-LASA LGA symbol before PCB layout.")
 
 # Carrier-side female socket mates to the controller's J2 male 1x06 header.
@@ -108,21 +108,21 @@ s.part("U3", "Regulator_Linear:AP2112K-3.3", "AP2112K-3.3TRG1", {
     "2": "GND",
     "3": "MODEM_5V_SW",
     "4": None,
-    "5": "CTRL_3V3",
+    "5": "CARRIER_3V3",
 }, block=block2)
 s.part("C15", "Device:C", "1uF LDO INPUT", {"1": "MODEM_5V_SW", "2": "GND"}, block=block2)
-s.part("C16", "Device:C", "1uF LDO OUTPUT", {"1": "CTRL_3V3", "2": "GND"}, block=block2)
-s.part("C17", "Device:C", "100nF TXU VCCA BYPASS", {"1": "CTRL_3V3", "2": "GND"}, block=block2)
+s.part("C16", "Device:C", "1uF LDO OUTPUT", {"1": "CARRIER_3V3", "2": "GND"}, block=block2)
+s.part("C17", "Device:C", "100nF TXU VCCA BYPASS", {"1": "CARRIER_3V3", "2": "GND"}, block=block2)
 s.part("C18", "Device:C", "100nF TXU VCCB BYPASS", {"1": "MODEM_VDD_1V8", "2": "GND"}, block=block2)
 
 # TI TXU0202: fixed channel A1 -> B1Y and B2 -> A2Y.
 s.part("U2", "parts:TXU0202QDTTRQ1", "TXU0202DCU", {
     "1": "MODEM_TXD",       # B2 input, module TXD
     "2": "GND",
-    "3": "CTRL_3V3",        # VCCA
+    "3": "CARRIER_3V3",        # VCCA
     "4": "MODEM_TO_MCU_RX", # A2Y output to ESP32 RX
     "5": "MCU_TO_MODEM_TX", # A1 input from ESP32 TX
-    "6": "CTRL_3V3",        # OE active high
+    "6": "CARRIER_3V3",        # OE active high
     "7": "MODEM_VDD_1V8",   # VCCB from module VDD_1V8
     "8": "MODEM_RXD",       # B1Y output to module RXD
 }, block=block2)

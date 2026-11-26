@@ -2,7 +2,7 @@
 	(version 20250114)
 	(generator "pcbkit")
 	(generator_version "9.0")
-	(uuid "5383a57f-b40d-4021-8ded-ce569755c6c7")
+	(uuid "6d494205-0a53-42c6-8664-688ba8aa116d")
 	(paper "A1")
 	(title_block
 		(title "Edu Ride LTE Carrier — Preliminary 3.8 V Modem Power Stage")
@@ -1594,4 +1594,4 @@
 				)
 				(pin input line
 					(at -10.16 10.16 
-… (197951 more characters cut)
+… (197965 more characters cut)
