@@ -75,6 +75,7 @@ typedef struct {
  * SD/FAT or dedicated append-only storage implementation.
  */
 esp_err_t er_event_journal_init(const er_event_identity_t *identity);
+/* GPS_ONLY identity rejects all STUDENT_BOARDING_* event types. */
 esp_err_t er_event_journal_enqueue(er_event_type_t type,
                                    const char *trip_id,
                                    int64_t utc_time_ms,

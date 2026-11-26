@@ -19,3 +19,5 @@ The uploader is opt-in and is not started by app_main. A future secure provision
 - Build, TLS, reconnect, power-loss and hardware tests are pending. No tests are claimed to have passed.
 
 The backend configuration endpoint and credential lifecycle are documented in `backend/docs/DEVICE_PROVISIONING.md`. Firmware accepts credentials in RAM only; secure persistent provisioning remains a production gate.
+
+The event journal itself rejects all `STUDENT_BOARDING_*` event types when initialized as `GPS_ONLY`; backend validation independently enforces the same rule.

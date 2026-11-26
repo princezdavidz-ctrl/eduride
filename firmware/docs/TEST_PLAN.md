@@ -53,3 +53,5 @@ No tests in this document are claimed to have passed. Execute in the dedicated t
 - Authenticated config returns server-assigned device variant and capabilities; revoked credentials receive 401.
 - Duplicate device-code provisioning is refused; rotation invalidates old token; revocation prevents config/event access.
 - Secure token delivery, encrypted storage lifecycle, interrupted provisioning and factory-reset recovery.
+
+- Firmware event journal refuses all three STUDENT_BOARDING_* event types when initialized as GPS_ONLY.

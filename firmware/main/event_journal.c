@@ -170,6 +170,14 @@ esp_err_t er_event_journal_enqueue(er_event_type_t type,
         time_quality < ER_TIME_UNSYNCED || time_quality > ER_TIME_NETWORK) {
         return ESP_ERR_INVALID_ARG;
     }
+    /* GPS-only hardware has no camera/vision capability. */
+    if (s_identity.variant == ER_DEVICE_VARIANT_GPS_ONLY &&
+        (type == ER_EVENT_STUDENT_BOARDING_MATCHED ||
+         type == ER_EVENT_STUDENT_BOARDING_UNCERTAIN ||
+         type == ER_EVENT_STUDENT_BOARDING_UNMATCHED)) {
+        ESP_LOGE(TAG, "Rejected vision-only event on GPS-only controller");
+        return ESP_ERR_NOT_SUPPORTED;
+    }
     if (xSemaphoreTake(s_lock, portMAX_DELAY) != pdTRUE) return ESP_ERR_TIMEOUT;
 
     esp_err_t err;
