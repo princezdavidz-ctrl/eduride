@@ -1,16 +1,20 @@
 #include "gnss_parser.h"
 
 #include <ctype.h>
+#include <math.h>
+#include <stdio.h>
+#include "freertos/FreeRTOS.h"
+#include "freertos/portmacro.h"
 #include <stdlib.h>
 #include <string.h>
 
 #define ER_KNOTS_TO_KPH 1.852
 
 static er_gnss_snapshot_t s_snapshot;
+static portMUX_TYPE s_parser_mux = portMUX_INITIALIZER_UNLOCKED;
 static bool s_rmc_active;
 static bool s_gga_fix;
 static double s_rmc_lat, s_rmc_lon, s_gga_lat, s_gga_lon;
-static char s_rmc_time[11], s_rmc_date[7];
 
 static bool parse_number(const char *text, double *out)
 {
@@ -68,7 +72,7 @@ static bool valid_date(const char *value)
 static bool parse_checksum(char *line, size_t length, char **body_end)
 {
     char *star = memchr(line, '*', length);
-    if (star == NULL || (size_t)(star - line) + 3 > length) return false;
+    if (star == NULL || (size_t)(star - line) + 3 != length || star[3] != '\0') return false;
     int high = isdigit((unsigned char)star[1]) ? star[1] - '0' :
         (toupper((unsigned char)star[1]) >= 'A' && toupper((unsigned char)star[1]) <= 'F'
          ? toupper((unsigned char)star[1]) - 'A' + 10 : -1);
@@ -109,8 +113,8 @@ static void refresh_fix(void)
     }
 }
 
-bool er_gnss_parser_feed(const char *sentence, size_t length,
-                         int64_t received_monotonic_us)
+static bool parser_feed_unlocked(const char *sentence, size_t length,
+                                 int64_t received_monotonic_us)
 {
     if (sentence == NULL || length < 10 || length >= ER_GNSS_LINE_MAX) {
         ++s_snapshot.malformed_count;
@@ -136,9 +140,10 @@ bool er_gnss_parser_feed(const char *sentence, size_t length,
     if (strcmp(type, "RMC") == 0) {
         double lat, lon, knots = 0.0, course = 0.0;
         if (!valid_time(fields[1]) || !valid_date(fields[9]) ||
-            strcmp(fields[2], "A") != 0 ||
-            !parse_coordinate(fields[3], fields[4], true, &lat) ||
-            !parse_coordinate(fields[5], fields[6], false, &lon) ||
+            (strcmp(fields[2], "A") != 0 && strcmp(fields[2], "V") != 0) ||
+            (strcmp(fields[2], "A") == 0 &&
+             (!parse_coordinate(fields[3], fields[4], true, &lat) ||
+              !parse_coordinate(fields[5], fields[6], false, &lon)) ||
             (fields[7][0] && !parse_number(fields[7], &knots)) ||
             (fields[8][0] && !parse_number(fields[8], &course)) ||
             knots < 0.0 || course < 0.0 || course >= 360.0) {
@@ -147,12 +152,16 @@ bool er_gnss_parser_feed(const char *sentence, size_t length,
             ++s_snapshot.malformed_count;
             return false;
         }
+        if (strcmp(fields[2], "V") == 0) {
+            s_rmc_active = false;
+            s_snapshot.received_monotonic_us = received_monotonic_us;
+            refresh_fix();
+            return true;
+        }
         s_rmc_active = true;
         s_rmc_lat = lat; s_rmc_lon = lon;
         s_snapshot.speed_kph = knots * ER_KNOTS_TO_KPH;
         s_snapshot.course_deg = course;
-        (void)snprintf(s_rmc_time, sizeof(s_rmc_time), "%s", fields[1]);
-        (void)snprintf(s_rmc_date, sizeof(s_rmc_date), "%s", fields[9]);
         (void)snprintf(s_snapshot.utc_time, sizeof(s_snapshot.utc_time), "%s", fields[1]);
         (void)snprintf(s_snapshot.utc_date, sizeof(s_snapshot.utc_date), "%s", fields[9]);
         ++s_snapshot.valid_rmc_count;
@@ -183,17 +192,29 @@ bool er_gnss_parser_feed(const char *sentence, size_t length,
     return true;
 }
 
+bool er_gnss_parser_feed(const char *sentence, size_t length,
+                         int64_t received_monotonic_us)
+{
+    taskENTER_CRITICAL(&s_parser_mux);
+    bool accepted = parser_feed_unlocked(sentence, length, received_monotonic_us);
+    taskEXIT_CRITICAL(&s_parser_mux);
+    return accepted;
+}
+
 void er_gnss_parser_get_snapshot(er_gnss_snapshot_t *snapshot)
 {
-    if (snapshot != NULL) *snapshot = s_snapshot;
+    if (snapshot == NULL) return;
+    taskENTER_CRITICAL(&s_parser_mux);
+    *snapshot = s_snapshot;
+    taskEXIT_CRITICAL(&s_parser_mux);
 }
 
 void er_gnss_parser_reset(void)
 {
+    taskENTER_CRITICAL(&s_parser_mux);
     memset(&s_snapshot, 0, sizeof(s_snapshot));
     s_rmc_active = false;
     s_gga_fix = false;
     s_rmc_lat = s_rmc_lon = s_gga_lat = s_gga_lon = 0.0;
-    memset(s_rmc_time, 0, sizeof(s_rmc_time));
-    memset(s_rmc_date, 0, sizeof(s_rmc_date));
+    taskEXIT_CRITICAL(&s_parser_mux);
 }

@@ -22,6 +22,7 @@ static void gnss_reader_task(void *arg)
     uint8_t chunk[128];
     char line[ER_GNSS_LINE_MAX];
     size_t used = 0;
+    bool discarding_overlong = false;
     for (;;) {
         int count = uart_read_bytes(ER_GNSS_UART_PORT, chunk, sizeof(chunk),
                                     pdMS_TO_TICKS(250));
@@ -32,12 +33,13 @@ static void gnss_reader_task(void *arg)
         }
         for (int i = 0; i < count; ++i) {
             if (chunk[i] == '\n') {
-                if (used > 0) (void)er_gnss_parser_feed(line, used,
-                                                        esp_timer_get_time());
+                if (!discarding_overlong && used > 0)
+                    (void)er_gnss_parser_feed(line, used, esp_timer_get_time());
                 used = 0;
-            } else if (chunk[i] != '\r') {
+                discarding_overlong = false;
+            } else if (chunk[i] != '\r' && !discarding_overlong) {
                 if (used < sizeof(line) - 1) line[used++] = (char)chunk[i];
-                else used = 0; /* Discard an overlong sentence through next LF. */
+                else { used = 0; discarding_overlong = true; }
             }
         }
     }
