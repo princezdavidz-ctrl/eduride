@@ -1,6 +1,6 @@
 # SIMCom A7670E module pin map — transcription for carrier design
 
-Source: SIMCom A7670 Series Hardware Design V1.03, Figure 2 and Table 4, pp. 14–16. This pin map applies to the A7670E family in that guide. Before releasing a footprint or buying parts, obtain written confirmation that the exact A7670E-LASA order code/revision uses this pin assignment and land pattern.
+Source: SIMCom A7670 Series Hardware Design V1.03, Figure 2 and Table 4, pp. 14–16. This is the current working transcription for the A7670E family. V1.00 differs on several optional GPIO assignments (notably pads 49/50/53/67/68); obtain written confirmation that the exact A7670E-LASA order code/revision uses the V1.03 pin assignment and land pattern before releasing a footprint or buying parts.
 
 | Pad | Signal | Electrical class / domain | Carrier decision |
 |---:|---|---|---|
@@ -52,11 +52,11 @@ Source: SIMCom A7670 Series Hardware Design V1.03, Figure 2 and Table 4, pp. 14�
 | 46 | GND | Ground | GND plane |
 | 47 | NC | A7670E top-view assignment diagram marks NC; GPIO8 appears only in the separate A7670C-only GPIO table | Leave open; do not repurpose |
 | 48 | GPIO9 | 1.8V GPIO | NC |
-| 49 | GPIO4 / UART3_RX | 1.8V GPIO / UART3 input | NC |
-| 50 | GPIO5 / UART3_TX | 1.8V GPIO / UART3 output | NC |
+| 49 | GPIO10 | 1.8V GPIO | NC; V1.00 lists GPIO4/UART3_RX on this pad |
+| 50 | GPIO11 | 1.8V GPIO | NC; V1.00 lists GPIO5/UART3_TX on this pad |
 | 51 | NC | A7670E top-view assignment diagram marks NC; ADC1 alternate pad 51 is listed for other family variants | Leave open; do not repurpose |
 | 52 | NETLIGHT | 1.8V digital output | Optional LED only after current and drive checks; default NC |
-| 53 | NC | No connect | Leave open |
+| 53 | GPIO12 | 1.8V GPIO | NC; V1.00 lists NC on this pad |
 | 54 | GND | Ground | GND plane |
 | 55 | VBAT | 3.4–4.2V power input | 3.8V rail; high-current local bulk/ceramics |
 | 56 | VBAT | 3.4–4.2V power input | 3.8V rail; high-current local bulk/ceramics |
@@ -69,9 +69,9 @@ Source: SIMCom A7670 Series Hardware Design V1.03, Figure 2 and Table 4, pp. 14�
 | 63 | GND | Ground | GND plane |
 | 64 | GND | Ground | GND plane |
 | 65 | GND | Ground | GND plane |
-| 66 | STATUS / GND documentation conflict | Figure 2 and Table 4 show STATUS; Table 8 also includes pad 66 in its GND list, and STATUS type is inconsistently marked DI | HOLD — do not connect to GND, translator, or J2 until SIMCom confirms exact LASA pad assignment and electrical direction in writing |
-| 67 | GPIO10 | 1.8V GPIO | NC |
-| 68 | GPIO11 | 1.8V GPIO | NC |
+| 66 | STATUS / GND documentation conflict | V1.00 Table 3 and V1.03 Figure 2 / Table 4 show STATUS; V1.03 Table 8 also includes pad 66 in its GND list, and STATUS type is marked DI despite output timing text | HOLD — do not connect to GND or controller until SIMCom confirms exact LASA pad assignment and electrical direction in writing |
+| 67 | GPIO13 | 1.8V GPIO | NC; V1.00 lists GPIO10 on this pad |
+| 68 | GPIO14 | 1.8V GPIO | NC; V1.00 lists GPIO11 on this pad |
 | 69 | GND | Ground | Central ground-pad array; connect to GND plane |
 | 70 | GND | Ground | Central ground-pad array; connect to GND plane |
 | 71 | GND | Ground | Central ground-pad array; connect to GND plane |
@@ -95,8 +95,9 @@ Source: SIMCom A7670 Series Hardware Design V1.03, Figure 2 and Table 4, pp. 14�
 
 ## Critical pin-map conflicts — release blockers
 
-1. **Pad 66 conflict:** the V1.03 top-view pin assignment diagram (Figure 1) and Other Pins table assign pad 66 to STATUS, but Table 8's GND list also includes pad 66. The STATUS row is marked DI even though the status timing section describes the module driving STATUS high after initialization. The GND-list entry may be a documentation error, but do not route pad 66 or connect it to the controller until SIMCom confirms the exact A7670E-LASA pad function and electrical direction.
-2. **Pads 36 / 47 / 51:** the A7670E top-view assignment diagram marks these pads NC. Alternate GPIO/ADC functions appear for other A7670 family variants. Keep them NC and do not repurpose them.
+1. **Pad 66 conflict:** V1.00 Table 3 and V1.03 Figure 2 / Table 4 assign pad 66 to STATUS; V1.00's GND list excludes it. V1.03 Table 8 also includes pad 66 in its GND list. Both guides mark STATUS as DI in a pin-type field, while the power-on timing and status description show the module driving STATUS high after initialization. This is likely a documentation inconsistency, but do not route pad 66 until SIMCom confirms the exact A7670E-LASA pad function and direction.
+2. **Pads 36 / 47 / 51:** the A7670E top-view assignment diagram marks these pads NC. Keep them NC and do not repurpose them.
+3. **Optional GPIO revision differences:** V1.00 and V1.03 differ on pads 49, 50, 53, 67 and 68. This carrier does not use these GPIOs; keep them unconnected until the exact LASA revision is confirmed.
 
 ## Critical checks before schematic release
 

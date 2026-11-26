@@ -200,7 +200,7 @@ The 1.8 V VDD_1V8 output (pin 15) is specified up to 50 mA and is on by default.
 
 ## Explicit manufacturer confirmation required
 
-The family guide has an internal pad-66 contradiction: Figure 2 and Table 4 assign STATUS to pad 66, while Table 8's GND list also includes pad 66. The STATUS row labels its type DI although the power-on/off timing section describes the module driving STATUS high after initialization. The GND-list entry may be a documentation error, but keep pad 66 isolated until SIMCom confirms the exact A7670E-LASA order code's pad map and status electrical direction in writing. Figure 2 marks pads 36, 47 and 51 NC for A7670E; keep them NC and do not repurpose them.
+The family guides have revision differences that prevent a production module symbol/footprint from being released. V1.00 Table 3 and V1.03 Figure 2 / Table 4 assign STATUS to pad 66, while V1.03 Table 8 also includes pad 66 in its GND list; both guides mark STATUS as DI even though timing text describes a module-driven output. V1.00 and V1.03 also differ on optional GPIO assignments at pads 49, 50, 53, 67 and 68. Keep pad 66 isolated, keep pads 36/47/51 NC, and leave the optional GPIO pads unconnected until SIMCom confirms the exact A7670E-LASA order code and hardware revision in writing.
 
 ## First-pass carrier schematic milestone — A0 prototype
 
@@ -241,5 +241,5 @@ The V1.03 guide recommends a TVS diode at the module VBAT pins (listed examples 
 - J8 is a logical placeholder for module MAIN_ANT pad 60 and GND; it is not a physical connector and must be replaced by the confirmed module symbol.
 - R23/R24 are default 0 Ω series links. C21/C22 are DNP tuning positions; values are selected only after antenna-vendor guidance and conducted/OTA tuning. D7 is an optional PESD0402-03 low-capacitance RF TVS candidate.
 - J9 is a Hirose U.FL-R-SMT-1(10), 50 Ω, 6 GHz connector candidate. Place the RF connector and matching components close to MAIN_ANT. Use a strain-relieved coax pigtail to an external vehicle antenna; U.FL is a board-side connector, not a repeatedly handled field-service connector.
-- Maintain a 50 Ω controlled-impedance RF feed 
-… (8157 more characters cut)
+- Maintai
+… (8650 more characters cut)
