@@ -194,3 +194,16 @@ The 1.8 V VDD_1V8 output (pin 15) is specified up to 50 mA and is on by default.
 ## Explicit manufacturer confirmation required
 
 The family guide has an internal pad-66 contradiction: Table 8's GND list includes pad 66, while the later Other Pins table assigns STATUS to pad 66. The STATUS row also labels its type DI although the power-state timing section describes the module driving STATUS high after initialization. Pads 36, 47 and 51 also have variant-dependent GPIO/ADC references elsewhere in the guide. These are not acceptable assumptions for an LGA footprint or schematic. Keep pads 36, 47, 51 and 66 unrouted / no-connect in the carrier draft until SIMCom confirms the exact A7670E-LASA order code's pad map and status electrical direction in writing.
+
+## Power-stage schematic milestone — A0 prototype
+
+A first-pass, standalone LT8640 5 V → 3.8 V power-stage schematic has been generated in `board.kicad_sch` from `scripts/design.py`.
+
+- Includes J14 carrier power input, 0 Ω input measurement link, LT8640, 2.7 µH inductor, 1 MHz timing resistor, 3.8 V feedback divider, soft-start and bootstrap capacitors, input bypassing, 47 µF ceramic output capacitor, two 330 µF polymer bulk capacitors, and a 3.8 V output/test connector.
+- Preliminary values: 1.000 MΩ / 343 kΩ feedback divider (about 3.798 V at 0.970 V reference), 41.2 kΩ RT (1 MHz), 2.7 µH inductor, 10 nF soft start, 100 nF bootstrap capacitor, 1 µF INTVCC bypass, 4.7 pF feed-forward, 4.7 µF + 2×1 µF input ceramic bypass, and 47 µF ceramic + 2×330 µF polymer output capacitance.
+- LT8640 switch pins are modeled as passive switching nodes to avoid false ERC output-to-output conflicts; the regulated output and externally supplied rails use explicit PWR_FLAG symbols.
+- KiCad schematic ERC result: **0 errors, 0 warnings**. Netlist export also completed successfully.
+
+This is only the regulator subcircuit. It is not the complete modem carrier schematic, PCB layout, DRC, thermal analysis, stability validation or bench test. Capacitor effective values under DC bias, LT8640 loop stability with the selected bulk bank, input current path, inductor saturation, PCB thermal behavior and output droop still require calculations and bench verification. No footprint is assigned to the schematic symbols yet.
+
+Candidate symbol/footprint library files are saved locally in `parts.kicad_sym` and `parts.pretty/`. The LT8640, inductor and polymer-capacitor footprints are library candidates only; none is assigned to the schematic, and all must be checked against the current manufacturer mechanical drawings before PCB placement.
