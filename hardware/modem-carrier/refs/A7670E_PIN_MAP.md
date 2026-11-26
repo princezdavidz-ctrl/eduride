@@ -69,7 +69,7 @@ Source: SIMCom A7670 Series Hardware Design V1.03, Figure 2 and Table 4, pp. 14â
 | 63 | GND | Ground | GND plane |
 | 64 | GND | Ground | GND plane |
 | 65 | GND | Ground | GND plane |
-| 66 | STATUS / GND documentation conflict | V1.00 Table 3 and V1.03 Figure 2 / Table 4 show STATUS; V1.03 Table 8 also includes pad 66 in its GND list, and STATUS type is marked DI despite output timing text | HOLD â€” do not connect to GND or controller until SIMCom confirms exact LASA pad assignment and electrical direction in writing |
+| 66 | STATUS / GND documentation conflict | V1.00 Table 3 and V1.03 Figure 2 / Table 4 show STATUS; V1.03 Table 8 also includes pad 66 in its GND list, and STATUS type is marked DI despite output timing text | R25 STATUS link and R28 GND link are both DNP; populate exactly one only after SIMCom confirms exact LASA pad assignment and electrical direction |
 | 67 | GPIO13 | 1.8V GPIO | NC; V1.00 lists GPIO10 on this pad |
 | 68 | GPIO14 | 1.8V GPIO | NC; V1.00 lists GPIO11 on this pad |
 | 69 | GND | Ground | Central ground-pad array; connect to GND plane |

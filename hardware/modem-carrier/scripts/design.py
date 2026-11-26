@@ -80,6 +80,7 @@ s.flag("MODEM_5V_IN", "MODEM_5V_SW", "MODEM_VBAT_3V8", "GND")
 block2 = "MODEM LOGIC INTERFACE"
 s.note(block2, "J2 supplies only signals and GND; the carrier generates its own 3.3V translator rail from MODEM_5V_SW. The module supplies the 1.8V translator rail from VDD_1V8 (50mA max).")
 s.note(block2, "PWRKEY and RESET are active-low at the modem. The NPN stages invert controller GPIO levels: J2 GPIO HIGH pulls the module pin LOW. PWRKEY low 50 ms powers on; low at least 2.5 s powers off; wait at least 2 s before power-on again. RESET low 2.0–2.5 s is emergency reset only. Never assert both together and do not add capacitors over 10 nF to either pin.")
+s.note(block2, "Pad 66 STATUS/GND option: R25 (4.7k to the NPN status translator) and R28 (0R to GND) are mutually exclusive and both DNP by default. Populate only the option confirmed for the exact module revision; never populate both.")
 s.note(block2, "J4 is a logical placeholder for the module pins, not a physical connector. Replace it with the complete, manufacturer-confirmed A7670E-LASA LGA symbol before PCB layout.")
 
 # Carrier-side female socket mates to the controller's J2 male 1x06 header.
@@ -89,17 +90,18 @@ s.part("J3", "Connector_Generic:Conn_01x06", "CONTROLLER J2 SIGNAL INPUT", {
     "3": "MODEM_TO_MCU_RX",
     "4": "MODEM_PWRKEY",
     "5": "MODEM_RESET",
-    "6": None,
+    "6": "MODEM_STATUS",
 }, block=block2)
 
 # Logical A7670E signal placeholder; not a physical connector or final module symbol.
-s.part("J4", "Connector_Generic:Conn_01x06", "A7670E LGA LOGIC PORT — PLACEHOLDER ONLY", {
+s.part("J4", "Connector_Generic:Conn_01x07", "A7670E LGA LOGIC PORT — PLACEHOLDER ONLY", {
     "1": "MODEM_VDD_1V8",
     "2": "MODEM_TXD",
     "3": "MODEM_RXD",
     "4": "MODEM_PWRKEY_N",
     "5": "MODEM_RESET_N",
     "6": "GND",
+    "7": "MODEM_STATUS_1V8",
 }, block=block2)
 
 # Local 3.3V reference rail for the A-side of the translator and OE.
@@ -144,6 +146,14 @@ s.part("Q2", "Transistor_BJT:MMBT3904", "MMBT3904 RESET", {
 }, block=block2)
 s.part("R10", "Device:R", "1k RESET COLLECTOR SERIES", {"1": "RESET_COLLECTOR", "2": "MODEM_RESET_N"}, block=block2)
 s.part("D3", "Device:D_TVS", "ESDBW5V0A1 RESET TVS", {"1": "MODEM_RESET_N", "2": "GND"}, block=block2)
+
+# Optional 1.8V STATUS to 3.3V controller input. Pad-66 selection is mutually
+# exclusive: R25 fitted for STATUS, or R28 fitted if SIMCom confirms GND.
+s.part("R25", "Device:R", "4.7k STATUS BASE LINK — DNP UNTIL CONFIRMED", {"1": "MODEM_STATUS_1V8", "2": "STATUS_BASE"}, block=block2, dnp=True)
+s.part("R26", "Device:R", "100k STATUS BASE PULLDOWN", {"1": "STATUS_BASE", "2": "GND"}, block=block2)
+s.part("Q3", "Transistor_BJT:MMBT3904", "MMBT3904 STATUS LEVEL SHIFT", {"1": "STATUS_BASE", "2": "GND", "3": "MODEM_STATUS"}, block=block2)
+s.part("R27", "Device:R", "10k STATUS COLLECTOR PULLUP", {"1": "CARRIER_3V3", "2": "MODEM_STATUS"}, block=block2)
+s.part("R28", "Device:R", "0R PAD66 TO GND ALTERNATIVE — DNP", {"1": "MODEM_STATUS_1V8", "2": "GND"}, block=block2, dnp=True)
 
 # This flag stands in for the A7670 module's VDD_1V8 power-output pin until the
 # module symbol is added after SIMCom resolves the exact LASA pad map.
@@ -222,10 +232,10 @@ s.part("J8", "Connector_Generic:Conn_01x02", "A7670E MAIN_ANT / GND — LOGICAL 
 
 # Two series zero-ohm links and two unpopulated shunt tuning positions.
 s.part("R23", "Device:R", "0R RF MATCH SERIES 1", {"1": "MODEM_MAIN_ANT", "2": "RF_MATCH_1"}, block=block5, footprint="Resistor_SMD:R_0402_1005Metric")
-s.part("C21", "Device:C", "DNP RF TUNING CAP C1", {"1": "RF_MATCH_1", "2": "GND"}, block=block5, footprint="Capacitor_SMD:C_0201_0603Metric")
+s.part("C21", "Device:C", "DNP RF TUNING CAP C1", {"1": "RF_MATCH_1", "2": "GND"}, block=block5, footprint="Capacitor_SMD:C_0201_0603Metric", dnp=True)
 s.part("R24", "Device:R", "0R RF MATCH SERIES 2", {"1": "RF_MATCH_1", "2": "RF_MATCH_2"}, block=block5, footprint="Resistor_SMD:R_0402_1005Metric")
-s.part("C22", "Device:C", "DNP RF TUNING CAP C2", {"1": "RF_MATCH_2", "2": "GND"}, block=block5, footprint="Capacitor_SMD:C_0201_0603Metric")
-s.part("D7", "Device:D_TVS", "PESD0402-03 OPTIONAL RF TVS", {"1": "RF_MATCH_2", "2": "GND"}, block=block5, footprint="Resistor_SMD:R_0402_1005Metric")
+s.part("C22", "Device:C", "DNP RF TUNING CAP C2", {"1": "RF_MATCH_2", "2": "GND"}, block=block5, footprint="Capacitor_SMD:C_0201_0603Metric", dnp=True)
+s.part("D7", "Device:D_TVS", "PESD0402-03 OPTIONAL RF TVS", {"1": "RF_MATCH_2", "2": "GND"}, block=block5, footprint="Resistor_SMD:R_0402_1005Metric", dnp=True)
 s.part("J9", "parts:U_FL-R-SMT-1_10_", "HIROSE U.FL-R-SMT-1(10) 50R RF CONNECTOR", {
     "1": "RF_MATCH_2", "2": "GND"
 }, block=block5, footprint="parts:U.FL_Hirose_U.FL-R-SMT-1_Vertical")

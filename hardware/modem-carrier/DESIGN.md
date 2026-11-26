@@ -200,11 +200,11 @@ The 1.8 V VDD_1V8 output (pin 15) is specified up to 50 mA and is on by default.
 
 ## Explicit manufacturer confirmation required
 
-The family guides have revision differences that prevent a production module symbol/footprint from being released. V1.00 Table 3 and V1.03 Figure 2 / Table 4 assign STATUS to pad 66, while V1.03 Table 8 also includes pad 66 in its GND list; both guides mark STATUS as DI even though timing text describes a module-driven output. V1.00 and V1.03 also differ on optional GPIO assignments at pads 49, 50, 53, 67 and 68. Keep pad 66 isolated, keep pads 36/47/51 NC, and leave the optional GPIO pads unconnected until SIMCom confirms the exact A7670E-LASA order code and hardware revision in writing.
+The family guides have revision differences that prevent a production module symbol/footprint from being released. V1.00 Table 3 and V1.03 Figure 2 / Table 4 assign STATUS to pad 66, while V1.03 Table 8 also includes pad 66 in its GND list; both guides mark STATUS as DI even though timing text describes a module-driven output. V1.00 and V1.03 also differ on optional GPIO assignments at pads 49, 50, 53, 67 and 68. Pad 66 is routed only to two mutually exclusive DNP options: R25 to the 1.8 V status translator or R28 to GND. Both are DNP by default; populate exactly one only after SIMCom confirms the exact A7670E-LASA order code and hardware revision. Keep pads 36/47/51 NC and leave optional GPIO pads unconnected.
 
 ## First-pass carrier schematic milestone — A0 prototype
 
-A first-pass carrier schematic with the LT8640 5 V → 3.8 V power stage, controller UART / power-control interfaces, USB-C device port, SIM-card interface and LTE RF matching path (66 parts, 44 nets) has been generated in `board.kicad_sch` from `scripts/design.py`.
+A first-pass carrier schematic with the LT8640 5 V → 3.8 V power stage, controller UART / power-control interfaces, USB-C device port, SIM-card interface and LTE RF matching path (71 parts, 47 nets) has been generated in `board.kicad_sch` from `scripts/design.py`.
 
 - Includes J14 carrier power input, 0 Ω input measurement link, LT8640, 2.7 µH inductor, 1 MHz timing resistor, 3.8 V feedback divider, soft-start and bootstrap capacitors, input bypassing, 47 µF ceramic output capacitor, two 330 µF polymer bulk capacitors, the SIMCom-recommended 33 pF / 10 pF / 100 nF / 1 µF local VBAT ceramics, a 5 V VRWM VBAT TVS candidate, and a 3.8 V output/test connector.
 - Adds an AP2112K-3.3 local LDO because controller J2 exposes no 3.3 V supply pin; this rail powers only the A-side and OE of the TXU0202.
@@ -240,6 +240,5 @@ The V1.03 guide recommends a TVS diode at the module VBAT pins (listed examples 
 
 - J8 is a logical placeholder for module MAIN_ANT pad 60 and GND; it is not a physical connector and must be replaced by the confirmed module symbol.
 - R23/R24 are default 0 Ω series links. C21/C22 are DNP tuning positions; values are selected only after antenna-vendor guidance and conducted/OTA tuning. D7 is an optional PESD0402-03 low-capacitance RF TVS candidate.
-- J9 is a Hirose U.FL-R-SMT-1(10), 50 Ω, 6 GHz connector candidate. Place the RF connector and matching components close to MAIN_ANT. Use a strain-relieved coax pigtail to an external vehicle antenna; U.FL is a board-side connector, not a repeatedly handled field-service connector.
-- Maintai
-… (8650 more characters cut)
+- J9 is a Hirose U.FL-R-SMT-1(10), 50 Ω, 6 GHz connector candidate. Place the RF connector and matching components close to MAIN_ANT. Use a strain-relieved coax pigtai
+… (9574 more characters cut)

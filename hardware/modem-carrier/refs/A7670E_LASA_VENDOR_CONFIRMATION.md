@@ -35,7 +35,7 @@ The pad-66 discrepancy is not the only concern: the GPIO assignments and peak-cu
 
 ## Current safe design decisions while awaiting confirmation
 
-- Keep the controller-side MODEM_STATUS signal unconnected until pad 66 is confirmed and a suitable 1.8 V-to-3.3 V interface is finalized.
+- Keep R25 (1.8 V STATUS path) and R28 (GND alternative) DNP. Populate exactly one only after pad 66 is confirmed; the NPN level-shift path to controller J2 pin 6 is present but should not be relied on until the module function is verified.
 - Keep pads 36, 47 and 51 NC.
 - Do not assign optional GPIO functions to pads 49, 50, 53, 67 or 68.
 - Retain the conservative 2.8 A VBAT design target and 660 µF nominal polymer bulk bank until the module revision is confirmed.
