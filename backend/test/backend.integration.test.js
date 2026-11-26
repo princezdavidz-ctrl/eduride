@@ -93,6 +93,40 @@ test("persistent API enforces identity, organization and device boundaries", { s
     });
     assert.equal(telemetry.status, 202);
 
+    const deviceConfig = await request("/api/device/config", { headers: { "x-device-token": deviceToken } });
+    assert.equal(deviceConfig.status, 200);
+    assert.equal(deviceConfig.data.device_code, "INTEGRATION-DEVICE-A");
+    assert.equal(deviceConfig.data.variant, "gps_only");
+    assert.deepEqual(deviceConfig.data.capabilities, ["gps", "event_sync"]);
+    const unauthenticatedConfig = await request("/api/device/config");
+    assert.equal(unauthenticatedConfig.status, 401);
+
+    const deviceEvent = {
+      schema_version: 1,
+      event_id: "0123456789abcdef0123456789abcdef",
+      device_id: "INTEGRATION-DEVICE-A",
+      device_sequence: "1",
+      event_type: "DEVICE_HEALTH",
+      trip_id: null,
+      event_time_utc: new Date().toISOString(),
+      monotonic_time_us: "123456",
+      time_quality: "GNSS",
+      firmware_version: "0.1.0",
+      hardware_revision: "rev-a",
+      variant: "gps_only",
+      payload: { state: "degraded" },
+    };
+    const eventBatch = await request("/api/device/events", { method: "POST", headers: { "x-device-token": deviceToken }, body: JSON.stringify({ schema_version: 1, events: [deviceEvent] }) });
+    assert.equal(eventBatch.status, 202);
+    assert.deepEqual(eventBatch.data.acknowledged, [deviceEvent.event_id]);
+    const duplicateEvent = await request("/api/device/events", { method: "POST", headers: { "x-device-token": deviceToken }, body: JSON.stringify({ schema_version: 1, events: [deviceEvent] }) });
+    assert.deepEqual(duplicateEvent.data.duplicates, [deviceEvent.event_id]);
+    const gpsOnlyBoarding = await request("/api/device/events", { method: "POST", headers: { "x-device-token": deviceToken }, body: JSON.stringify({ schema_version: 1, events: [{ ...deviceEvent, event_id: "1123456789abcdef0123456789abcdef", device_sequence: "2", event_type: "STUDENT_BOARDING_MATCHED" }] }) });
+    assert.equal(gpsOnlyBoarding.status, 202);
+    assert.equal(gpsOnlyBoarding.data.rejected.length, 1);
+    const sensitiveEvent = await request("/api/device/events", { method: "POST", headers: { "x-device-token": deviceToken }, body: JSON.stringify({ schema_version: 1, events: [{ ...deviceEvent, event_id: "2123456789abcdef0123456789abcdef", device_sequence: "2", payload: { studentName: "Not allowed" } }] }) });
+    assert.equal(sensitiveEvent.data.rejected.length, 1);
+
     const imagePayload = await request("/api/device/telemetry", {
       method: "POST",
       headers: { "x-device-token": deviceToken },

@@ -1,0 +1,31 @@
+menu "Edu Ride controller"
+
+config ER_ENABLE_DRIVER_UI
+    bool "Enable driver buttons and status LEDs"
+    default n
+    help
+        Enables active-low button inputs and active-high LED outputs on the
+        currently documented PCB pin map. Keep disabled until the assembled
+        PCB revision and electrical characteristics are verified.
+
+config ER_ENABLE_GNSS_UART
+    bool "Enable GNSS UART receiver"
+    default n
+    help
+        Enables UART1 GNSS input on GPIO18 RX and GPIO17 TX.
+        Keep disabled until the exact receiver voltage, wiring and baud rate are verified.
+
+config ER_GNSS_UART_BAUD
+    int "GNSS UART baud rate"
+    depends on ER_ENABLE_GNSS_UART
+    range 1200 921600
+    default 9600
+
+config ER_ENABLE_CELLULAR_LINK
+    bool "Enable generic cellular link status contract"
+    default n
+    help
+        Initializes the hardware-agnostic cellular lifecycle/status module.
+        Does not configure UART or drive modem power/reset pins.
+
+endmenu

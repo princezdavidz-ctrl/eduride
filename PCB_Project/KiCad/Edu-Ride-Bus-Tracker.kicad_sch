@@ -1,0 +1,1191 @@
+(kicad_sch
+	(version 20250114)
+	(generator "pcbkit")
+	(generator_version "9.0")
+	(uuid "2e26e69a-2856-4eb2-add1-3ffac7aef96d")
+	(paper "A2")
+	(title_block (title "Edu Ride Bus Tracker") (rev "A") (company ""))
+	(lib_symbols
+		(symbol "pcbkit:C1"
+			(pin_names (offset 0) hide)
+			(pin_numbers hide)
+			(exclude_from_sim no)
+			(in_bom yes)
+			(on_board yes)
+			(property "Reference" "C"
+				(at 0 0 0)
+				(effects
+					(font (size 1.27 1.27))
+				)
+			)
+			(property "Value" "10uF"
+				(at 0 0 0)
+				(effects
+					(font (size 1.27 1.27))
+				)
+			)
+			(property "Footprint" "pcbkit:C_1206_3216Metric"
+				(at 0 0 0)
+				(effects hide
+					(font (size 1.27 1.27))
+				)
+			)
+			(property "Datasheet" ""
+				(at 0 0 0)
+				(effects hide
+					(font (size 1.27 1.27))
+				)
+			)
+			(property "Description" ""
+				(at 0 0 0)
+				(effects hide
+					(font (size 1.27 1.27))
+				)
+			)
+			(property "LCSC Part #" "C13585"
+				(at 0 0 0)
+				(effects hide
+					(font (size 1.27 1.27))
+				)
+			)
+			(property "MPN" "CL31A106KBHNNNE"
+				(at 0 0 0)
+				(effects hide
+					(font (size 1.27 1.27))
+				)
+			)
+			(property "Manufacturer" "Samsung Electro-Mechanics"
+				(at 0 0 0)
+				(effects hide
+					(font (size 1.27 1.27))
+				)
+			)
+			(property "pcbkit-need" "67ebfd66076a MPN Manufacturer"
+				(at 0 0 0)
+				(effects hide
+					(font (size 1.27 1.27))
+				)
+			)
+			(symbol "C1_1_1"
+				(polyline
+					(pts (xy -1.6 0.45) (xy 1.6 0.45))
+					(stroke (width 0.4) (type default))
+					(fill (type none))
+				)
+				(polyline
+					(pts (xy -1.6 -0.45) (xy 1.6 -0.45))
+					(stroke (width 0.4) (type default))
+					(fill (type none))
+				)
+				(polyline
+					(pts (xy 0 3.81) (xy 0 0.45))
+					(stroke (width 0.2) (type default))
+					(fill (type none))
+				)
+				(polyline
+					(pts (xy 0 -0.45) (xy 0 -3.81))
+					(stroke (width 0.2) (type default))
+					(fill (type none))
+				)
+				(text "CL31A106KBHNNNE"
+					(at 2.3 -1.7 0)
+					(effects
+						(font (size 1.17 1.17))
+						(justify left)
+					)
+				)
+				(pin passive line
+					(at 0 3.81 0)
+					(length 0)
+					(name "a"
+						(effects
+							(font (size 1.27 1.27))
+						)
+					)
+					(number "1"
+						(effects
+							(font (size 1.27 1.27))
+						)
+					)
+				)
+				(pin passive line
+					(at 0 -3.81 0)
+					(length 0)
+					(name "b"
+						(effects
+							(font (size 1.27 1.27))
+						)
+					)
+					(number "2"
+						(effects
+							(font (size 1.27 1.27))
+						)
+					)
+				)
+			)
+		)
+		(symbol "pcbkit:C2"
+			(pin_names (offset 0) hide)
+			(pin_numbers hide)
+			(exclude_from_sim no)
+			(in_bom yes)
+			(on_board yes)
+			(property "Reference" "C"
+				(at 0 0 0)
+				(effects
+					(font (size 1.27 1.27))
+				)
+			)
+			(property "Value" "100nF"
+				(at 0 0 0)
+				(effects
+					(font (size 1.27 1.27))
+				)
+			)
+			(property "Footprint" "pcbkit:C_0402_1005Metric"
+				(at 0 0 0)
+				(effects hide
+					(font (size 1.27 1.27))
+				)
+			)
+			(property "Datasheet" ""
+				(at 0 0 0)
+				(effects hide
+					(font (size 1.27 1.27))
+				)
+			)
+			(property "Description" ""
+				(at 0 0 0)
+				(effects hide
+					(font (size 1.27 1.27))
+				)
+			)
+			(property "LCSC Part #" "C307331"
+				(at 0 0 0)
+				(effects hide
+					(font (size 1.27 1.27))
+				)
+			)
+			(property "MPN" "CL05B104KB54PNC"
+				(at 0 0 0)
+				(effects hide
+					(font (size 1.27 1.27))
+				)
+			)
+			(property "Manufacturer" "Samsung Electro-Mechanics"
+				(at 0 0 0)
+				(effects hide
+					(font (size 1.27 1.27))
+				)
+			)
+			(property "pcbkit-need" "a99cf3290c56 MPN Manufacturer"
+				(at 0 0 0)
+				(effects hide
+					(font (size 1.27 1.27))
+				)
+			)
+			(symbol "C2_1_1"
+				(polyline
+					(pts (xy -1.6 0.45) (xy 1.6 0.45))
+					(stroke (width 0.4) (type default))
+					(fill (type none))
+				)
+				(polyline
+					(pts (xy -1.6 -0.45) (xy 1.6 -0.45))
+					(stroke (width 0.4) (type default))
+					(fill (type none))
+				)
+				(polyline
+					(pts (xy 0 3.81) (xy 0 0.45))
+					(stroke (width 0.2) (type default))
+					(fill (type none))
+				)
+				(polyline
+					(pts (xy 0 -0.45) (xy 0 -3.81))
+					(stroke (width 0.2) (type default))
+					(fill (type none))
+				)
+				(text "CL05B104KB54PNC"
+					(at 2.3 -1.7 0)
+					(effects
+						(font (size 1.17 1.17))
+						(justify left)
+					)
+				)
+				(pin passive line
+					(at 0 3.81 0)
+					(length 0)
+					(name "a"
+						(effects
+							(font (size 1.27 1.27))
+						)
+					)
+					(number "1"
+						(effects
+							(font (size 1.27 1.27))
+						)
+					)
+				)
+				(pin passive line
+					(at 0 -3.81 0)
+					(length 0)
+					(name "b"
+						(effects
+							(font (size 1.27 1.27))
+						)
+					)
+					(number "2"
+						(effects
+							(font (size 1.27 1.27))
+						)
+					)
+				)
+			)
+		)
+		(symbol "pcbkit:C3"
+			(pin_names (offset 0) hide)
+			(pin_numbers hide)
+			(exclude_from_sim no)
+			(in_bom yes)
+			(on_board yes)
+			(property "Reference" "C"
+				(at 0 0 0)
+				(effects
+					(font (size 1.27 1.27))
+				)
+			)
+			(property "Value" "22uF"
+				(at 0 0 0)
+				(effects
+					(font (size 1.27 1.27))
+				)
+			)
+			(property "Footprint" "pcbkit:C_1206_3216Metric"
+				(at 0 0 0)
+				(effects hide
+					(font (size 1.27 1.27))
+				)
+			)
+			(property "Datasheet" ""
+				(at 0 0 0)
+				(effects hide
+					(font (size 1.27 1.27))
+				)
+			)
+			(property "Description" ""
+				(at 0 0 0)
+				(effects hide
+					(font (size 1.27 1.27))
+				)
+			)
+			(property "LCSC Part #" "C12891"
+				(at 0 0 0)
+				(effects hide
+					(font (size 1.27 1.27))
+				)
+			)
+			(property "MPN" "CL31A226KAHNNNE"
+				(at 0 0 0)
+				(effects hide
+					(font (size 1.27 1.27))
+				)
+			)
+			(property "Manufacturer" "Samsung Electro-Mechanics"
+				(at 0 0 0)
+				(effects hide
+					(font (size 1.27 1.27))
+				)
+			)
+			(property "pcbkit-need" "3ab851454a20 MPN Manufacturer"
+				(at 0 0 0)
+				(effects hide
+					(font (size 1.27 1.27))
+				)
+			)
+			(symbol "C3_1_1"
+				(polyline
+					(pts (xy -1.6 0.45) (xy 1.6 0.45))
+					(stroke (width 0.4) (type default))
+					(fill (type none))
+				)
+				(polyline
+					(pts (xy -1.6 -0.45) (xy 1.6 -0.45))
+					(stroke (width 0.4) (type default))
+					(fill (type none))
+				)
+				(polyline
+					(pts (xy 0 3.81) (xy 0 0.45))
+					(stroke (width 0.2) (type default))
+					(fill (type none))
+				)
+				(polyline
+					(pts (xy 0 -0.45) (xy 0 -3.81))
+					(stroke (width 0.2) (type default))
+					(fill (type none))
+				)
+				(text "CL31A226KAHNNNE"
+					(at 2.3 -1.7 0)
+					(effects
+						(font (size 1.17 1.17))
+						(justify left)
+					)
+				)
+				(pin passive line
+					(at 0 3.81 0)
+					(length 0)
+					(name "a"
+						(effects
+							(font (size 1.27 1.27))
+						)
+					)
+					(number "1"
+						(effects
+							(font (size 1.27 1.27))
+						)
+					)
+				)
+				(pin passive line
+					(at 0 -3.81 0)
+					(length 0)
+					(name "b"
+						(effects
+							(font (size 1.27 1.27))
+						)
+					)
+					(number "2"
+						(effects
+							(font (size 1.27 1.27))
+						)
+					)
+				)
+			)
+		)
+		(symbol "pcbkit:C4"
+			(pin_names (offset 0) hide)
+			(pin_numbers hide)
+			(exclude_from_sim no)
+			(in_bom yes)
+			(on_board yes)
+			(property "Reference" "C"
+				(at 0 0 0)
+				(effects
+					(font (size 1.27 1.27))
+				)
+			)
+			(property "Value" "100nF"
+				(at 0 0 0)
+				(effects
+					(font (size 1.27 1.27))
+				)
+			)
+			(property "Footprint" "pcbkit:C_0402_1005Metric"
+				(at 0 0 0)
+				(effects hide
+					(font (size 1.27 1.27))
+				)
+			)
+			(property "Datasheet" ""
+				(at 0 0 0)
+				(effects hide
+					(font (size 1.27 1.27))
+				)
+			)
+			(property "Description" ""
+				(at 0 0 0)
+				(effects hide
+					(font (size 1.27 1.27))
+				)
+			)
+			(property "LCSC Part #" "C307331"
+				(at 0 0 0)
+				(effects hide
+					(font (size 1.27 1.27))
+				)
+			)
+			(property "MPN" "CL05B104KB54PNC"
+				(at 0 0 0)
+				(effects hide
+					(font (size 1.27 1.27))
+				)
+			)
+			(property "Manufacturer" "Samsung Electro-Mechanics"
+				(at 0 0 0)
+				(effects hide
+					(font (size 1.27 1.27))
+				)
+			)
+			(property "pcbkit-need" "d504f09282d0 MPN Manufacturer"
+				(at 0 0 0)
+				(effects hide
+					(font (size 1.27 1.27))
+				)
+			)
+			(symbol "C4_1_1"
+				(polyline
+					(pts (xy -0.45 1.6) (xy -0.45 -1.6))
+					(stroke (width 0.4) (type default))
+					(fill (type none))
+				)
+				(polyline
+					(pts (xy 0.45 1.6) (xy 0.45 -1.6))
+					(stroke (width 0.4) (type default))
+					(fill (type none))
+				)
+				(polyline
+					(pts (xy -3.81 0) (xy -0.45 0))
+					(stroke (width 0.2) (type default))
+					(fill (type none))
+				)
+				(polyline
+					(pts (xy 0.45 0) (xy 3.81 0))
+					(stroke (width 0.2) (type default))
+					(fill (type none))
+				)
+				(text "CL05B104KB54PNC"
+					(at 0 3.1 0)
+					(effects
+						(font (size 1.17 1.17))
+					)
+				)
+				(pin passive line
+					(at -3.81 0 0)
+					(length 0)
+					(name "a"
+						(effects
+							(font (size 1.27 1.27))
+						)
+					)
+					(number "1"
+						(effects
+							(font (size 1.27 1.27))
+						)
+					)
+				)
+				(pin passive line
+					(at 3.81 0 0)
+					(length 0)
+					(name "b"
+						(effects
+							(font (size 1.27 1.27))
+						)
+					)
+					(number "2"
+						(effects
+							(font (size 1.27 1.27))
+						)
+					)
+				)
+			)
+		)
+		(symbol "pcbkit:C5"
+			(pin_names (offset 0) hide)
+			(pin_numbers hide)
+			(exclude_from_sim no)
+			(in_bom yes)
+			(on_board yes)
+			(property "Reference" "C"
+				(at 0 0 0)
+				(effects
+					(font (size 1.27 1.27))
+				)
+			)
+			(property "Value" "10uF"
+				(at 0 0 0)
+				(effects
+					(font (size 1.27 1.27))
+				)
+			)
+			(property "Footprint" "pcbkit:C_1210_3225Metric"
+				(at 0 0 0)
+				(effects hide
+					(font (size 1.27 1.27))
+				)
+			)
+			(property "Datasheet" ""
+				(at 0 0 0)
+				(effects hide
+					(font (size 1.27 1.27))
+				)
+			)
+			(property "Description" ""
+				(at 0 0 0)
+				(effects hide
+					(font (size 1.27 1.27))
+				)
+			)
+			(property "LCSC Part #" "C7472976"
+				(at 0 0 0)
+				(effects hide
+					(font (size 1.27 1.27))
+				)
+			)
+			(property "MPN" "HGC1210R7106K500NSVK"
+				(at 0 0 0)
+				(effects hide
+					(font (size 1.27 1.27))
+				)
+			)
+			(property "Manufacturer" "Chinocera"
+				(at 0 0 0)
+				(effects hide
+					(font (size 1.27 1.27))
+				)
+			)
+			(property "pcbkit-need" "9d6148de0803 MPN Manufacturer"
+				(at 0 0 0)
+				(effects hide
+					(font (size 1.27 1.27))
+				)
+			)
+			(symbol "C5_1_1"
+				(polyline
+					(pts (xy -1.6 0.45) (xy 1.6 0.45))
+					(stroke (width 0.4) (type default))
+					(fill (type none))
+				)
+				(polyline
+					(pts (xy -1.6 -0.45) (xy 1.6 -0.45))
+					(stroke (width 0.4) (type default))
+					(fill (type none))
+				)
+				(polyline
+					(pts (xy 0 3.81) (xy 0 0.45))
+					(stroke (width 0.2) (type default))
+					(fill (type none))
+				)
+				(polyline
+					(pts (xy 0 -0.45) (xy 0 -3.81))
+					(stroke (width 0.2) (type default))
+					(fill (type none))
+				)
+				(text "HGC1210R7106K500NSVK"
+					(at 2.3 -1.7 0)
+					(effects
+						(font (size 1.17 1.17))
+						(justify left)
+					)
+				)
+				(pin passive line
+					(at 0 3.81 0)
+					(length 0)
+					(name "a"
+						(effects
+							(font (size 1.27 1.27))
+						)
+					)
+					(number "1"
+						(effects
+							(font (size 1.27 1.27))
+						)
+					)
+				)
+				(pin passive line
+					(at 0 -3.81 0)
+					(length 0)
+					(name "b"
+						(effects
+							(font (size 1.27 1.27))
+						)
+					)
+					(number "2"
+						(effects
+							(font (size 1.27 1.27))
+						)
+					)
+				)
+			)
+		)
+		(symbol "pcbkit:C6"
+			(pin_names (offset 0) hide)
+			(pin_numbers hide)
+			(exclude_from_sim no)
+			(in_bom yes)
+			(on_board yes)
+			(property "Reference" "C"
+				(at 0 0 0)
+				(effects
+					(font (size 1.27 1.27))
+				)
+			)
+			(property "Value" "100nF"
+				(at 0 0 0)
+				(effects
+					(font (size 1.27 1.27))
+				)
+			)
+			(property "Footprint" "pcbkit:C_0402_1005Metric"
+				(at 0 0 0)
+				(effects hide
+					(font (size 1.27 1.27))
+				)
+			)
+			(property "Datasheet" ""
+				(at 0 0 0)
+				(effects hide
+					(font (size 1.27 1.27))
+				)
+			)
+			(property "Description" ""
+				(at 0 0 0)
+				(effects hide
+					(font (size 1.27 1.27))
+				)
+			)
+			(property "LCSC Part #" "C307331"
+				(at 0 0 0)
+				(effects hide
+					(font (size 1.27 1.27))
+				)
+			)
+			(property "MPN" "CL05B104KB54PNC"
+				(at 0 0 0)
+				(effects hide
+					(font (size 1.27 1.27))
+				)
+			)
+			(property "Manufacturer" "Samsung Electro-Mechanics"
+				(at 0 0 0)
+				(effects hide
+					(font (size 1.27 1.27))
+				)
+			)
+			(property "pcbkit-need" "78e48e8c9862 MPN Manufacturer"
+				(at 0 0 0)
+				(effects hide
+					(font (size 1.27 1.27))
+				)
+			)
+			(symbol "C6_1_1"
+				(polyline
+					(pts (xy -1.6 0.45) (xy 1.6 0.45))
+					(stroke (width 0.4) (type default))
+					(fill (type none))
+				)
+				(polyline
+					(pts (xy -1.6 -0.45) (xy 1.6 -0.45))
+					(stroke (width 0.4) (type default))
+					(fill (type none))
+				)
+				(polyline
+					(pts (xy 0 3.81) (xy 0 0.45))
+					(stroke (width 0.2) (type default))
+					(fill (type none))
+				)
+				(polyline
+					(pts (xy 0 -0.45) (xy 0 -3.81))
+					(stroke (width 0.2) (type default))
+					(fill (type none))
+				)
+				(text "CL05B104KB54PNC"
+					(at 2.3 -1.7 0)
+					(effects
+						(font (size 1.17 1.17))
+						(justify left)
+					)
+				)
+				(pin passive line
+					(at 0 3.81 0)
+					(length 0)
+					(name "a"
+						(effects
+							(font (size 1.27 1.27))
+						)
+					)
+					(number "1"
+						(effects
+							(font (size 1.27 1.27))
+						)
+					)
+				)
+				(pin passive line
+					(at 0 -3.81 0)
+					(length 0)
+					(name "b"
+						(effects
+							(font (size 1.27 1.27))
+						)
+					)
+					(number "2"
+						(effects
+							(font (size 1.27 1.27))
+						)
+					)
+				)
+			)
+		)
+		(symbol "pcbkit:C7"
+			(pin_names (offset 0) hide)
+			(pin_numbers hide)
+			(exclude_from_sim no)
+			(in_bom yes)
+			(on_board yes)
+			(property "Reference" "C"
+				(at 0 0 0)
+				(effects
+					(font (size 1.27 1.27))
+				)
+			)
+			(property "Value" "22uF"
+				(at 0 0 0)
+				(effects
+					(font (size 1.27 1.27))
+				)
+			)
+			(property "Footprint" "pcbkit:C_1206_3216Metric"
+				(at 0 0 0)
+				(effects hide
+					(font (size 1.27 1.27))
+				)
+			)
+			(property "Datasheet" ""
+				(at 0 0 0)
+				(effects hide
+					(font (size 1.27 1.27))
+				)
+			)
+			(property "Description" ""
+				(at 0 0 0)
+				(effects hide
+					(font (size 1.27 1.27))
+				)
+			)
+			(property "LCSC Part #" "C12891"
+				(at 0 0 0)
+				(effects hide
+					(font (size 1.27 1.27))
+				)
+			)
+			(property "MPN" "CL31A226KAHNNNE"
+				(at 0 0 0)
+				(effects hide
+					(font (size 1.27 1.27))
+				)
+			)
+			(property "Manufacturer" "Samsung Electro-Mechanics"
+				(at 0 0 0)
+				(effects hide
+					(font (size 1.27 1.27))
+				)
+			)
+			(property "pcbkit-need" "adc30c424192 MPN Manufacturer"
+				(at 0 0 0)
+				(effects hide
+					(font (size 1.27 1.27))
+				)
+			)
+			(symbol "C7_1_1"
+				(polyline
+					(pts (xy -1.6 0.45) (xy 1.6 0.45))
+					(stroke (width 0.4) (type default))
+					(fill (type none))
+				)
+				(polyline
+					(pts (xy -1.6 -0.45) (xy 1.6 -0.45))
+					(stroke (width 0.4) (type default))
+					(fill (type none))
+				)
+				(polyline
+					(pts (xy 0 3.81) (xy 0 0.45))
+					(stroke (width 0.2) (type default))
+					(fill (type none))
+				)
+				(polyline
+					(pts (xy 0 -0.45) (xy 0 -3.81))
+					(stroke (width 0.2) (type default))
+					(fill (type none))
+				)
+				(text "CL31A226KAHNNNE"
+					(at 2.3 -1.7 0)
+					(effects
+						(font (size 1.17 1.17))
+						(justify left)
+					)
+				)
+				(pin passive line
+					(at 0 3.81 0)
+					(length 0)
+					(name "a"
+						(effects
+							(font (size 1.27 1.27))
+						)
+					)
+					(number "1"
+						(effects
+							(font (size 1.27 1.27))
+						)
+					)
+				)
+				(pin passive line
+					(at 0 -3.81 0)
+					(length 0)
+					(name "b"
+						(effects
+							(font (size 1.27 1.27))
+						)
+					)
+					(number "2"
+						(effects
+							(font (size 1.27 1.27))
+						)
+					)
+				)
+			)
+		)
+		(symbol "pcbkit:C8"
+			(pin_names (offset 0) hide)
+			(pin_numbers hide)
+			(exclude_from_sim no)
+			(in_bom yes)
+			(on_board yes)
+			(property "Reference" "C"
+				(at 0 0 0)
+				(effects
+					(font (size 1.27 1.27))
+				)
+			)
+			(property "Value" "100nF"
+				(at 0 0 0)
+				(effects
+					(font (size 1.27 1.27))
+				)
+			)
+			(property "Footprint" "pcbkit:C_0402_1005Metric"
+				(at 0 0 0)
+				(effects hide
+					(font (size 1.27 1.27))
+				)
+			)
+			(property "Datasheet" ""
+				(at 0 0 0)
+				(effects hide
+					(font (size 1.27 1.27))
+				)
+			)
+			(property "Description" ""
+				(at 0 0 0)
+				(effects hide
+					(font (size 1.27 1.27))
+				)
+			)
+			(property "LCSC Part #" "C307331"
+				(at 0 0 0)
+				(effects hide
+					(font (size 1.27 1.27))
+				)
+			)
+			(property "MPN" "CL05B104KB54PNC"
+				(at 0 0 0)
+				(effects hide
+					(font (size 1.27 1.27))
+				)
+			)
+			(property "Manufacturer" "Samsung Electro-Mechanics"
+				(at 0 0 0)
+				(effects hide
+					(font (size 1.27 1.27))
+				)
+			)
+			(property "pcbkit-need" "d504f09282d0 MPN Manufacturer"
+				(at 0 0 0)
+				(effects hide
+					(font (size 1.27 1.27))
+				)
+			)
+			(symbol "C8_1_1"
+				(polyline
+					(pts (xy -0.45 1.6) (xy -0.45 -1.6))
+					(stroke (width 0.4) (type default))
+					(fill (type none))
+				)
+				(polyline
+					(pts (xy 0.45 1.6) (xy 0.45 -1.6))
+					(stroke (width 0.4) (type default))
+					(fill (type none))
+				)
+				(polyline
+					(pts (xy -3.81 0) (xy -0.45 0))
+					(stroke (width 0.2) (type default))
+					(fill (type none))
+				)
+				(polyline
+					(pts (xy 0.45 0) (xy 3.81 0))
+					(stroke (width 0.2) (type default))
+					(fill (type none))
+				)
+				(text "CL05B104KB54PNC"
+					(at 0 3.1 0)
+					(effects
+						(font (size 1.17 1.17))
+					)
+				)
+				(pin passive line
+					(at -3.81 0 0)
+					(length 0)
+					(name "a"
+						(effects
+							(font (size 1.27 1.27))
+						)
+					)
+					(number "1"
+						(effects
+							(font (size 1.27 1.27))
+						)
+					)
+				)
+				(pin passive line
+					(at 3.81 0 0)
+					(length 0)
+					(name "b"
+						(effects
+							(font (size 1.27 1.27))
+						)
+					)
+					(number "2"
+						(effects
+							(font (size 1.27 1.27))
+						)
+					)
+				)
+			)
+		)
+		(symbol "pcbkit:C9"
+			(pin_names (offset 0) hide)
+			(pin_numbers hide)
+			(exclude_from_sim no)
+			(in_bom yes)
+			(on_board yes)
+			(property "Reference" "C"
+				(at 0 0 0)
+				(effects
+					(font (size 1.27 1.27))
+				)
+			)
+			(property "Value" "22uF"
+				(at 0 0 0)
+				(effects
+					(font (size 1.27 1.27))
+				)
+			)
+			(property "Footprint" "pcbkit:C_1206_3216Metric"
+				(at 0 0 0)
+				(effects hide
+					(font (size 1.27 1.27))
+				)
+			)
+			(property "Datasheet" ""
+				(at 0 0 0)
+				(effects hide
+					(font (size 1.27 1.27))
+				)
+			)
+			(property "Description" ""
+				(at 0 0 0)
+				(effects hide
+					(font (size 1.27 1.27))
+				)
+			)
+			(property "LCSC Part #" "C12891"
+				(at 0 0 0)
+				(effects hide
+					(font (size 1.27 1.27))
+				)
+			)
+			(property "MPN" "CL31A226KAHNNNE"
+				(at 0 0 0)
+				(effects hide
+					(font (size 1.27 1.27))
+				)
+			)
+			(property "Manufacturer" "Samsung Electro-Mechanics"
+				(at 0 0 0)
+				(effects hide
+					(font (size 1.27 1.27))
+				)
+			)
+			(property "pcbkit-need" "e4d2e14c6c2e MPN Manufacturer"
+				(at 0 0 0)
+				(effects hide
+					(font (size 1.27 1.27))
+				)
+			)
+			(symbol "C9_1_1"
+				(polyline
+					(pts (xy -1.6 0.45) (xy 1.6 0.45))
+					(stroke (width 0.4) (type default))
+					(fill (type none))
+				)
+				(polyline
+					(pts (xy -1.6 -0.45) (xy 1.6 -0.45))
+					(stroke (width 0.4) (type default))
+					(fill (type none))
+				)
+				(polyline
+					(pts (xy 0 3.81) (xy 0 0.45))
+					(stroke (width 0.2) (type default))
+					(fill (type none))
+				)
+				(polyline
+					(pts (xy 0 -0.45) (xy 0 -3.81))
+					(stroke (width 0.2) (type default))
+					(fill (type none))
+				)
+				(text "CL31A226KAHNNNE"
+					(at 2.3 -1.7 0)
+					(effects
+						(font (size 1.17 1.17))
+						(justify left)
+					)
+				)
+				(pin passive line
+					(at 0 3.81 0)
+					(length 0)
+					(name "a"
+						(effects
+							(font (size 1.27 1.27))
+						)
+					)
+					(number "1"
+						(effects
+							(font (size 1.27 1.27))
+						)
+					)
+				)
+				(pin passive line
+					(at 0 -3.81 0)
+					(length 0)
+					(name "b"
+						(effects
+							(font (size 1.27 1.27))
+						)
+					)
+					(number "2"
+						(effects
+							(font (size 1.27 1.27))
+						)
+					)
+				)
+			)
+		)
+		(symbol "pcbkit:C10"
+			(pin_names (offset 0) hide)
+			(pin_numbers hide)
+			(exclude_from_sim no)
+			(in_bom yes)
+			(on_board yes)
+			(property "Reference" "C"
+				(at 0 0 0)
+				(effects
+					(font (size 1.27 1.27))
+				)
+			)
+			(property "Value" "100nF"
+				(at 0 0 0)
+				(effects
+					(font (size 1.27 1.27))
+				)
+			)
+			(property "Footprint" "pcbkit:C_0402_1005Metric"
+				(at 0 0 0)
+				(effects hide
+					(font (size 1.27 1.27))
+				)
+			)
+			(property "Datasheet" ""
+				(at 0 0 0)
+				(effects hide
+					(font (size 1.27 1.27))
+				)
+			)
+			(property "Description" ""
+				(at 0 0 0)
+				(effects hide
+					(font (size 1.27 1.27))
+				)
+			)
+			(property "LCSC Part #" "C307331"
+				(at 0 0 0)
+				(effects hide
+					(font (size 1.27 1.27))
+				)
+			)
+			(property "MPN" "CL05B104KB54PNC"
+				(at 0 0 0)
+				(effects hide
+					(font (size 1.27 1.27))
+				)
+			)
+			(property "Manufacturer" "Samsung Electro-Mechanics"
+				(at 0 0 0)
+				(effects hide
+					(font (size 1.27 1.27))
+				)
+			)
+			(property "pcbkit-need" "0357b940a503 MPN Manufacturer"
+				(at 0 0 0)
+				(effects hide
+					(font (size 1.27 1.27))
+				)
+			)
+			(symbol "C10_1_1"
+				(polyline
+					(pts (xy -1.6 0.45) (xy 1.6 0.45))
+					(stroke (width 0.4) (type default))
+					(fill (type none))
+				)
+				(polyline
+					(pts (xy -1.6 -0.45) (xy 1.6 -0.45))
+					(stroke (width 0.4) (type default))
+					(fill (type none))
+				)
+				(polyline
+					(pts (xy 0 3.81) (xy 0 0.45))
+					(stroke (width 0.2) (type default))
+					(fill (type none))
+				)
+				(polyline
+					(pts (xy 0 -0.45) (xy 0 -3.81))
+					(stroke (width 0.2) (type default))
+					(fill (type none))
+				)
+				(text "CL05B104KB54PNC"
+					(at 2.3 -1.7 0)
+					(effects
+						(font (size 1.17 1.17))
+						(justify left)
+					)
+				)
+				(pin passive line
+					(at 0 3.81 0)
+					(length 0)
+					(name "a"
+						(effects
+							(font (size 1.27 1.27))
+						)
+					)
+					(number "1"
+						(effects
+							(font (size 1.27 1.27))
+						)
+					)
+				)
+				(pin passive line
+					(at 0 -3.81 0)
+					(length 0)
+					(name "b"
+						(effects
+							(font (size 1.27 1.27))
+						)
+					)
+					(number "2"
+						(effects
+							(font (size 1.27 1.27))
+						)
+					)
+				)
+			)
+		)
+		(symbol "pcbkit:C11"
+			(pin_names (offset 0) hide)
+			(pin_numbers hide)
+			(exclude_from_sim no)
+			(i
