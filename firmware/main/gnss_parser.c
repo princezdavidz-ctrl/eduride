@@ -22,7 +22,7 @@ static bool parse_number(const char *text, double *out)
     if (text == NULL || *text == '\0') return false;
     char *end = NULL;
     double value = strtod(text, &end);
-    if (end == text || *end != '\0') return false;
+    if (end == text || *end != '\0' || !isfinite(value)) return false;
     *out = value;
     return true;
 }
@@ -56,8 +56,12 @@ static bool valid_time(const char *value)
 {
     if (value == NULL || strlen(value) < 6 || strlen(value) > 10) return false;
     for (size_t i = 0; i < 6; ++i) if (!isdigit((unsigned char)value[i])) return false;
+    int hour = (value[0]-'0')*10 + value[1]-'0';
+    int minute = (value[2]-'0')*10 + value[3]-'0';
+    int second = (value[4]-'0')*10 + value[5]-'0';
+    if (hour > 23 || minute > 59 || second > 60) return false;
     if (value[6] == '\0') return true;
-    if (value[6] != '.') return false;
+    if (value[6] != '.' || strlen(value) < 8) return false;
     for (size_t i = 7; value[i] != '\0'; ++i)
         if (!isdigit((unsigned char)value[i])) return false;
     return true;
@@ -67,7 +71,9 @@ static bool valid_date(const char *value)
 {
     if (value == NULL || strlen(value) != 6) return false;
     for (size_t i = 0; i < 6; ++i) if (!isdigit((unsigned char)value[i])) return false;
-    return true;
+    int day = (value[0]-'0')*10 + value[1]-'0';
+    int month = (value[2]-'0')*10 + value[3]-'0';
+    return day >= 1 && day <= 31 && month >= 1 && month <= 12;
 }
 
 static bool parse_checksum(char *line, size_t length, char **body_end)
@@ -175,7 +181,7 @@ static bool parser_feed_unlocked(const char *sentence, size_t length,
             !parse_number(fields[8], &hdop) ||
             (quality > 0.0 && (!parse_coordinate(fields[2], fields[3], true, &lat) ||
                                !parse_coordinate(fields[4], fields[5], false, &lon))) ||
-            quality < 0.0 || quality > 8.0 || satellites < 0.0 || satellites > 99.0 ||
+            quality < 0.0 || quality > 8.0 || satellites < 0.0 || satellites > 99.0 || satellites != (double)((int)satellites) ||
             hdop < 0.0 || hdop > 99.9) {
             ++s_snapshot.malformed_count;
             return false;
