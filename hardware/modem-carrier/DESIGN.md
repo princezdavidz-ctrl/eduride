@@ -62,6 +62,9 @@ J14 is the separate two-terminal protected 5 V modem input. Its pin polarity and
 | Modem | SIMCom A7670E-LASA | Selected candidate; exact module revision, pad drawing and stock must be checked before footprint release |
 | 3.8 V buck | Analog Devices LT8640EUDC#TRPBF | 5 A continuous / 7 A peak transient family capability; 3.4–42 V input. Candidate only; calculate 3.8 V feedback, switching frequency, inductor, input/output capacitors and thermal behavior from the current datasheet |
 | UART translator | TI TXU0202DCU | Two channels with opposite fixed directions; A1→B1Y for ESP TX→modem RX, B2→A2Y for modem TX→ESP RX; VCCA=3.3 V, VCCB=1.8 V. Confirm VDD_EXT capability and startup sequencing |
+| Local 3.3 V logic LDO | Diodes Incorporated AP2112K-3.3TRG1 | 2.5–6 V input, fixed 3.3 V output, 600 mA; supplies only translator A-side and OE because controller J2 has no 3.3 V power pin |
+| PWRKEY / RESET transistor | MMBT3904 NPN, SOT-23 | SIMCom reference-style low-side open-collector control; 4.7 kΩ base drive, 47 kΩ base-emitter pull-down and 1 kΩ collector series resistor |
+| VBAT / control TVS | Leiditech ESDBW5V0A1 | SIMCom-listed 5 V VRWM example; candidate at VBAT, PWRKEY and RESET nodes |
 | STATUS translator (conditional) | TI SN74AXC1T45DBV | Only populate if SIMCom confirms pad 66 is a 1.8 V STATUS output; otherwise omit and leave controller J2 pin 6 NC |
 | SIM socket | XUNPU SMN-303 | Candidate SIM card push-push with card detect; footprint and card pin mapping must be checked against its manufacturer drawing |
 
@@ -194,20 +197,24 @@ The 1.8 V VDD_1V8 output (pin 15) is specified up to 50 mA and is on by default.
 
 ## Explicit manufacturer confirmation required
 
-The family guide has an internal pad-66 contradiction: Table 8's GND list includes pad 66, while the later Other Pins table assigns STATUS to pad 66. The STATUS row also labels its type DI although the power-state timing section describes the module driving STATUS high after initialization. Pads 36, 47 and 51 also have variant-dependent GPIO/ADC references elsewhere in the guide. These are not acceptable assumptions for an LGA footprint or schematic. Keep pads 36, 47, 51 and 66 unrouted / no-connect in the carrier draft until SIMCom confirms the exact A7670E-LASA order code's pad map and status electrical direction in writing.
+The family guide has an internal pad-66 contradiction: Table 8's GND list includes pad 66, while the later Other Pins table assigns STATUS to pad 66. The STATUS row also labels its type DI although the power-state timing section describes the module driving STATUS high after initialization. Pads 36 and 47 are listed in a separate A7670C-only GPIO table; ADC1 is shown on pad 25 or 51 depending on variant. Keep them unused until exact LASA confirmation. These are not acceptable assumptions for an LGA footprint or schematic. Keep pads 36, 47, 51 and 66 unrouted / no-connect in the carrier draft until SIMCom confirms the exact A7670E-LASA order code's pad map and status electrical direction in writing.
 
-## Power-stage schematic milestone — A0 prototype
+## First-pass carrier schematic milestone — A0 prototype
 
-A first-pass, standalone LT8640 5 V → 3.8 V power-stage schematic (23 parts, 10 nets) has been generated in `board.kicad_sch` from `scripts/design.py`.
+A first-pass carrier schematic with the LT8640 5 V → 3.8 V power stage and controller UART / power-control interfaces (41 parts, 24 nets) has been generated in `board.kicad_sch` from `scripts/design.py`.
 
-- Includes J14 carrier power input, 0 Ω input measurement link, LT8640, 2.7 µH inductor, 1 MHz timing resistor, 3.8 V feedback divider, soft-start and bootstrap capacitors, input bypassing, 47 µF ceramic output capacitor, two 330 µF polymer bulk capacitors, two 330 µF polymer bulk capacitors, the SIMCom-recommended 33 pF / 10 pF / 100 nF / 1 µF local VBAT ceramics, a 5 V VRWM VBAT TVS candidate, and a 3.8 V output/test connector.
-- Preliminary values: 1.000 MΩ / 343 kΩ feedback divider (about 3.798 V at 0.970 V reference), 41.2 kΩ RT (1 MHz), 2.7 µH inductor, 10 nF soft start, 100 nF bootstrap capacitor, 1 µF INTVCC bypass, 4.7 pF feed-forward, 4.7 µF + 2×1 µF input ceramic bypass, and 47 µF ceramic + 2×330 µF polymer output capacitance plus 33 pF / 10 pF / 100 nF / 1 µF local module bypass capacitors and an ESDBW5V0A1 TVS candidate.
-- LT8640 switch pins are modeled as passive switching nodes to avoid false ERC output-to-output conflicts; the regulated output and externally supplied rails use explicit PWR_FLAG symbols.
-- KiCad schematic ERC result: **0 errors, 0 warnings**. Netlist export also completed successfully.
+- Includes J14 carrier power input, 0 Ω input measurement link, LT8640, 2.7 µH inductor, 1 MHz timing resistor, 3.8 V feedback divider, soft-start and bootstrap capacitors, input bypassing, 47 µF ceramic output capacitor, two 330 µF polymer bulk capacitors, the SIMCom-recommended 33 pF / 10 pF / 100 nF / 1 µF local VBAT ceramics, a 5 V VRWM VBAT TVS candidate, and a 3.8 V output/test connector.
+- Adds an AP2112K-3.3 local LDO because controller J2 exposes no 3.3 V supply pin; this rail powers only the A-side and OE of the TXU0202.
+- Adds a TXU0202 fixed-direction UART translator: ESP32 TX 3.3 V → modem RX 1.8 V, and modem TX 1.8 V → ESP32 RX 3.3 V. Its B-side supply comes from the modem VDD_1V8 output.
+- Adds MMBT3904 open-collector stages for PWRKEY and RESET, with 4.7 kΩ base resistors, 47 kΩ base pull-downs, 1 kΩ collector series resistors and 5 V VRWM TVS candidates.
+- Adds J3 for the controller's existing J2 interface and J4 as a **schematic-only module signal placeholder**. J4 is not a physical connector and must be replaced by the verified A7670E-LASA LGA symbol before PCB layout. Controller J2 pin 6 remains NC.
+- Preliminary buck values: 1.000 MΩ / 343 kΩ feedback divider (about 3.798 V at 0.970 V reference), 41.2 kΩ RT (1 MHz), 2.7 µH inductor, 10 nF soft start, 100 nF bootstrap capacitor, 1 µF INTVCC bypass, 4.7 pF feed-forward, 4.7 µF + 2×1 µF input ceramic bypass, and 47 µF ceramic + 2×330 µF polymer output capacitance.
+- LT8640 switch pins are modeled as passive switching nodes to avoid false ERC output-to-output conflicts; externally supplied rails use explicit PWR_FLAG symbols. The VDD_1V8 and modem TXD flags represent the not-yet-integrated module symbol and must be removed when J4 is replaced.
+- KiCad schematic ERC result: **0 errors, 0 warnings**. Netlist export completed successfully; UART and PWRKEY/RESET pin-to-net connectivity was inspected.
 
-This is only the regulator subcircuit. It is not the complete modem carrier schematic, PCB layout, DRC, thermal analysis, stability validation or bench test. Capacitor effective values under DC bias, LT8640 loop stability with the selected bulk bank, input current path, inductor saturation, PCB thermal behavior, TVS clamping and output droop still require calculations and bench verification. No footprint is assigned to the schematic symbols yet.
+This is still a partial carrier schematic. J4 is a temporary logical placeholder, not a physical connector; the complete A7670E-LASA symbol and pad map are not integrated. It is not a routed PCB, DRC, thermal analysis, stability validation or bench test. Capacitor effective values under DC bias, LT8640 loop stability with the selected bulk bank, input current path, inductor saturation, PCB thermal behavior, TVS clamping and output droop still require calculations and bench verification. No footprint is assigned to the schematic symbols yet.
 
-Candidate symbol/footprint library files are saved locally in `parts.kicad_sym` and `parts.pretty/`. The LT8640, inductor and polymer-capacitor footprints are library candidates only; none is assigned to the schematic, and all must be checked against the current manufacturer mechanical drawings before PCB placement.
+Candidate symbol/footprint library files are saved locally in `parts.kicad_sym` and `parts.pretty/`. The LT8640, inductor, polymer-capacitor and TXU0202 footprints are library candidates only; none is assigned to the schematic, and all must be checked against current manufacturer mechanical drawings before PCB placement.
 
 
 ## Additional SIMCom VBAT implementation requirements

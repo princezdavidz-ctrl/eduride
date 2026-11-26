@@ -2,8 +2,8 @@
 	(version 20250114)
 	(generator "pcbkit")
 	(generator_version "9.0")
-	(uuid "fb936ee7-e078-48f1-b9ed-0bbe24c28d48")
-	(paper "A3")
+	(uuid "bc040ed5-7197-49ea-876f-a5cab54aada0")
+	(paper "A2")
 	(title_block
 		(title "Edu Ride LTE Carrier — Preliminary 3.8 V Modem Power Stage")
 		(rev "A0-PROTOTYPE")
@@ -1169,26 +1169,23 @@
 				)
 			)
 		)
-		(symbol "power:PWR_FLAG"
-			(power global)
-			(pin_numbers (hide yes))
-			(pin_names (offset 0) (hide yes))
+		(symbol "Connector_Generic:Conn_01x06"
+			(pin_names (offset 1.016) (hide yes))
 			(exclude_from_sim no)
 			(in_bom yes)
 			(on_board yes)
 			(in_pos_files yes)
 			(duplicate_pin_numbers_are_jumpers no)
-			(property "Reference" "#FLG"
-				(at 0 1.905 0)
+			(property "Reference" "J"
+				(at 0 7.62 0)
 				(show_name no)
 				(do_not_autoplace no)
-				(hide yes)
 				(effects
 					(font (size 1.27 1.27))
 				)
 			)
-			(property "Value" "PWR_FLAG"
-				(at 0 3.81 0)
+			(property "Value" "Conn_01x06"
+				(at 0 -10.16 0)
 				(show_name no)
 				(do_not_autoplace no)
 				(effects
@@ -1213,7 +1210,7 @@
 					(font (size 1.27 1.27))
 				)
 			)
-			(property "Description" "Special symbol for telling ERC where power comes from"
+			(property "Description" "Generic connector, single row, 01x06, script generated (kicad-library-utils/schlib/autogen/connector/)"
 				(at 0 0 0)
 				(show_name no)
 				(do_not_autoplace no)
@@ -1222,7 +1219,16 @@
 					(font (size 1.27 1.27))
 				)
 			)
-			(property "ki_keywords" "flag power"
+			(property "ki_keywords" "connector"
+				(at 0 0 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font (size 1.27 1.27))
+				)
+			)
+			(property "ki_fp_filters" "Connector*:*_1x??_*"
 				(at 0 0 0)
 				(show_name no)
 				(do_not_autoplace no)
@@ -1232,11 +1238,53 @@
 				)
 			)
 			(embedded_fonts no)
-			(symbol "PWR_FLAG_0_0"
-				(pin power_out line
-					(at 0 0 90)
-					(length 0)
-					(name ""
+			(symbol "Conn_01x06_1_1"
+				(rectangle
+					(start -1.27 6.35)
+					(end 1.27 -8.89)
+					(stroke (width 0.254) (type default))
+					(fill (type background))
+				)
+				(rectangle
+					(start -1.27 5.207)
+					(end 0 4.953)
+					(stroke (width 0.1524) (type default))
+					(fill (type none))
+				)
+				(rectangle
+					(start -1.27 2.667)
+					(end 0 2.413)
+					(stroke (width 0.1524) (type default))
+					(fill (type none))
+				)
+				(rectangle
+					(start -1.27 0.127)
+					(end 0 -0.127)
+					(stroke (width 0.1524) (type default))
+					(fill (type none))
+				)
+				(rectangle
+					(start -1.27 -2.413)
+					(end 0 -2.667)
+					(stroke (width 0.1524) (type default))
+					(fill (type none))
+				)
+				(rectangle
+					(start -1.27 -4.953)
+					(end 0 -5.207)
+					(stroke (width 0.1524) (type default))
+					(fill (type none))
+				)
+				(rectangle
+					(start -1.27 -7.493)
+					(end 0 -7.747)
+					(stroke (width 0.1524) (type default))
+					(fill (type none))
+				)
+				(pin passive line
+					(at -5.08 5.08 0)
+					(length 3.81)
+					(name "Pin_1"
 						(effects
 							(font (size 1.27 1.27))
 						)
@@ -1247,310 +1295,303 @@
 						)
 					)
 				)
-			)
-			(symbol "PWR_FLAG_0_1"
-				(polyline
-					(pts (xy 0 0) (xy 0 1.27) (xy -1.016 1.905) (xy 0 2.54) (xy 1.016 1.905) (xy 0 1.27))
-					(stroke (width 0) (type default))
-					(fill (type none))
+				(pin passive line
+					(at -5.08 2.54 0)
+					(length 3.81)
+					(name "Pin_2"
+						(effects
+							(font (size 1.27 1.27))
+						)
+					)
+					(number "2"
+						(effects
+							(font (size 1.27 1.27))
+						)
+					)
+				)
+				(pin passive line
+					(at -5.08 0 0)
+					(length 3.81)
+					(name "Pin_3"
+						(effects
+							(font (size 1.27 1.27))
+						)
+					)
+					(number "3"
+						(effects
+							(font (size 1.27 1.27))
+						)
+					)
+				)
+				(pin passive line
+					(at -5.08 -2.54 0)
+					(length 3.81)
+					(name "Pin_4"
+						(effects
+							(font (size 1.27 1.27))
+						)
+					)
+					(number "4"
+						(effects
+							(font (size 1.27 1.27))
+						)
+					)
+				)
+				(pin passive line
+					(at -5.08 -5.08 0)
+					(length 3.81)
+					(name "Pin_5"
+						(effects
+							(font (size 1.27 1.27))
+						)
+					)
+					(number "5"
+						(effects
+							(font (size 1.27 1.27))
+						)
+					)
+				)
+				(pin passive line
+					(at -5.08 -7.62 0)
+					(length 3.81)
+					(name "Pin_6"
+						(effects
+							(font (size 1.27 1.27))
+						)
+					)
+					(number "6"
+						(effects
+							(font (size 1.27 1.27))
+						)
+					)
 				)
 			)
 		)
-	)
-	(rectangle
-		(start 12.7 12.7)
-		(end 278.13 161.29)
-		(stroke (width 0) (type dash))
-		(fill (type none))
-		(uuid "4efe3fd7-2878-4e60-bb7e-9440dabe21ce")
-	)
-	(text "3.8V MODEM POWER STAGE"
-		(exclude_from_sim no)
-		(at 16.51 19.05 0)
-		(effects
-			(font (size 2.54 2.54))
-			(justify left bottom)
-		)
-		(uuid "fe226add-8e18-4d94-a4f9-94ac243ccadd")
-	)
-	(text "Preliminary 5 V to 3.8 V / 2.8 A conservative modem rail. Values and layout remain subject to datasheet, stability, thermal and bench verification."
-		(exclude_from_sim no)
-		(at 16.51 22.86 0)
-		(effects
-			(font (size 1.27 1.27))
-			(justify left bottom)
-		)
-		(uuid "f67b45ba-75c5-435e-96e1-93cbf0793aae")
-	)
-	(wire
-		(pts (xy 35.56 33.02) (xy 33.02 33.02))
-		(stroke (width 0) (type default))
-		(uuid "f70fbc49-041e-41e7-9407-fa0e2e6ac27a")
-	)
-	(global_label "MODEM_5V_IN"
-		(shape passive)
-		(at 33.02 33.02 180)
-		(effects
-			(font (size 1.27 1.27))
-			(justify right)
-		)
-		(uuid "272d36e0-1827-447b-aa78-a3bd63d4ee4f")
-		(property "Intersheetrefs" "${INTERSHEET_REFS}"
-			(at 0 0 0)
-			(effects
-				(font (size 1.27 1.27))
+		(symbol "Regulator_Linear:AP2112K-3.3"
+			(property "Reference" "U"
+				(at -5.08 5.715 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(effects
+					(font (size 1.27 1.27))
+					(justify left)
+				)
+			)
+			(property "Value" "AP2112K-3.3"
+				(at 0 5.715 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(effects
+					(font (size 1.27 1.27))
+					(justify left)
+				)
+			)
+			(property "Footprint" "Package_TO_SOT_SMD:SOT-23-5"
+				(at 0 8.255 0)
+				(show_name no)
+				(do_not_autoplace no)
 				(hide yes)
+				(effects
+					(font (size 1.27 1.27))
+				)
 			)
-		)
-	)
-	(wire
-		(pts (xy 35.56 35.56) (xy 33.02 35.56))
-		(stroke (width 0) (type default))
-		(uuid "1b7c91f5-7b5c-4072-b1d6-03e710bcb868")
-	)
-	(global_label "GND"
-		(shape passive)
-		(at 33.02 35.56 180)
-		(effects
-			(font (size 1.27 1.27))
-			(justify right)
-		)
-		(uuid "19926895-2cfd-4964-ab2c-3bf0f5ec1de8")
-		(property "Intersheetrefs" "${INTERSHEET_REFS}"
-			(at 0 0 0)
-			(effects
-				(font (size 1.27 1.27))
+			(property "Datasheet" "https://www.diodes.com/assets/Datasheets/AP2112.pdf"
+				(at 0 2.54 0)
+				(show_name no)
+				(do_not_autoplace no)
 				(hide yes)
+				(effects
+					(font (size 1.27 1.27))
+				)
 			)
-		)
-	)
-	(symbol
-		(lib_id "Connector_Generic:Conn_01x02")
-		(at 40.64 33.02 0)
-		(unit 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(dnp no)
-		(uuid "41ae3007-c000-46ec-b9f5-8ccdd11b6776")
-		(property "Reference" "J1"
-			(at 39.37 27.94 0)
-			(effects
-				(font (size 1.27 1.27))
-				(justify left)
-			)
-		)
-		(property "Value" "J14 CARRIER POWER INPUT"
-			(at 39.37 30.48 0)
-			(effects
-				(font (size 1.27 1.27))
-				(justify left)
-			)
-		)
-		(property "Footprint" ""
-			(at 40.64 33.02 0)
-			(effects
-				(font (size 1.27 1.27))
+			(property "Description" "600mA low dropout linear regulator, with enable pin, 3.8V-6V input voltage range, 3.3V fixed positive output, SOT-23-5"
+				(at 0 0 0)
+				(show_name no)
+				(do_not_autoplace no)
 				(hide yes)
+				(effects
+					(font (size 1.27 1.27))
+				)
 			)
-		)
-		(property "Datasheet" ""
-			(at 40.64 33.02 0)
-			(effects
-				(font (size 1.27 1.27))
+			(property "ki_keywords" "linear regulator ldo fixed positive"
+				(at 0 0 0)
+				(show_name no)
+				(do_not_autoplace no)
 				(hide yes)
+				(effects
+					(font (size 1.27 1.27))
+				)
 			)
-		)
-		(pin "1" (uuid "82eb516e-713a-4150-b34c-7798bad4db43"))
-		(pin "2" (uuid "97289c1d-da4b-4bdf-9925-1ba0bf3ca787"))
-		(instances
-			(project "Edu Ride A7670E LTE Carrier"
-				(path "/fb936ee7-e078-48f1-b9ed-0bbe24c28d48" (reference "J1") (unit 1))
-			)
-		)
-	)
-	(symbol
-		(lib_id "Device:R")
-		(at 90.17 33.02 90)
-		(unit 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(dnp no)
-		(uuid "c5e8ccef-87a1-4ed9-8899-dddfe2c0fd55")
-		(property "Reference" "R1"
-			(at 90.17 28.194 90)
-			(effects
-				(font (size 1.27 1.27))
-			)
-		)
-		(property "Value" "0R INPUT LINK / CURRENT MEASUREMENT"
-			(at 90.17 30.734 90)
-			(effects
-				(font (size 1.27 1.27))
-			)
-		)
-		(property "Footprint" ""
-			(at 90.17 33.02 0)
-			(effects
-				(font (size 1.27 1.27))
+			(property "ki_fp_filters" "SOT?23?5*"
+				(at 0 0 0)
+				(show_name no)
+				(do_not_autoplace no)
 				(hide yes)
+				(effects
+					(font (size 1.27 1.27))
+				)
+			)
+			(embedded_fonts no)
+			(pin_names (offset 0.254))
+			(exclude_from_sim no)
+			(in_bom yes)
+			(on_board yes)
+			(in_pos_files yes)
+			(duplicate_pin_numbers_are_jumpers no)
+			(symbol "AP2112K-3.3_0_1"
+				(rectangle
+					(start -5.08 4.445)
+					(end 5.08 -5.08)
+					(stroke (width 0.254) (type default))
+					(fill (type background))
+				)
+			)
+			(symbol "AP2112K-3.3_1_1"
+				(pin power_in line
+					(at -7.62 2.54 0)
+					(length 2.54)
+					(name "VIN"
+						(effects
+							(font (size 1.27 1.27))
+						)
+					)
+					(number "1"
+						(effects
+							(font (size 1.27 1.27))
+						)
+					)
+				)
+				(pin power_in line
+					(at 0 -7.62 90)
+					(length 2.54)
+					(name "GND"
+						(effects
+							(font (size 1.27 1.27))
+						)
+					)
+					(number "2"
+						(effects
+							(font (size 1.27 1.27))
+						)
+					)
+				)
+				(pin input line
+					(at -7.62 0 0)
+					(length 2.54)
+					(name "EN"
+						(effects
+							(font (size 1.27 1.27))
+						)
+					)
+					(number "3"
+						(effects
+							(font (size 1.27 1.27))
+						)
+					)
+				)
+				(pin no_connect line
+					(at 5.08 0 180)
+					(length 2.54)
+					(hide yes)
+					(name "NC"
+						(effects
+							(font (size 1.27 1.27))
+						)
+					)
+					(number "4"
+						(effects
+							(font (size 1.27 1.27))
+						)
+					)
+				)
+				(pin power_out line
+					(at 7.62 2.54 180)
+					(length 2.54)
+					(name "VOUT"
+						(effects
+							(font (size 1.27 1.27))
+						)
+					)
+					(number "5"
+						(effects
+							(font (size 1.27 1.27))
+						)
+					)
+				)
 			)
 		)
-		(property "Datasheet" ""
-			(at 90.17 33.02 0)
-			(effects
-				(font (size 1.27 1.27))
+		(symbol "parts:TXU0202QDTTRQ1"
+			(exclude_from_sim no)
+			(in_bom yes)
+			(on_board yes)
+			(in_pos_files yes)
+			(duplicate_pin_numbers_are_jumpers no)
+			(property "Reference" "U"
+				(at 0 13.97 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(effects
+					(font (size 1.27 1.27))
+				)
+			)
+			(property "Value" "TXU0202QDTTRQ1"
+				(at 0 -13.97 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(effects
+					(font (size 1.27 1.27))
+				)
+			)
+			(property "Footprint" ""
+				(at 0 0 0)
+				(show_name no)
+				(do_not_autoplace no)
 				(hide yes)
+				(effects
+					(font (size 1.27 1.27))
+				)
 			)
-		)
-		(pin "1" (uuid "cdbbccf3-30b7-4bfa-9e6c-6986f8632607"))
-		(pin "2" (uuid "efbd65a3-cb54-4039-9fa7-538af8c81478"))
-		(instances
-			(project "Edu Ride A7670E LTE Carrier"
-				(path "/fb936ee7-e078-48f1-b9ed-0bbe24c28d48" (reference "R1") (unit 1))
-			)
-		)
-	)
-	(wire
-		(pts (xy 83.82 33.02) (xy 86.36 33.02))
-		(stroke (width 0) (type default))
-		(uuid "1fd15990-9adc-48dd-87f2-6263c5912449")
-	)
-	(global_label "MODEM_5V_IN"
-		(shape passive)
-		(at 83.82 33.02 180)
-		(effects
-			(font (size 1.27 1.27))
-			(justify right)
-		)
-		(uuid "e6239c5f-5b93-4f41-a735-f8b3fdf8d981")
-		(property "Intersheetrefs" "${INTERSHEET_REFS}"
-			(at 0 0 0)
-			(effects
-				(font (size 1.27 1.27))
+			(property "Datasheet" ""
+				(at 0 0 0)
+				(show_name no)
+				(do_not_autoplace no)
 				(hide yes)
+				(effects
+					(font (size 1.27 1.27))
+				)
 			)
-		)
-	)
-	(wire
-		(pts (xy 93.98 33.02) (xy 96.52 33.02))
-		(stroke (width 0) (type default))
-		(uuid "9fbbec81-2d31-41bb-b43d-32012da2acfa")
-	)
-	(global_label "MODEM_5V_SW"
-		(shape passive)
-		(at 96.52 33.02 0)
-		(effects
-			(font (size 1.27 1.27))
-			(justify left)
-		)
-		(uuid "b18cb09f-04e7-4084-b769-d7fd0477757e")
-		(property "Intersheetrefs" "${INTERSHEET_REFS}"
-			(at 0 0 0)
-			(effects
-				(font (size 1.27 1.27))
+			(property "Description" ""
+				(at 0 0 0)
+				(show_name no)
+				(do_not_autoplace no)
 				(hide yes)
+				(effects
+					(font (size 1.27 1.27))
+				)
 			)
-		)
-	)
-	(no_connect (at 175.26 43.18) (uuid "eae26f6c-bd5c-4383-8882-68b2abbb51a1"))
-	(wire
-		(pts (xy 139.7 35.56) (xy 137.16 35.56))
-		(stroke (width 0) (type default))
-		(uuid "f7203ef7-fa52-41ff-9909-82486c534214")
-	)
-	(global_label "MODEM_VBAT_3V8"
-		(shape passive)
-		(at 137.16 35.56 180)
-		(effects
-			(font (size 1.27 1.27))
-			(justify right)
-		)
-		(uuid "93929bdf-a748-4800-8033-81fb140035ae")
-		(property "Intersheetrefs" "${INTERSHEET_REFS}"
-			(at 0 0 0)
-			(effects
-				(font (size 1.27 1.27))
+			(property "EasyEDA symbol" "c4ffee93fad64b70a4ad9a03ad851340"
+				(at 0 0 0)
+				(show_name no)
+				(do_not_autoplace no)
 				(hide yes)
+				(effects
+					(font (size 1.27 1.27))
+				)
 			)
-		)
-	)
-	(wire
-		(pts (xy 139.7 38.1) (xy 137.16 38.1))
-		(stroke (width 0) (type default))
-		(uuid "4fbc3868-2504-4083-a1d0-1fe90ef01288")
-	)
-	(global_label "INTVCC"
-		(shape passive)
-		(at 137.16 38.1 180)
-		(effects
-			(font (size 1.27 1.27))
-			(justify right)
-		)
-		(uuid "4977f507-2f14-4b39-991b-f1322fb2098f")
-		(property "Intersheetrefs" "${INTERSHEET_REFS}"
-			(at 0 0 0)
-			(effects
-				(font (size 1.27 1.27))
-				(hide yes)
-			)
-		)
-	)
-	(wire
-		(pts (xy 139.7 40.64) (xy 137.16 40.64))
-		(stroke (width 0) (type default))
-		(uuid "aaeaff58-d545-4c2f-8661-4076cfd1cc0e")
-	)
-	(global_label "BST"
-		(shape passive)
-		(at 137.16 40.64 180)
-		(effects
-			(font (size 1.27 1.27))
-			(justify right)
-		)
-		(uuid "b60296fc-5ebc-435b-b23c-f54488eee0c3")
-		(property "Intersheetrefs" "${INTERSHEET_REFS}"
-			(at 0 0 0)
-			(effects
-				(font (size 1.27 1.27))
-				(hide yes)
-			)
-		)
-	)
-	(wire
-		(pts (xy 139.7 43.18) (xy 137.16 43.18))
-		(stroke (width 0) (type default))
-		(uuid "5e12060a-7cb0-452d-b6b3-6b11acb90969")
-	)
-	(global_label "MODEM_5V_SW"
-		(shape passive)
-		(at 137.16 43.18 180)
-		(effects
-			(font (size 1.27 1.27))
-			(justify right)
-		)
-		(uuid "3a842ef8-cb97-419f-8789-7b55f9d33fc3")
-		(property "Intersheetrefs" "${INTERSHEET_REFS}"
-			(at 0 0 0)
-			(effects
-				(font (size 1.27 1.27))
-				(hide yes)
-			)
-		)
-	)
-	(wire
-		(pts (xy 139.7 48.26) (xy 137.16 48.26))
-		(stroke (width 0) (type default))
-		(uuid "340e4ada-152a-4f0d-af3d-cce8ad57879b")
-	)
-	(wire
-		(pts (xy 139.7 50.8) (xy 137.16 50.8))
-		(stroke (width 0) (type default))
-		(uuid "33159e36-0e03-46c7-b7e0-c6dcd707fe37")
-	)
-	(wire
-		(pts (xy 137.16 48.26) (xy 137.16 50.8))
-		(stroke (width 0) (type default))
-		
-… (45886 more characters cut)
+			(embedded_fonts no)
+			(symbol "TXU0202QDTTRQ1_1_1"
+				(rectangle
+					(start -7.62 -12.7)
+					(end 7.62 12.7)
+					(stroke (width 0) (type default))
+					(fill (type none))
+				)
+				(circle
+					(center -6.35 11.43)
+					(radius 0.381)
+					(stroke (width 0) (type default))
+					(fill (type none))
+				)
+				(pin input line
+					(at -10.16 10.16 
+… (106171 more characters cut)
