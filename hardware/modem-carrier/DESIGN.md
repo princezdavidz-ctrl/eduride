@@ -32,7 +32,7 @@ Controller J2 UART TX/RX → TXU0202 dual-supply fixed-direction translator (3.3
 
 Controller J2 PWRKEY and RESET → separate low-side open-drain transistor stages → modem active-low control pins.
 
-Potential modem STATUS (1.8 V) → dedicated 1.8-to-3.3 V translator → controller J2 STATUS input, **only after pad 66 is confirmed by SIMCom**. Until then J2 pin 6 is left unconnected on the carrier.
+Potential modem STATUS (1.8 V) → mutually exclusive DNP pad-66 options R25 (STATUS) / R28 (GND) → Q3 MMBT3904 inverter → controller J2 pin 6. Both selection resistors remain DNP until SIMCom confirms the exact module revision; use UART/AT readiness checks until then.
 
 SIM socket → SIM ESD protection → modem SIM_VDD / SIM_DATA / SIM_CLK / SIM_RST; card detect may be wired to a modem GPIO only after exact pin and firmware requirements are checked.
 
@@ -51,7 +51,7 @@ Modem USB_DP / USB_DM → USB 2.0 ESD device → 90 Ω differential pair → USB
 | 3 | MODEM_TO_MCU_RX | GPIO16 | 1.8 V modem TXD → translator B2 → 3.3 V ESP RX |
 | 4 | MODEM_PWRKEY | GPIO38 | Drives open-drain PWRKEY stage; exact polarity/timing from purchased module revision |
 | 5 | MODEM_RESET | GPIO39 | Drives open-drain RESET stage; exact polarity/timing from purchased module revision |
-| 6 | MODEM_STATUS | GPIO40 | **NC on carrier** until SIMCom confirms module pad 66 is a STATUS output and not GND |
+| 6 | MODEM_STATUS | GPIO40 | Optional active-low status from Q3 NPN level-shift stage; R25/R28 pad-66 options are both DNP until SIMCom confirms function |
 
 J14 is the separate two-terminal protected 5 V modem input. Its pin polarity and current capability must be re-read from the current controller schematic and confirmed on the physical assembly. Do not assume J14 can sustain the calculated 2.4–3 A input without verification.
 
@@ -65,7 +65,7 @@ J14 is the separate two-terminal protected 5 V modem input. Its pin polarity and
 | Local 3.3 V logic LDO | Diodes Incorporated AP2112K-3.3TRG1 | 2.5–6 V input, fixed 3.3 V output, 600 mA; powers only translator A-side and OE | Candidate; confirm input rail limits and thermal dissipation |
 | PWRKEY / RESET transistor | MMBT3904 NPN, SOT-23 | SIMCom-style low-side open-collector control with 4.7 kΩ base drive, 47 kΩ pull-down and 1 kΩ collector resistor | Candidate; verify exact timing and pinout on purchased module |
 | VBAT / control TVS | Leiditech ESDBW5V0A1 | SIMCom-listed 5 V VRWM example at VBAT, PWRKEY and RESET | Candidate; confirm clamping and footprint |
-| STATUS translator (conditional) | TI SN74AXC1T45DBV | Only populate if SIMCom confirms pad 66 is a 1.8 V STATUS output; otherwise omit and leave controller J2 pin 6 NC |
+| STATUS level interface (conditional) | MMBT3904 NPN + R25/R26/R27/R28 | Inverting 1.8 V STATUS-to-3.3 V GPIO40 stage; R25 (STATUS) and R28 (GND) are mutually exclusive DNP options until SIMCom confirms pad 66 |
 | SIM socket | XUNPU SMN-303 | Candidate SIM card push-push with card detect; footprint and card pin mapping must be checked against its manufacturer drawing |
 
 Do not reuse the PCB library's LT8640 EasyEDA footprint without checking it against the official Analog Devices UDC package drawing. The LT8640 has missing physical lead positions 5 and 12 and an exposed pad assigned to SW (pins 21 and 22), not GND. A generic 20-pad QFN footprint or a conventional grounded thermal pad would be wrong.
@@ -99,7 +99,7 @@ The A7670E-LASA has no trusted PCBKit footprint. Create a project-local footprin
 | Receive modem responses | modem 1.8 V TXD translated to ESP32 3.3 V RX | GPIO16 via J2 pin 3 |
 | Request modem power-on / off sequence | low-side open-drain transistor on PWRKEY | GPIO38 via J2 pin 4 |
 | Request modem reset | low-side open-drain transistor on RESET | GPIO39 via J2 pin 5 |
-| Read modem status | Use UART/AT status queries initially; hardware STATUS only if SIMCom confirms pad 66 is not GND and is an output | J2 pin 6 remains NC until confirmed |
+| Read modem status | Optional Q3 NPN stage converts confirmed 1.8 V STATUS to active-low 3.3 V; keep R25/R28 DNP and use UART/AT readiness queries until confirmed | GPIO40 via J2 pin 6 |
 | Know 3.8 V rail is present | power-good signal from buck, if pin budget permits; otherwise test point only | TBD; do not consume an ESP32 GPIO without confirming availability |
 | Linux host data path | USB 2.0 D+/D− to host connector | USB connector; not ESP32 UART |
 
@@ -146,7 +146,7 @@ The V1.03 guide further confirms:
 - Pin 15 VDD_1V8 is a module output, on by default, up to 50 mA. It can supply the TXU0202 1.8 V translator rail only after power-sequencing and startup behavior are validated.
 - Pin 1 PWRKEY and pin 16 RESET are active-low inputs with internal 50 kΩ pull-ups to VBAT. Their VIH is specified as 0.7 × VBAT and VIL ≤0.5 V. Use open-drain transistor stages; never connect ESP32 3.3 V directly. Do not place capacitors above 10 nF on PWRKEY or RESET.
 - PWRKEY power-on pulse is typically 50 ms; the STATUS signal goes high when initialization is ready (typical 11.2 s). Power-off pulse is at least 2.5 s. RESET pulse is 2–2.5 s and should be reserved for emergency recovery, not routine power control.
-- Figure 2 and Table 4 assign pad 66 to STATUS, but Table 8 also includes pad 66 in the GND list and labels STATUS as DI although the timing description shows a module-driven output. Treat this as a likely documentation inconsistency and keep pad 66 isolated until SIMCom confirms the exact A7670E-LASA pin assignment and direction.
+- V1.00 Table 3 and V1.03 Figure 2 / Table 4 assign pad 66 to STATUS, while V1.03 Table 8 also includes it in the GND list and marks STATUS as DI despite output timing text. R25 (STATUS) and R28 (GND) are mutually exclusive DNP options; do not populate either until SIMCom confirms the exact A7670E-LASA pin assignment and direction.
 - UART pins 9 TXD and 10 RXD are 1.8 V. The full-function UART supports RTS/CTS, but the existing controller J2 only provides TX/RX; leave RTS/CTS open as SIMCom permits when unused.
 - USB pins 27 USB_DP and 28 USB_DM form a USB 2.0 device/slave interface; the modem does not support USB host mode. The carrier's USB connector must connect to a Linux host computer, not another USB device. Route 90 Ω differential, protect at the connector, and connect host VBUS to module pin 24 only as the SIMCom reference design requires. Do not back-feed the host.
 - SIM pins 30 SIM_VDD, 31 SIM_DATA, 32 SIM_CLK, 33 SIM_RST, 34 SIM_DET. SIMCom recommends ESD protection beside the socket and shows 22 Ω series resistors on SIM_RST, SIM_CLK and SIM_DATA, with local SIM_VDD decoupling. Use the exact module guide's reference circuit and the selected socket's verified contact numbering.
@@ -193,9 +193,9 @@ The carrier should therefore use a matching 1×06 female socket for J2 and a key
 
 ## Power-control and status detail
 
-Use SIMCom's recommended transistor-level PWRKEY circuit (MMBT3904 is its example), not a direct ESP32 connection. The internal PWRKEY and RESET pull-ups go to VBAT, so their high level can exceed the ESP32's 3.3 V domain. Keep external capacitance on either control pin at or below 10 nF. Firmware timing must follow the guide: approximately 50 ms low pulse for power-on, at least 2.5 s low for power-off, and approximately 2.5 s low for emergency reset. Never pull PWRKEY and RESET low together. The STATUS assignment is not safe to route: Figure 2 and Table 4 show pad 66 as STATUS, but Table 8 also includes it in the GND list and labels STATUS as DI. Keep pad 66 isolated until SIMCom resolves the conflict for the exact purchased module revision.
+Use SIMCom's recommended transistor-level PWRKEY circuit (MMBT3904 is its example), not a direct ESP32 connection. The internal PWRKEY and RESET pull-ups go to VBAT, so their high level can exceed the ESP32's 3.3 V domain. Keep external capacitance on either control pin at or below 10 nF. Firmware timing must follow the guide: approximately 50 ms low pulse for power-on, at least 2.5 s low for power-off, and approximately 2.5 s low for emergency reset. Never pull PWRKEY and RESET low together. Pad 66 is provisionally routed only to mutually exclusive DNP options R25 (STATUS) and R28 (GND). Do not populate either until SIMCom resolves the exact purchased module revision.
 
-The 1.8 V VDD_1V8 output (pin 15) is specified up to 50 mA and is on by default. It is a suitable candidate supply for the translator's VCCB rails, subject to sequencing and back-power validation. TXU0202 provides Ioff partial-power-down support and fixed-direction channels; tie its OE to a defined state, not a floating pin. If pad 66 is confirmed as STATUS, the status translator direction is B→A (1.8 V modem to 3.3 V controller); validate DIR and OE logic against the chosen SN74AXC1T45 datasheet before schematic release. Until then, omit the status translator and leave controller J2 pin 6 NC.
+The 1.8 V VDD_1V8 output (pin 15) is specified up to 50 mA and is on by default. It is a suitable candidate supply for the translator's VCCB rails, subject to sequencing and back-power validation. TXU0202 provides Ioff partial-power-down support and fixed-direction channels; tie its OE to a defined state, not a floating pin. The current Q3 MMBT3904 stage inverts a confirmed 1.8 V STATUS output to active-low 3.3 V MODEM_STATUS at controller GPIO40. R25 is the 4.7 kΩ STATUS path; R28 is the 0 Ω GND alternative. Both are DNP until the exact module revision is confirmed.
 
 
 ## Explicit manufacturer confirmation required
@@ -210,7 +210,7 @@ A first-pass carrier schematic with the LT8640 5 V → 3.8 V power stage, contro
 - Adds an AP2112K-3.3 local LDO because controller J2 exposes no 3.3 V supply pin; this rail powers only the A-side and OE of the TXU0202.
 - Adds a TXU0202 fixed-direction UART translator: ESP32 TX 3.3 V → modem RX 1.8 V, and modem TX 1.8 V → ESP32 RX 3.3 V. Its B-side supply comes from the modem VDD_1V8 output.
 - Adds MMBT3904 open-collector stages for PWRKEY and RESET, with 4.7 kΩ base resistors, 47 kΩ base pull-downs, 1 kΩ collector series resistors and 5 V VRWM TVS candidates.
-- Adds J3 for the controller's existing J2 interface and J4/J5 as **schematic-only module signal placeholders**. J4/J5 are not physical connectors and must be replaced by the verified A7670E-LASA LGA symbol before PCB layout. Controller J2 pin 6 remains NC pending pad-66 confirmation.
+- Adds J3 for the controller's existing J2 interface and J4/J5/J8 as **schematic-only module signal placeholders**. These are not physical connectors and must be replaced by the verified A7670E-LASA LGA symbol before PCB layout. Controller J2 pin 6 is available through Q3; the pad-66 selection resistors remain DNP pending confirmation.
 - Adds a 16-pin USB-C USB 2.0 device/UFP connector candidate, 5.1 kΩ CC1/CC2 Rd resistors, SBU no-connects, a 0 Ω shield-ground link, 0.4 pF ESD protection on D+/D−, and a 7 V VRWM VBUS TVS candidate. USB D+/D− and VBUS each have a 0 Ω series link. USB VBUS reaches only the modem VBUS-detect pin; it is not tied to the 5 V modem power rail.
 - Adds a nano-SIM socket candidate, SIMCom-style four-line ESDA6V1W5 array, 22 Ω series resistors on SIM_RST/SIM_CLK/SIM_DATA, 100 nF + 33 pF SIM_VDD bypass, and a direct SIM_DET card-detect connection. SIM VPP is left NC; no external SIM_DATA pull-up is added because the module has an internal 4.7 kΩ pull-up.
 - Adds the SIMCom Figure 31 RF network: two 0 Ω series links, two DNP tuning-capacitor positions, optional PESD0402-03 RF TVS and a 50 Ω Hirose U.FL connector. C1/C2 values remain unset until antenna-vendor tuning.
@@ -240,5 +240,5 @@ The V1.03 guide recommends a TVS diode at the module VBAT pins (listed examples 
 
 - J8 is a logical placeholder for module MAIN_ANT pad 60 and GND; it is not a physical connector and must be replaced by the confirmed module symbol.
 - R23/R24 are default 0 Ω series links. C21/C22 are DNP tuning positions; values are selected only after antenna-vendor guidance and conducted/OTA tuning. D7 is an optional PESD0402-03 low-capacitance RF TVS candidate.
-- J9 is a Hirose U.FL-R-SMT-1(10), 50 Ω, 6 GHz connector candidate. Place the RF connector and matching components close to MAIN_ANT. Use a strain-relieved coax pigtai
-… (9574 more characters cut)
+- J9 is a Hirose U.FL-R-SMT-1(10), 50 Ω, 6 GHz connec
+… (9698 more characters cut)

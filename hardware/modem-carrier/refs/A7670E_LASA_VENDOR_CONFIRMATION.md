@@ -11,7 +11,7 @@ The two available SIMCom family hardware guides share the 24 × 24 × 2.5 mm, 88
 
 | Item | A7670 Series Hardware Design V1.00 | A7670 Series Hardware Design V1.03 | Design disposition |
 |---|---|---|---|
-| Pad 66 | Table 3 identifies STATUS; the GND list excludes pad 66 | Figure 2 / Table 4 identify STATUS, but Table 8 also includes pad 66 in its GND list; STATUS type is marked DI while timing text describes an output | Treat as STATUS candidate; keep controller status connection isolated until written confirmation |
+| Pad 66 | Table 3 identifies STATUS; the GND list excludes pad 66 | Figure 2 / Table 4 identify STATUS, but Table 8 also includes pad 66 in its GND list; STATUS type is marked DI while timing text describes an output | R25 STATUS and R28 GND options both remain DNP until written confirmation |
 | Pads 36 / 47 / 51 | NC | A7670E top-view diagram marks NC; alternate family functions appear in other variants | Keep NC |
 | Pads 49 / 50 | GPIO4 / GPIO5 (UART3 RX/TX) | GPIO10 / GPIO11 | Do not assign optional GPIO functions until exact revision is confirmed |
 | Pads 53 / 67 / 68 | NC / GPIO10 / GPIO11 | GPIO12 / GPIO13 / GPIO14 | Do not assign optional GPIO functions until exact revision is confirmed |
