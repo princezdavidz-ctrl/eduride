@@ -242,4 +242,4 @@ The V1.03 guide recommends a TVS diode at the module VBAT pins (listed examples 
 - R23/R24 are default 0 Ω series links. C21/C22 are DNP tuning positions; values are selected only after antenna-vendor guidance and conducted/OTA tuning. D7 is an optional PESD0402-03 low-capacitance RF TVS candidate.
 - J9 is a Hirose U.FL-R-SMT-1(10), 50 Ω, 6 GHz connector candidate. Place the RF connector and matching components close to MAIN_ANT. Use a strain-relieved coax pigtail to an external vehicle antenna; U.FL is a board-side connector, not a repeatedly handled field-service connector.
 - Maintain a 50 Ω controlled-impedance RF feed 
-… (5914 more characters cut)
+… (8157 more characters cut)
