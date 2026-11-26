@@ -51,7 +51,7 @@ Modem USB_DP / USB_DM → USB 2.0 ESD device → 90 Ω differential pair → USB
 | 3 | MODEM_TO_MCU_RX | GPIO16 | 1.8 V modem TXD → translator B2 → 3.3 V ESP RX |
 | 4 | MODEM_PWRKEY | GPIO38 | Drives open-drain PWRKEY stage; exact polarity/timing from purchased module revision |
 | 5 | MODEM_RESET | GPIO39 | Drives open-drain RESET stage; exact polarity/timing from purchased module revision |
-| 6 | MODEM_STATUS | GPIO40 | Receives translated 1.8 V STATUS signal |
+| 6 | MODEM_STATUS | GPIO40 | **NC on carrier** until SIMCom confirms module pad 66 is a STATUS output and not GND |
 
 J14 is the separate two-terminal protected 5 V modem input. Its pin polarity and current capability must be re-read from the current controller schematic and confirmed on the physical assembly. Do not assume J14 can sustain the calculated 2.4–3 A input without verification.
 
@@ -62,7 +62,7 @@ J14 is the separate two-terminal protected 5 V modem input. Its pin polarity and
 | Modem | SIMCom A7670E-LASA | Selected candidate; exact module revision, pad drawing and stock must be checked before footprint release |
 | 3.8 V buck | Analog Devices LT8640EUDC#TRPBF | 5 A continuous / 7 A peak transient family capability; 3.4–42 V input. Candidate only; calculate 3.8 V feedback, switching frequency, inductor, input/output capacitors and thermal behavior from the current datasheet |
 | UART translator | TI TXU0202DCU | Two channels with opposite fixed directions; A1→B1Y for ESP TX→modem RX, B2→A2Y for modem TX→ESP RX; VCCA=3.3 V, VCCB=1.8 V. Confirm VDD_EXT capability and startup sequencing |
-| STATUS translator | TI SN74AXC1T45DBV | Candidate one-bit translator for modem STATUS 1.8 V→ESP32 3.3 V; confirm direction pin, OE behavior and pin table |
+| STATUS translator (conditional) | TI SN74AXC1T45DBV | Only populate if SIMCom confirms pad 66 is a 1.8 V STATUS output; otherwise omit and leave controller J2 pin 6 NC |
 | SIM socket | XUNPU SMN-303 | Candidate SIM card push-push with card detect; footprint and card pin mapping must be checked against its manufacturer drawing |
 
 Do not reuse the PCB library's LT8640 EasyEDA footprint without checking it against the official Analog Devices UDC package drawing. The LT8640 has missing physical lead positions 5 and 12 and an exposed pad assigned to SW (pins 21 and 22), not GND. A generic 20-pad QFN footprint or a conventional grounded thermal pad would be wrong.
@@ -188,7 +188,7 @@ The carrier should therefore use a matching 1×06 female socket for J2 and a key
 
 Use SIMCom's recommended transistor-level PWRKEY circuit (MMBT3904 is its example), not a direct ESP32 connection. The internal PWRKEY and RESET pull-ups go to VBAT, so their high level can exceed the ESP32's 3.3 V domain. Keep external capacitance on either control pin at or below 10 nF. Firmware timing must follow the guide: approximately 50 ms low pulse for power-on, at least 2.5 s low for power-off, and approximately 2.5 s low for emergency reset. Never pull PWRKEY and RESET low together. The STATUS assignment is not safe to route: the same guide also lists pad 66 as GND and labels STATUS as DI. Keep pad 66 isolated until SIMCom resolves the conflict for the exact purchased module revision.
 
-The 1.8 V VDD_1V8 output (pin 15) is specified up to 50 mA and is on by default. It is a suitable candidate supply for the translator's VCCB rails, subject to sequencing and back-power validation. TXU0202 provides Ioff partial-power-down support and fixed-direction channels; tie its OE to a defined state, not a floating pin. The status translator direction is B→A (1.8 V modem to 3.3 V controller); validate DIR and OE logic against the chosen SN74AXC1T45 datasheet before schematic release.
+The 1.8 V VDD_1V8 output (pin 15) is specified up to 50 mA and is on by default. It is a suitable candidate supply for the translator's VCCB rails, subject to sequencing and back-power validation. TXU0202 provides Ioff partial-power-down support and fixed-direction channels; tie its OE to a defined state, not a floating pin. If pad 66 is confirmed as STATUS, the status translator direction is B→A (1.8 V modem to 3.3 V controller); validate DIR and OE logic against the chosen SN74AXC1T45 datasheet before schematic release. Until then, omit the status translator and leave controller J2 pin 6 NC.
 
 
 ## Explicit manufacturer confirmation required
