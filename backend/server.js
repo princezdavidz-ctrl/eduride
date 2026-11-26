@@ -653,8 +653,11 @@ export const server = createServer((request, response) => {
 export async function startServer() {
   if (!process.env.DATABASE_URL) throw new Error("DATABASE_URL is required. In-memory mode is intentionally disabled.");
   await pool.query("SELECT 1");
-  const migration = await pool.query("SELECT version FROM schema_migrations WHERE version = 1");
-  if (!migration.rows[0]) throw new Error("Database schema is not migrated. Run npm run migrate before starting the API.");
+  const migration = await pool.query("SELECT version FROM schema_migrations WHERE version IN (1, 2)");
+  const appliedVersions = new Set(migration.rows.map((row) => Number(row.version)));
+  if (!appliedVersions.has(1) || !appliedVersions.has(2)) {
+    throw new Error("Database migrations 001 and 002 are required. Run npm run migrate before starting the API.");
+  }
   await new Promise((resolve, reject) => {
     server.once("error", reject);
     server.listen(PORT, resolve);

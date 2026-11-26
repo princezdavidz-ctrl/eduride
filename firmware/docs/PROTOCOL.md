@@ -1,19 +1,11 @@
 # Edu Ride Controller Event and Transport Contract v1
 
-The backend endpoint is `POST /api/device/events`; see `backend/docs/DEVICE_EVENT_API.md`.
+Backend endpoint: POST /api/device/events; see backend/docs/DEVICE_EVENT_API.md. Firmware uploader: event_uploader.c, opt-in through er_event_uploader_start.
 
-- schema_version: 1.
-- event_id: 32 lowercase hex characters, generated once and stable across retries.
-- device_id: provisioned device_code.
-- device_sequence and monotonic_time_us: uint64 decimal strings.
-- event_type: BOOT, TRIP_STARTED, TRIP_ENDED, STUDENT_BOARDING_MATCHED, STUDENT_BOARDING_UNCERTAIN, STUDENT_BOARDING_UNMATCHED, DRIVER_PICKUP_CONFIRMED, DRIVER_NEXT_STOP, DEVICE_HEALTH, DEVICE_FAULT.
-- event_time_utc: ISO-8601 UTC or null when time is untrusted.
-- time_quality: UNSYNCED, RTC, GNSS, NETWORK.
-- trip_id: opaque identifier or null.
-- firmware_version, hardware_revision, variant, and minimal payload object (max 192 UTF-8 bytes).
+Each event contains schema_version 1, stable 32-character lowercase hexadecimal event_id, provisioned device_code, uint64 decimal-string device_sequence and monotonic_time_us, event_type, nullable trip_id, nullable ISO-8601 UTC event_time_utc, time_quality, firmware_version, hardware_revision, variant and a minimal operational JSON payload (maximum 192 UTF-8 bytes).
 
-POST batches of 1–10 events with X-Device-Token over HTTPS. Server derives device/bus/organization from credentials. Exact event IDs are acknowledged. Duplicate (device,event_id) is safe; reused sequence with a different ID is rejected. Delete only acknowledged/duplicate IDs from persistent storage; retain rejected/unacknowledged events.
+Uploader sends one event per HTTPS request using X-Device-Token. TLS verification requires a trusted root CA supplied by secure provisioning. No plaintext or insecure certificate fallback is permitted. Backend derives device, bus and organization from the token.
 
-GPS_ONLY cannot submit STUDENT_BOARDING_* events. Never include student names/IDs, biometrics, images, embeddings, parent contacts or credentials. Backend remains authoritative for recognition, roster and notifications.
+Only exact IDs returned in acknowledged or duplicates are removed from persistent storage. Rejected, missing and unacknowledged events remain queued. Retry with bounded exponential backoff and jitter without changing event ID or sequence. GPS_ONLY cannot submit STUDENT_BOARDING_* events. Never include student names/IDs, biometrics, images, embeddings, parent contacts or credentials.
 
-Retry transient errors with bounded exponential backoff and jitter; preserve event ID and sequence. Validate TLS certificates; no plaintext fallback. Surface permanent auth/schema errors as device faults. Never accept arbitrary remote commands.
+Uploader is not started by app_main. Secure provisioning must deliver endpoint, device token and CA. Do not hardcode secrets or enable upload before provisioning is implemented and reviewed.

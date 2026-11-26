@@ -45,3 +45,7 @@ No tests in this document are claimed to have passed. Execute in the dedicated t
 - Vehicle power transient, temperature, vibration and EMI/EMC review.
 - Enclosure, antenna placement and cable installation.
 - Supervised route trial with synthetic/authorized test data; no production student recognition deployment until privacy and safety approvals.
+
+- Uploader exact-ID acknowledgement parsing, malformed JSON and oversized response handling.
+- HTTPS-only URL validation, root-CA trust and credential redaction.
+- Uploader remains inactive until endpoint, device token and trusted CA are securely provisioned.
