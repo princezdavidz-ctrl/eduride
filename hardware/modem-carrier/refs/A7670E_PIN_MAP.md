@@ -33,13 +33,13 @@ Source: SIMCom A7670 Series Hardware Design V1.03, Figure 2 and Table 4, pp. 14�
 | 27 | USB_DP | USB 2.0 D+ | USB ESD → USB-C device receptacle D+ |
 | 28 | USB_DM | USB 2.0 D− | USB ESD → USB-C device receptacle D− |
 | 29 | GND | Ground | GND plane |
-| 30 | SIM_VDD | SIM power output, 1.8V/3.0V | Nano-SIM socket VCC; local decoupling per SIMCom |
-| 31 | SIM_DATA | SIM bidirectional data | Nano-SIM I/O through ESD / series network per SIMCom |
-| 32 | SIM_CLK | SIM clock output | Nano-SIM CLK through ESD / series network per SIMCom |
-| 33 | SIM_RST | SIM reset output | Nano-SIM RST through ESD / series network per SIMCom |
+| 30 | SIM_VDD | SIM power output, 1.8V/3.0V | SIM socket VCC; local decoupling per SIMCom |
+| 31 | SIM_DATA | SIM bidirectional data | SIM I/O through ESD / series network per SIMCom |
+| 32 | SIM_CLK | SIM clock output | SIM CLK through ESD / series network per SIMCom |
+| 33 | SIM_RST | SIM reset output | SIM RST through ESD / series network per SIMCom |
 | 34 | SIM_DET | SIM detect input | Socket card-detect switch; polarity to be checked against socket drawing |
 | 35 | NC | No connect | Leave open |
-| 36 | NC | No connect | Leave open |
+| 36 | NC / GPIO6 variant-dependent | Variant-dependent 1.8V GPIO in some A7670 family tables | HOLD open until exact A7670E-LASA variant pin map is confirmed |
 | 37 | I2C_SDA | 1.8V I²C bidirectional | NC |
 | 38 | I2C_SCL | 1.8V I²C clock | NC |
 | 39 | GND | Ground | GND plane |
@@ -50,11 +50,11 @@ Source: SIMCom A7670 Series Hardware Design V1.03, Figure 2 and Table 4, pp. 14�
 | 44 | NC | No connect | Leave open |
 | 45 | GND | Ground | GND plane |
 | 46 | GND | Ground | GND plane |
-| 47 | NC | No connect | Leave open |
+| 47 | NC / GPIO8 variant-dependent | Variant-dependent 1.8V GPIO / keyboard function in family documentation | HOLD open until exact A7670E-LASA variant pin map is confirmed |
 | 48 | GPIO9 | 1.8V GPIO | NC |
 | 49 | GPIO4 / UART3_RX | 1.8V GPIO / UART3 input | NC |
 | 50 | GPIO5 / UART3_TX | 1.8V GPIO / UART3 output | NC |
-| 51 | NC | No connect | Leave open |
+| 51 | NC / ADC1 variant-dependent | ADC1 is listed as pin 25 or 51 in family documentation | HOLD open until exact A7670E-LASA variant pin map is confirmed |
 | 52 | NETLIGHT | 1.8V digital output | Optional LED only after current and drive checks; default NC |
 | 53 | NC | No connect | Leave open |
 | 54 | GND | Ground | GND plane |
@@ -69,7 +69,7 @@ Source: SIMCom A7670 Series Hardware Design V1.03, Figure 2 and Table 4, pp. 14�
 | 63 | GND | Ground | GND plane |
 | 64 | GND | Ground | GND plane |
 | 65 | GND | Ground | GND plane |
-| 66 | STATUS | 1.8V digital output | SN74AXC1T45 B→A translator to controller GPIO40 |
+| 66 | STATUS? / GND conflict | 1.8V status output in status table; simultaneously included in GND pin list | HOLD — do not connect to GND, translator, or J2 until SIMCom confirms exact LASA pad assignment in writing |
 | 67 | GPIO10 | 1.8V GPIO | NC |
 | 68 | GPIO11 | 1.8V GPIO | NC |
 | 69 | GND | Ground | Central ground-pad array; connect to GND plane |
@@ -92,6 +92,11 @@ Source: SIMCom A7670 Series Hardware Design V1.03, Figure 2 and Table 4, pp. 14�
 | 86 | GND | Ground | Central ground-pad array; connect to GND plane |
 | 87 | GND | Ground | Central ground-pad array; connect to GND plane |
 | 88 | GND | Ground | Central ground-pad array; connect to GND plane |
+
+## Critical pin-map conflicts — release blockers
+
+1. **Pad 66 conflict:** the V1.03 pin assignment / power table's GND list includes pad 66 (Table 8), while the later Other Pins table assigns pad 66 to STATUS. The STATUS row is also marked DI even though the status timing section describes a module-driven status output. Do not route pad 66 or connect it to the controller until SIMCom confirms the exact A7670E-LASA pad function and electrical direction.
+2. **Pad 47 / 36 / 51 variant ambiguity:** family documentation includes GPIO/keyboard functions on these pad numbers for some variants and an ADC1 assignment that may use pad 25 or 51. The A7670E-specific GPIO table does not fully reconcile all these references. Leave these pads open until SIMCom confirms the exact LASA pinout.
 
 ## Critical checks before schematic release
 
