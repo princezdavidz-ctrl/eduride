@@ -5,6 +5,7 @@
 #include "driver/uart.h"
 #include "esp_log.h"
 #include "esp_timer.h"
+#include "esp_timer.h"
 #include "freertos/FreeRTOS.h"
 #include "freertos/task.h"
 #include "gnss_parser.h"
@@ -90,5 +91,10 @@ esp_err_t er_gnss_uart_get_snapshot(er_gnss_snapshot_t *snapshot)
     if (snapshot == NULL) return ESP_ERR_INVALID_ARG;
     if (!s_running) return ESP_ERR_INVALID_STATE;
     er_gnss_parser_get_snapshot(snapshot);
+    const int64_t now_us = esp_timer_get_time();
+    if (snapshot->received_monotonic_us <= 0 ||
+        now_us - snapshot->received_monotonic_us > 5000000) {
+        snapshot->fix_valid = false;
+    }
     return ESP_OK;
 }

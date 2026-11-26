@@ -61,3 +61,5 @@ No tests in this document are claimed to have passed. Execute in the dedicated t
 - RMC/GGA coordinate mismatch, sentence ordering, stale snapshot age and receiver silence.
 - UART chunking across sentence boundaries, multiple sentences per read, overlong line discard and UART driver startup failure.
 - Confirm selected receiver UART voltage, baud, TX/RX direction, startup output and reset behavior before enabling CONFIG_ER_ENABLE_GNSS_UART.
+
+- GNSS snapshot automatically becomes invalid after five seconds without accepted receiver sentences; verify threshold against configured receiver output rate.
