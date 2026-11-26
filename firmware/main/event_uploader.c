@@ -95,7 +95,7 @@ static bool has_id(const cJSON *a,const char *id) {
 static esp_err_t upload_one(const er_event_record_t *record) {
  char *body=NULL;esp_err_t err=serialize_event(record,&body);if(err!=ESP_OK)return err;
  response_t response={0};
- esp_http_client_config_t cfg={.url=s_endpoint,.method=HTTP_METHOD_POST,.timeout_ms=REQUEST_TIMEOUT_MS,.cert_pem=s_root_ca,.event_handler=on_http_event,.user_data=&response,.buffer_size=2048,.buffer_size_tx=2048,.keep_alive_enable=false};
+ esp_http_client_config_t cfg={.url=s_endpoint,.method=HTTP_METHOD_POST,.timeout_ms=REQUEST_TIMEOUT_MS,.cert_pem=s_root_ca,.event_handler=on_http_event,.user_data=&response,.buffer_size=2048,.buffer_size_tx=2048,.keep_alive_enable=false,.disable_auto_redirect=true};
  esp_http_client_handle_t client=esp_http_client_init(&cfg);
  if(!client){cJSON_free(body);return ESP_ERR_NO_MEM;}
  err=esp_http_client_set_header(client,"Content-Type","application/json");
