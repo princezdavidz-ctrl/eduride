@@ -1,6 +1,6 @@
 # Cellular Modem Driver Contract
 
-## Current implementation boundary
+## Preferred modem candidate\n\nThe current engineering preference is SIMCom A7670E-LASA for controller telemetry. It is not yet enabled or electrically approved. See `MODEM_SELECTION.md` for the Kenya band comparison, carrier-board requirements and power/interface gates. The modem-specific adapter must remain disabled until those gates are closed.\n\n## Current implementation boundary
 
 The controller has a documented modem UART/control pin assignment, but no exact modem, carrier board, SIM interface, supply requirement or carrier profile has been selected. This change adds only a hardware-agnostic lifecycle/status contract.
 

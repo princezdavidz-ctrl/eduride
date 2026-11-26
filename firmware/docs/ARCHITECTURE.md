@@ -67,3 +67,8 @@ The portable NMEA parser accepts checksum-validated RMC and GGA sentences, conve
 ## Cellular driver boundary
 
 The generic cellular lifecycle/status contract is separate from the selected modem adapter. It tracks OFF, POWERING, SIM_CHECK, REGISTERING, PDP_CONNECTING, ONLINE, DEGRADED and FAULT states, but performs no UART, PWRKEY, RESET, SIM or APN operations. It can be compiled independently while the exact modem/carrier board remains unselected. See `CELLULAR_DRIVER.md` for electrical, adapter and validation gates.
+
+
+## Selected cellular modem candidate
+
+The preferred controller-telemetry candidate is SIMCom A7670E-LASA LTE Cat 1, pending carrier-board and electrical validation. The modem serves metadata/event transport only. The separate Linux vision computer needs its own independently verified high-bandwidth uplink. See `MODEM_SELECTION.md`.
